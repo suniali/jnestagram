@@ -1,0 +1,8 @@
+.venv/
+.idea/
+media/
+
+**/__pycache__/
+*.pyc
+
+jnestagram/local_settings.py
