@@ -6,3 +6,4 @@ media/
 *.pyc
 
 jnestagram/local_settings.py
+static/tailwinds/node_modules/
