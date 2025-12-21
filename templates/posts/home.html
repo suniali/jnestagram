@@ -29,7 +29,8 @@
                         <span class="font-light text-gray-500 ml-1">{{ post.approved_comments_count }}</span>
                     </a>
                     <div class="flex items-center gap-4 [&>a:hover]:underline">
-                        <a class="flex items-center gap-1" href="">
+                        <a class="flex items-center gap-1"
+                           href="{% if request.user.is_authenticated %}{% url 'like_post' post.id %}{% else %}{% url 'login' %}{% endif %}">
                             <img class="w-5 -mt-1"
                                  src="https://img.icons8.com/small/24/000000/fire-heart.png">
                             {{ post.likes.count }}
