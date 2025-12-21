@@ -26,9 +26,9 @@
     </section>
     <section class="card p-4">
         <div class="flex items-center">
-            <img class="w-7 mr-2 -mt-3"
+            <img class="w-7 mr-2"
                  src="https://img.icons8.com/ios-glyphs/90/null/fire-heart.png" />
-            <h2>Top Posts</h2>
+            <h2 class="my-2">Top Posts</h2>
         </div>
         <ul class="hoverlist">
             {% for top_post in top_posts.all %}
@@ -37,9 +37,9 @@
                         <div class="flex items-center truncate">
                             <img class="w-10 h-10 rounded-lg object-cover mr-3 shrink-0"
                                  src="{% if top_post.image %}{{ top_post.image.url }}{% else %}https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg{% endif %}   ">
-                            <img class="w-6 h-6 rounded-full object-cover mr-1"
+                            <img class="w-4 h-4 rounded-full object-cover mr-1 mt-1"
                                  src="https://img.icons8.com/small/96/A9A9A9/happy.png">
-                            <span class="font-bold text-sm mr-1">{{ top_post.title }}</span>
+                            <span class="font-bold text-sm mr-1">{{ top_post.user.username }}</span>
                         </div>
                         <span class="text-sm font-light text-grey-500 shrink-0">{{ top_post.likes.count }} Likes</span>
                     </a>
