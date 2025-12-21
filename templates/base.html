@@ -21,6 +21,7 @@
               href="{% static 'tailwinds/css/style.main.css' %}">
     </head>
     <body class="bg-gray-100">
+        <div style="display: none;">{% csrf_token %}</div>
         {% include 'partials/header.html' %}
         {% block layout %}{% endblock %}
     </body>

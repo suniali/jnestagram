@@ -29,12 +29,27 @@
                         <span class="font-light text-gray-500 ml-1">{{ post.approved_comments_count }}</span>
                     </a>
                     <div class="flex items-center gap-4 [&>a:hover]:underline">
-                        <a class="flex items-center gap-1"
-                           href="{% if request.user.is_authenticated %}{% url 'like_post' post.id %}{% else %}{% url 'login' %}{% endif %}">
-                            <img class="w-5 -mt-1"
-                                 src="https://img.icons8.com/small/24/000000/fire-heart.png">
-                            {{ post.likes.count }}
-                        </a>
+                        <div class="text-center">
+                            {% if user.is_authenticated %}
+                                <div x-data="{ liked: {{ post.is_liked|yesno:'true,false' }}, totalLikes: {{ post.total_likes }}, animating: false, async toggle() { if (this.animating) return;  const csrf = document.querySelector('[name=csrfmiddlewaretoken]')?.value || document.querySelector('meta[name=csrf-token]')?.content;  if (!csrf) { console.error('CSRF token not found!'); return; }  try { const res = await fetch('/like/{{ post.pk }}/', { method: 'POST', headers: { 'X-CSRFToken': csrf, 'X-Requested-With': 'XMLHttpRequest' } });  if (!res.ok) return;  const data = await res.json();  this.liked = data.liked; this.totalLikes = data.total_likes;  if (data.liked) { this.animating = true; this.$refs.heart.style.transform = 'scale(1.5)'; setTimeout(() => { this.$refs.heart.style.transform = 'scale(1)'; this.animating = false; }, 300); } } catch (err) { console.error(err); } } }"
+                                     @click="toggle()"
+                                     class="cursor-pointer inline-block select-none flex items-center justify-between gap-1">
+                                    <img x-ref="heart"
+                                         src="https://img.icons8.com/small/96/fire-heart.png"
+                                         alt="Like"
+                                         class="w-6 h-6 mx-auto transition-transform duration-500">
+                                    <span class="block text-sm text-gray-700 mt-1" x-text="totalLikes"></span>
+                                </div>
+                            {% else %}
+                                <a href="{% url 'login' %}?next={{ request.path }}" class="inline-block">
+                                    <img x-ref="heart"
+                                         src="https://img.icons8.com/small/96/fire-heart.png"
+                                         alt="Like"
+                                         class="w-6 h-6 mx-auto transition-transform duration-300">
+                                    <span class="block text-sm text-gray-700 mt-1" x-text="totalLikes"></span>
+                                </a>
+                            {% endif %}
+                        </div>
                         <a href="">Edit</a>
                         <a href="">Delete</a>
                     </div>

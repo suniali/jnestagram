@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 from django.db.models import Q,Count
 from django.shortcuts import get_object_or_404,redirect
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 
 from .models import Post, Tag,Like
 
@@ -42,15 +44,15 @@ class PostListView(ListView):
 
         return context
 
+@require_POST
 @login_required
 def like_post(request, post_id):
-    post = get_object_or_404(Post,id=post_id)
-    like,created= Like.objects.get_or_create(user=request.user, post=post)
-    
+    post = get_object_or_404(Post, pk=post_id)
+    like,created=Like.objects.get_or_create(user=request.user, post=post)
+    print(like)
     if not created:
         like.delete()
-        liked=False
+        liked = False
     else:
-        liked=True
-
-    return redirect('home')
+        liked = True
+    return JsonResponse({'liked': liked, 'total_likes': post.total_likes()})

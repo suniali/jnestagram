@@ -4,5 +4,5 @@ from .views import PostListView,like_post
 
 urlpatterns = [
     path('',PostListView.as_view(),name='home'),
-    path('post/<int:post_id>/like/', like_post, name='like_post'),
+    path('like/<int:post_id>/', like_post, name='like_post'),
 ]
