@@ -30,7 +30,7 @@ class PostListView(ListView):
         if tag_name:
             queryset = queryset.filter(tag__name=tag_name)
             
-        return queryset.order_by('-created_at').distinct()
+        return queryset.distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

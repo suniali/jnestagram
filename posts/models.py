@@ -30,6 +30,7 @@ class Post(models.Model):
         db_table = 'posts'
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
+        ordering = ['-created_at']
         
     def __str__(self):
         return self.title
@@ -49,6 +50,7 @@ class Comment(models.Model):
         db_table = 'comments'
         verbose_name = 'Comment'
         verbose_name_plural = 'Comments'
+        ordering = ['-created_at']
         
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
