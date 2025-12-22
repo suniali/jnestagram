@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView,CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView,CreateView,UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.db.models import Q,Count
 from django.http import JsonResponse
 from django.urls import reverse_lazy
@@ -71,6 +71,32 @@ class PostCreateView(LoginRequiredMixin,CreateView):
                 pass
         return response
         
+class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+    model=Post
+    form_class=PostForm
+    template_name='posts/post.html'
+    success_url=reverse_lazy('home')
+    
+    def test_func(self):
+        post=self.get_object()
+        return self.request.user==post.user
+    
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        context['tags']=Tag.objects.all()
+        context['selected_tag_ids']=list(self.object.tag.values_list('id',flat=True))
+        return context
+
+    def form_valid(self, form):
+        tags_id_str=self.request.POST.get('selected_tags','')
+        response=super().form_valid(form)
+        if tags_id_str:
+            tags=[int(tid) for tid in tags_id_str.split(',') if tid.strip().isdigit()]
+            self.object.tag.set(tags)
+        else:
+            self.object.tag.clear()
+        
+        return response
 
 @require_POST
 @login_required

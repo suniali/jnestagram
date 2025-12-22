@@ -51,7 +51,7 @@
                             {% endif %}
                         </div>
                         {% if user.is_authenticated and user == post.user %}
-                            <a href="">Edit</a>
+                            <a href="{% url 'update_post' post.id %}">Edit</a>
                             <a href="">Delete</a>
                         {% endif %}
                     </div>
