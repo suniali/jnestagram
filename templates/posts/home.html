@@ -50,8 +50,10 @@
                                 </a>
                             {% endif %}
                         </div>
-                        <a href="">Edit</a>
-                        <a href="">Delete</a>
+                        {% if user.is_authenticated and user == post.user %}
+                            <a href="">Edit</a>
+                            <a href="">Delete</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
