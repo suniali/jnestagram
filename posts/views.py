@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404
-from django.views.generic import ListView,CreateView,UpdateView
+from django.shortcuts import get_object_or_404,redirect
+from django.views.generic import ListView,CreateView,UpdateView,View
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from django.contrib import messages
 from django.db.models import Q,Count
 from django.http import JsonResponse
 from django.urls import reverse_lazy
@@ -97,6 +98,23 @@ class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
             self.object.tag.clear()
         
         return response
+    
+class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,View):
+    def test_func(self):
+        post=get_object_or_404(Post, pk=self.kwargs['pk'])
+        return post.user==self.request.user
+    
+    def post(self,request,*args,**kwargs):
+        post=get_object_or_404(Post, pk=self.kwargs['pk'])
+
+        post.is_active=False
+        post.save()
+
+        messages.success(request,'Your Post Deleted.')
+        return redirect('home')
+
+    def get(self,request,*args,**kwargs):
+        return  redirect('home')
 
 @require_POST
 @login_required
