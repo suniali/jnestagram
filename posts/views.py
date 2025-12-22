@@ -69,7 +69,8 @@ class PostCreateView(LoginRequiredMixin,CreateView):
                 tags=[int(tid) for tid in tag_ids_str.split(',') if tid.strip().isdigit()]
                 self.object.tag.set(tags)
             except ValueError:
-                pass
+                messages.error(self.request, "Invalid tag id")
+        messages.success(self.request, "Post successfully created")
         return response
         
 class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
@@ -96,7 +97,7 @@ class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
             self.object.tag.set(tags)
         else:
             self.object.tag.clear()
-        
+        messages.success(self.request, 'You have successfully updated your post.')
         return response
     
 class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,View):
