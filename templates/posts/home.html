@@ -24,7 +24,7 @@
                     {% endfor %}
                 </div>
                 <div class="flex items-center justify-between text-sm px-2">
-                    <a class="font-bold hover:underline" href="">
+                    <a class="font-bold hover:underline" href="{% url 'add_comment' post.pk %}">
                         Comments
                         <span class="font-light text-gray-500 ml-1">{{ post.approved_comments_count }}</span>
                     </a>

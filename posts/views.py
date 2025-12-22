@@ -4,12 +4,13 @@ from django.shortcuts import get_object_or_404,redirect
 from django.views.generic import ListView,CreateView,UpdateView,View
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib import messages
-from django.db.models import Q,Count
+from django.db.models import Q,Count,Prefetch
 from django.http import JsonResponse
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 
-from .models import Post, Tag,Like
-from .form import PostForm
+from .models import Post,Tag,Like,Comment
+from .form import PostForm, CommentForm
+
 
 class PostListView(ListView):
     model = Post
@@ -19,18 +20,24 @@ class PostListView(ListView):
     ordering = ['-created_at']
     
     def get_queryset(self):
-        queryset = Post.objects.filter(is_active=True, is_public=True)
+        queryset = Post.objects.filter(is_active=True, is_public=True).select_related(
+            'user'
+        ).prefetch_related(
+            'tag'
+        )
+
         queryset = queryset.annotate(
             approved_comments_count=Count(
                 'comments', 
                 filter=Q(comments__is_approved=True), 
                 distinct=True
-            ))
+            )
+        )
         tag_name = self.request.GET.get('tag')
         if tag_name:
             queryset = queryset.filter(tag__name=tag_name)
             
-        return queryset.distinct()
+        return queryset.order_by('-created_at').distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -116,6 +123,30 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,View):
 
     def get(self,request,*args,**kwargs):
         return  redirect('home')
+
+class CommentCreateView(LoginRequiredMixin,CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "posts/comment.html"
+
+    def get_queryset(self, **kwargs):
+       return Comment.objects.select_related('user','post').filter(is_approved=True)
+
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        post=get_object_or_404(Post, pk=self.kwargs['pk'])
+        approved_comments=self.get_queryset().filter(post=post).order_by('-created_at')
+
+        context['post'] = post
+        context['comments'] = approved_comments
+        return context
+    def form_valid(self, form):
+        form.instance.user=self.request.user
+        form.instance.post=Post.objects.get(pk=self.kwargs['pk'])
+        messages.success(self.request, 'Comment successfully created')
+        return super().form_valid(form)
+    def get_success_url(self):
+        return reverse('add_comment',kwargs={'pk':self.kwargs['pk']})
 
 @require_POST
 @login_required
