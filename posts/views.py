@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404,redirect
-from django.views.generic import ListView,CreateView,UpdateView,View
+from django.views.generic import ListView, CreateView, UpdateView, View, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib import messages
 from django.db.models import Q,Count,Prefetch
@@ -147,6 +147,35 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
         return super().form_valid(form)
     def get_success_url(self):
         return reverse('add_comment',kwargs={'pk':self.kwargs['pk']})
+
+class CommentUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "posts/comment_update.html"
+
+    def test_func(self):
+        comment=self.get_object()
+        return self.request.user==comment.user
+
+    def form_valid(self, form):
+        form.instance.is_approved=False
+        messages.info(self.request, "Your edit has been submitted and is awaiting re-approval.")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('add_comment',kwargs={'pk':self.object.post.pk})
+
+class CommentDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
+    model = Comment
+    template_name = 'posts/comment_confirm_delete.html'
+
+    def test_func(self):
+        comment=self.get_object()
+        return self.request.user==comment.user
+
+    def get_success_url(self):
+        messages.warning(self.request, "Comment deleted successfully.")
+        return  reverse_lazy('add_comment',kwargs={'pk':self.object.post.pk})
 
 @require_POST
 @login_required
