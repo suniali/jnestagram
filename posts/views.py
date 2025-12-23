@@ -143,7 +143,14 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
     def form_valid(self, form):
         form.instance.user=self.request.user
         form.instance.post=Post.objects.get(pk=self.kwargs['pk'])
-        messages.success(self.request, 'Comment successfully created')
+
+        if self.request.user.is_staff or  self.request.user.is_superuser:
+            form.instance.is_approved=True
+            messages.success(self.request,'Your comment has been published.')
+        else:
+            form.instance.is_approved=False
+            messages.success(self.request, 'Your comment is awaiting approval.')
+
         return super().form_valid(form)
     def get_success_url(self):
         return reverse('add_comment',kwargs={'pk':self.kwargs['pk']})
