@@ -51,7 +51,7 @@
                             {% endif %}
                         </div>
                         {% if user.is_authenticated and user == post.user %}
-                            <a href="{% url 'update_post' post.id %}">Edit</a>
+                            <a href="{% url 'update_post' post.id %}?next={{ request.path }}">Edit</a>
                             <div x-data="{ showConfirm: false }">
                                 <a class="cursor-pointer select-none hover:underline"
                                    @click="showConfirm = true">Delete</a>
@@ -65,7 +65,7 @@
                                                         class="px-4 py-2 text-gray-500 hover:text-violet-500 hover:bg-white hover:border-2 hover:border-violet-500 font-medium shadow-none">
                                                     Cancel
                                                 </button>
-                                                <form method="POST" action="{% url 'delete_post' post.pk %}">
+                                                <form method="POST" action="{% url 'delete_post' post.pk %}?next={{ request.path }}">
                                                     {% csrf_token %}
                                                     <button type="submit"
                                                             class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold">

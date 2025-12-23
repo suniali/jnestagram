@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.db.models import Q,Count,Prefetch
 from django.http import JsonResponse
 from django.urls import reverse_lazy,reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .models import Post,Tag,Like,Comment
 from .form import PostForm, CommentForm
@@ -79,6 +80,18 @@ class PostCreateView(LoginRequiredMixin,CreateView):
                 messages.error(self.request, "Invalid tag id")
         messages.success(self.request, "Post successfully created")
         return response
+
+    def get_success_url(self):
+        next_url=self.request.GET.get('next')
+
+        is_safe=url_has_allowed_host_and_scheme(
+            url=next_url,
+            allowed_hosts=self.request.get_host(),
+            require_https=self.request.is_secure(),
+        )
+        if next_url and is_safe:
+            return next_url
+        return reverse_lazy('home')
         
 class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model=Post
@@ -106,6 +119,18 @@ class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
             self.object.tag.clear()
         messages.success(self.request, 'You have successfully updated your post.')
         return response
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        is_safe = url_has_allowed_host_and_scheme(
+            url=next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        )
+
+        if next_url and is_safe:
+            return next_url
+        return redirect('home')
     
 class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,View):
     def test_func(self):
@@ -119,6 +144,14 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,View):
         post.save()
 
         messages.success(request,'Your Post Deleted.')
+        next_url=request.GET.get('next')
+        is_secure=url_has_allowed_host_and_scheme(
+            url=next_url,
+            allowed_hosts={request.get_host()},
+            require_https=self.request.is_secure(),
+        )
+        if next_url and is_secure:
+            return redirect(next_url)
         return redirect('home')
 
     def get(self,request,*args,**kwargs):
@@ -153,6 +186,14 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
 
         return super().form_valid(form)
     def get_success_url(self):
+        next_url=self.request.GET.get('next')
+        is_secure=url_has_allowed_host_and_scheme(
+            url=next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        )
+        if next_url and is_secure:
+            return next_url
         return reverse('add_comment',kwargs={'pk':self.kwargs['pk']})
 
 class CommentUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
@@ -170,6 +211,14 @@ class CommentUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
+        next_url=self.request.GET.get('next')
+        is_secure=url_has_allowed_host_and_scheme(
+            url=next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        )
+        if next_url and is_secure:
+            return next_url
         return reverse_lazy('add_comment',kwargs={'pk':self.object.post.pk})
 
 class CommentDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
@@ -182,6 +231,14 @@ class CommentDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
 
     def get_success_url(self):
         messages.warning(self.request, "Comment deleted successfully.")
+        next_url=self.request.GET.get('next')
+        is_secure = url_has_allowed_host_and_scheme(
+            url=next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        )
+        if next_url and is_secure:
+            return next_url
         return  reverse_lazy('add_comment',kwargs={'pk':self.object.post.pk})
 
 @require_POST

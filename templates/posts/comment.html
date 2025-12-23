@@ -55,9 +55,9 @@
 
                   {% if request.user == comment.user %}
                       <div class="actions" style="font-size: 0.85rem;">
-                          <a href="{% url 'update_comment' comment.pk %}" style="color: #007bff; text-decoration: none;">Edit</a>
+                          <a href="{% url 'update_comment' comment.pk %}?next={{ request.path }}" style="color: #007bff; text-decoration: none;">Edit</a>
                           <span style="color: #ccc; margin: 0 8px;">|</span>
-                          <a href="{% url 'delete_comment' comment.pk %}" style="color: #dc3545; text-decoration: none;">Delete</a>
+                          <a href="{% url 'delete_comment' comment.pk %}?next={{ request.path }}" style="color: #dc3545; text-decoration: none;">Delete</a>
                       </div>
                   {% endif %}
                 </div>

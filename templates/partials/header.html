@@ -41,7 +41,7 @@
             {% else %}
                 <li>
                     <a class="cursor-pointer select-none text-violet-400 font-bold border-2 border-violet-400 rounded-e-md mr-2"
-                       href="{% url 'create_post' %}">Create Post</a>
+                       href="{% url 'create_post' %}?next={{ request.path }}">Create Post</a>
                 </li>
                 <li x-data="{ dropdownOpen: false }" class="relative">
                     <a @click="dropdownOpen = !dropdownOpen"

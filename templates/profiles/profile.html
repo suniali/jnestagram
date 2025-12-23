@@ -182,7 +182,7 @@
                             </div>
                         </div>
                         <div class="flex gap-2 " x-data="{ showConfirm: false }">
-                            <a href="{% url 'update_post' post.id %} " class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
+                            <a href="{% url 'update_post' post.id %}?next={{ request.path }}" class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                             </a>
 
@@ -199,7 +199,7 @@
                                                     class="px-4 py-2 text-gray-500 hover:text-violet-500 hover:bg-white hover:border-2 hover:border-violet-500 font-medium shadow-none">
                                                 Cancel
                                             </button>
-                                            <form method="POST" action="{% url 'delete_post' post.pk %}">
+                                            <form method="POST" action="{% url 'delete_post' post.pk %}?next={{ request.path }}">
                                                 {% csrf_token %}
                                                 <button type="submit"
                                                         class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold">
@@ -236,10 +236,10 @@
                         <p class="text-slate-600 text-sm mb-4 bg-slate-50 p-3 rounded-xl">"{{ comment.text }}"</p>
 
                         <div class="flex gap-3">
-                            <a href="{% url 'approve_comment' comment.pk %}" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white text-center py-2 rounded-xl text-sm font-bold transition shadow-lg shadow-emerald-100">
+                            <a href="{% url 'approve_comment' comment.pk %}?next={{ request.path }}" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white text-center py-2 rounded-xl text-sm font-bold transition shadow-lg shadow-emerald-100">
                                 Approve
                             </a>
-                            <a href="{% url 'delete_comment' comment.pk %}" class="px-4 py-2 border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-xl text-sm font-bold transition">
+                            <a href="{% url 'delete_comment' comment.pk %}?next={{ request.path }}" class="px-4 py-2 border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-xl text-sm font-bold transition">
                                 Reject
                             </a>
                         </div>

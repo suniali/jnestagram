@@ -4,7 +4,7 @@
 <div class="edit-container w-full max-w-xl mx-auto my-8 p-6 bg-white rounded-xl shadow" >
     <h2 class="text-3xl font-bold font1 titleBlip mb-3">Edit Your Comment</h2>
     <hr>
-    <form method="post">
+    <form method="post" action="{% url 'update_comment' comment.pk %}?next={{ request.GET.next}}">
         {% csrf_token %}
         <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Join the discussion</label>
