@@ -4,9 +4,9 @@ from django.shortcuts import get_object_or_404,redirect
 from django.views.generic import ListView, CreateView, UpdateView, View, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib import messages
-from django.db.models import Q,Count,Prefetch
+from django.db.models import Q,Count
 from django.http import JsonResponse
-from django.urls import reverse_lazy,reverse
+from django.urls import reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
 
 from .models import Post,Tag,Like,Comment
@@ -194,7 +194,7 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
         )
         if next_url and is_secure:
             return next_url
-        return reverse('add_comment',kwargs={'pk':self.kwargs['pk']})
+        return reverse_lazy('add_comment',kwargs={'pk':self.kwargs['pk']})
 
 class CommentUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Comment
