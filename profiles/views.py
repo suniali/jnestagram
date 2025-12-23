@@ -1,14 +1,15 @@
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.db import transaction
-from django.contrib.auth import get_user_model
-from django.views.generic import View
-from django.shortcuts import render,redirect
-from django.contrib.auth import login,logout,authenticate,update_session_auth_hash
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model,login,logout,authenticate,update_session_auth_hash
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import View
+from django.shortcuts import render,redirect,get_object_or_404
 
 from .models import Profile
+from posts.models import Post,Comment
 
 User = get_user_model()
 
@@ -159,7 +160,14 @@ class ProfileView(LoginRequiredMixin,View):
 
     def get(self, request):
         profile, created = Profile.objects.get_or_create(user=request.user)
-        return render(request, self.template_name, {'profile': profile})
+        users_posts=Post.objects.filter(user=request.user,is_active=True).order_by('-created_at')
+        pending_comments=Comment.objects.filter(post__user=request.user,is_approved=False).select_related('user','post')
+        context={
+            'profile': profile,
+            'user_posts':users_posts,
+            'pending_comments':pending_comments,
+        }
+        return render(request, self.template_name,context)
     
     def post(self, request):
         user=request.user
@@ -189,3 +197,11 @@ class ProfileView(LoginRequiredMixin,View):
             messages.error(request, 'An error occurred. Please try again.')
             
         return redirect('profile')
+
+@login_required
+def approve_comment(request,pk):
+    comment=get_object_or_404(Comment,pk=pk,post__user=request.user)
+    comment.is_approved=True
+    comment.save()
+    messages.success(request, 'Comment has been approved and is now public.')
+    return redirect('profile')

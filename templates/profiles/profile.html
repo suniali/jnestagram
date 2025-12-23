@@ -1,79 +1,255 @@
 {% extends "base.html" %}
 {% block title %}My Profile{% endblock %}
+
 {% block layout %}
-    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-100 px-4 py-12">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-8 md:p-12">
-            <div class="text-center mb-10">
-                <h1 class="text-4xl font-bold text-gray-800 font1 titleBlip">My Profile</h1>
-                <p class="text-gray-600 mt-2">Update your personal information</p>
-            </div>
-            <div class="flex flex-col md:flex-row items-center md:items-start gap-10 mb-10">
-                <!-- Avatar -->
-                <div class="text-center">
-                    <div class="relative">
-                        {% if profile.avatar %}
-                            <img src="{{ profile.avatar.url }}"
-                                 alt="Avatar"
-                                 class="w-32 h-32 rounded-full object-cover border-4 border-indigo-200 shadow-lg">
-                        {% else %}
-                            <div class="w-32 h-32 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-5xl font-bold shadow-lg">
-                                {{ request.user.username|slice:":1"|upper }}
+    {#    Profile #}
+    <div class="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8"
+         x-data="{
+        photoPreview: null,
+        isSaving: false,
+        handleFileChange(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => { this.photoPreview = e.target.result; };
+            reader.readAsDataURL(file);
+        }
+     }">
+
+        <div class="max-w-3xl mx-auto">
+            <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 overflow-hidden border border-slate-100">
+
+                <div class="h-32 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500"></div>
+
+                <div class="px-8 pb-12">
+                    <form method="post" enctype="multipart/form-data" @submit="isSaving = true">
+                        {% csrf_token %}
+
+                        <div class="relative -mt-16 mb-10 flex flex-col items-center">
+                            <div class="relative group">
+                                <template x-if="!photoPreview">
+                                    {% if profile.avatar %}
+                                        <img src="{{ profile.avatar.url }}" class="w-32 h-32 rounded-3xl object-cover border-4 border-white shadow-2xl ring-1 ring-slate-200">
+                                    {% else %}
+                                        <div class="w-32 h-32 rounded-3xl bg-indigo-500 flex items-center justify-center text-white text-4xl font-bold border-4 border-white shadow-2xl">
+                                            {{ request.user.username|slice:":1"|upper }}
+                                        </div>
+                                    {% endif %}
+                                </template>
+
+                                <template x-if="photoPreview">
+                                    <img :src="photoPreview" class="w-32 h-32 rounded-3xl object-cover border-4 border-white shadow-2xl ring-1 ring-slate-200">
+                                </template>
+
+                                <label for="avatar-upload" class="absolute inset-0 w-32 h-32 bg-black/40 rounded-3xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </label>
+                                <input type="file" id="avatar-upload" name="avatar" class="hidden" accept="image/*" @change="handleFileChange">
                             </div>
-                        {% endif %}
-                    </div>
-                    <p class="mt-4 text-gray-600 font-medium">{{ request.user.username }}</p>
-                </div>
-                <!-- Info -->
-                <div class="flex-1 text-left space-y-3">
-                    <div>
-                        <span class="font-medium text-gray-700">Email:</span>
-                        <span class="ml-3 text-gray-900">{{ request.user.email|default:"Not set" }}</span>
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-700">Member since:</span>
-                        <span class="ml-3 text-gray-900">{{ request.user.date_joined|date:"F j, Y" }}</span>
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-700">Last login:</span>
-                        <span class="ml-3 text-gray-900">{{ request.user.last_login|date:"F j, Y, H:i"|default:"Never" }}</span>
-                    </div>
+
+                            <h2 class="mt-4 text-2xl font-bold text-slate-800">{{ request.user.username }}</h2>
+                            <span class="text-sm text-slate-500 font-medium">Personal Account</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                            <div class="space-y-6">
+                                <h3 class="text-lg font-semibold text-slate-800 flex items-center gap-2">
+                                    <span class="w-1 h-6 bg-indigo-600 rounded-full"></span>
+                                    Account Details
+                                </h3>
+
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-slate-600 mb-1">Username</label>
+                                        <input type="text" disabled value="{{ request.user.username }}"
+                                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-500 cursor-not-allowed">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-slate-600 mb-1">Joined On</label>
+                                        <div class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-600 text-sm">
+                                            {{ request.user.date_joined|date:"F j, Y" }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <h3 class="text-lg font-semibold text-slate-800 flex items-center gap-2">
+                                    <span class="w-1 h-6 bg-purple-600 rounded-full"></span>
+                                    Update Info
+                                </h3>
+
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-slate-600 mb-1">Email Address</label>
+                                        <input type="email" name="email" value="{{ request.user.email }}"
+                                               class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
+                                    </div>
+
+                                    <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100">
+                                        <p class="text-xs text-indigo-700 leading-relaxed">
+                                            <strong>Pro Tip:</strong> Using a professional email helps in account recovery and receiving important notifications.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-12 flex items-center justify-between border-t border-slate-100 pt-8">
+                            <div class="hidden sm:block">
+                                <p class="text-xs text-slate-400">Last login: {{ request.user.last_login|date:"H:i, F j" }}</p>
+                            </div>
+
+                            <button type="submit"
+                                    class="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center gap-3 shadow-xl shadow-slate-200"
+                                    :class="isSaving ? 'opacity-70 cursor-wait' : ''">
+                                <span x-show="!isSaving">Save Profile</span>
+                                <span x-show="isSaving" class="flex items-center gap-2">
+                                <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Saving...
+                            </span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <!-- Edit Form -->
-            <form method="post" enctype="multipart/form-data" x-data>
-                {% csrf_token %}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div>
-                        <label class="block text-gray-700 font-medium mb-2">Username</label>
-                        <input type="text"
-                               name="username"
-                               disabled
-                               value="{{ request.user.username }}"
-                               required
-                               class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+        </div>
+    </div>
+
+    {#    Pending_Comments & Posts #}
+    <div class="max-w-3xl mx-auto mt-12" x-data="{ activeTab: 'posts' }">
+        <div class="flex p-1.5 bg-slate-100 rounded-2xl w-fit mb-10 border border-slate-200 gap-3">
+
+            <button @click="activeTab = 'posts'"
+                    class="group flex items-center gap-3 px-6 py-2.5 rounded-xl transition-all duration-200 outline-none font-bold text-xs uppercase tracking-widest"
+                    :class="activeTab === 'posts'
+                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 cursor-default'
+                    : 'text-slate-600 hover:bg-slate-200 hover:text-slate-900'">
+
+                <svg class="w-4 h-4"
+                     :class="activeTab === 'posts' ? 'text-white' : 'text-slate-400 group-hover:text-slate-700'"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+
+                <span>My Posts</span>
+
+                <span class="text-[10px] px-2 py-0.5 rounded-md font-black transition-all"
+                      :class="activeTab === 'posts' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600 group-hover:bg-slate-300'">
+            {{ user_posts.count }}
+        </span>
+            </button>
+
+            <button @click="activeTab = 'comments'"
+                    class="group flex items-center gap-3 px-6 py-2.5 rounded-xl transition-all duration-200 outline-none font-bold text-xs uppercase tracking-widest"
+                    :class="activeTab === 'comments'
+                    ? 'bg-amber-500 text-white shadow-lg shadow-amber-100 cursor-default'
+                    : 'text-slate-600 hover:bg-slate-200 hover:text-slate-900'">
+
+                <svg class="w-4 h-4"
+                     :class="activeTab === 'comments' ? 'text-white' : 'text-slate-400 group-hover:text-slate-700'"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                </svg>
+
+                <span>Pending Comments</span>
+
+                <span class="text-[10px] px-2 py-0.5 rounded-md font-black transition-all"
+                      :class="activeTab === 'comments' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600 group-hover:bg-slate-300'">
+            {{ pending_comments.count }}
+        </span>
+            </button>
+        </div>
+
+        <div x-show="activeTab === 'posts'" x-transition class="mb-4">
+            <div class="grid gap-4">
+                {% for post in user_posts %}
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group hover:shadow-md transition-all">
+                        <div class="flex items-center gap-4">
+                            {% if post.image %}
+                                <img src="{{ post.image.url }}" class="w-16 h-16 rounded-xl object-cover">
+                            {% endif %}
+                            <div>
+                                <h4 class="font-bold text-slate-800">{{ post.title }}</h4>
+                                <p class="text-xs text-slate-500">{{ post.created_at|date:"M d, Y" }}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 " x-data="{ showConfirm: false }">
+                            <a href="{% url 'update_post' post.id %} " class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                            </a>
+
+                            <a  @click="showConfirm = true" class="cursor-pointer select-none p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </a>
+                            <template x-if="showConfirm">
+                                <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                                    <div class="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full mx-4">
+                                        <h3 class="text-lg font-bold mb-4 text-gray-900">Are you sure?</h3>
+                                        <p class="text-gray-600 mb-6 text-sm">This post will be hidden from public view.</p>
+                                        <div class="flex justify-end space-x-3">
+                                            <button @click="showConfirm = false"
+                                                    class="px-4 py-2 text-gray-500 hover:text-violet-500 hover:bg-white hover:border-2 hover:border-violet-500 font-medium shadow-none">
+                                                Cancel
+                                            </button>
+                                            <form method="POST" action="{% url 'delete_post' post.pk %}">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold">
+                                                    Yes, Disable it
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-gray-700 font-medium mb-2">Email(optional)</label>
-                        <input type="email"
-                               name="email"
-                               value="{{ request.user.email }}"
-                               class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                {% empty %}
+                    <div class="text-center py-10 bg-white rounded-2xl border-2 border-dashed border-slate-200">
+                        <p class="text-slate-500">You haven't posted anything yet.</p>
                     </div>
-                </div>
-                <div class="mb-8">
-                    <label class="block text-gray-700 font-medium mb-2">Profile Picture (optional)</label>
-                    <input type="file"
-                           name="avatar"
-                           accept="image/*"
-                           class="w-full file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                </div>
-                <div class="text-center">
-                    <button type="submit"
-                            class="inline-block px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-lg rounded-xl transition transform hover:scale-105 shadow-lg">
-                        Save Changes
-                    </button>
-                </div>
-            </form>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div x-show="activeTab === 'comments'" x-transition class="mb-4">
+            <div class="space-y-4">
+                {% for comment in pending_comments %}
+                    <div class="bg-white p-5 rounded-2xl border-l-4 border-l-amber-400 shadow-sm">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-slate-800">{{ comment.user.username }}</span>
+                                <span class="text-xs text-slate-400">on</span>
+                                <span class="text-xs font-medium text-indigo-600">{{ comment.post.title|truncatechars:30 }}</span>
+                            </div>
+                            <span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-bold uppercase">Pending</span>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-4 bg-slate-50 p-3 rounded-xl">"{{ comment.text }}"</p>
+
+                        <div class="flex gap-3">
+                            <a href="{% url 'approve_comment' comment.pk %}" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white text-center py-2 rounded-xl text-sm font-bold transition shadow-lg shadow-emerald-100">
+                                Approve
+                            </a>
+                            <a href="{% url 'delete_comment' comment.pk %}" class="px-4 py-2 border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-xl text-sm font-bold transition">
+                                Reject
+                            </a>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="text-center py-10 bg-white rounded-2xl border-2 border-dashed border-slate-200">
+                        <p class="text-slate-500">No comments waiting for approval.</p>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}
