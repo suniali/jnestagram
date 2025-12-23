@@ -53,13 +53,15 @@
                         {{ comment.text }}
                     </p>
 
-                  {% if request.user == comment.user %}
                       <div class="actions" style="font-size: 0.85rem;">
+                  {% if request.user == comment.user %}
                           <a href="{% url 'update_comment' comment.pk %}?next={{ request.path }}" style="color: #007bff; text-decoration: none;">Edit</a>
+                  {% endif %}
+                      {% if request.user == comment.user or request.user == comment.post.user %}
                           <span style="color: #ccc; margin: 0 8px;">|</span>
                           <a href="{% url 'delete_comment' comment.pk %}?next={{ request.path }}" style="color: #dc3545; text-decoration: none;">Delete</a>
+                      {% endif %}
                       </div>
-                  {% endif %}
                 </div>
             </div>
         {% empty %}

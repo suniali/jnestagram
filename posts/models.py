@@ -38,6 +38,10 @@ class Post(models.Model):
     def total_likes(self):
         return self.likes.count()
 
+    @property
+    def approved_comments(self):
+        return self.comments.filter(is_approved=True)
+
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='comments')
