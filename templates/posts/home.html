@@ -26,7 +26,7 @@
                 <div class="flex items-center justify-between text-sm px-2">
                     <a class="font-bold text-gray-500 hover:underline" href="{% if not user.is_authenticated %} {% url 'login' %} {% else %} {% url 'add_comment' post.pk %} {% endif %}">
                         Comments {{ post.approved_comments_count }}
-                          <span class="font-light">| {{ post.created_at|timesince }}</span>
+                        <span class="font-light">| {{ post.created_at|timesince }}</span>
                     </a>
                     <div class="flex items-center gap-4 [&>a:hover]:underline">
                         <div class="text-center">
@@ -52,31 +52,7 @@
                         </div>
                         {% if user.is_authenticated and user == post.user %}
                             <a href="{% url 'update_post' post.id %}?next={{ request.path }}">Edit</a>
-                            <div x-data="{ showConfirm: false }">
-                                <a class="cursor-pointer select-none hover:underline"
-                                   @click="showConfirm = true">Delete</a>
-                                <template x-if="showConfirm">
-                                    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                                        <div class="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full mx-4">
-                                            <h3 class="text-lg font-bold mb-4 text-gray-900">Are you sure?</h3>
-                                            <p class="text-gray-600 mb-6 text-sm">This post will be hidden from public view.</p>
-                                            <div class="flex justify-end space-x-3">
-                                                <button @click="showConfirm = false"
-                                                        class="px-4 py-2 text-gray-500 hover:text-violet-500 hover:bg-white hover:border-2 hover:border-violet-500 font-medium shadow-none">
-                                                    Cancel
-                                                </button>
-                                                <form method="POST" action="{% url 'delete_post' post.pk %}?next={{ request.path }}">
-                                                    {% csrf_token %}
-                                                    <button type="submit"
-                                                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold">
-                                                        Yes, Disable it
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
+                            <a class="cursor-pointer select-none hover:underline" href="{% url 'delete_post' post.id %}?next={{ request.path }}">Delete</a>
                         {% endif %}
                     </div>
                 </div>

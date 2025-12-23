@@ -132,30 +132,25 @@ class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
             return next_url
         return redirect('home')
     
-class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,View):
+class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
+    model = Post
+    template_name = 'posts/post_delete.html'
     def test_func(self):
         post=get_object_or_404(Post, pk=self.kwargs['pk'])
         return post.user==self.request.user
-    
-    def post(self,request,*args,**kwargs):
-        post=get_object_or_404(Post, pk=self.kwargs['pk'])
 
-        post.is_active=False
-        post.save()
-
-        messages.success(request,'Your Post Deleted.')
-        next_url=request.GET.get('next')
-        is_secure=url_has_allowed_host_and_scheme(
+    def get_success_url(self):
+        next_url=self.request.GET.get('next')
+        is_safe = url_has_allowed_host_and_scheme(
             url=next_url,
-            allowed_hosts={request.get_host()},
+            allowed_hosts=self.request.get_host(),
             require_https=self.request.is_secure(),
         )
-        if next_url and is_secure:
-            return redirect(next_url)
+        messages.success(self.request, "Post successfully deleted.")
+        if next_url and is_safe:
+            return next_url
         return redirect('home')
 
-    def get(self,request,*args,**kwargs):
-        return  redirect('home')
 
 class CommentCreateView(LoginRequiredMixin,CreateView):
     model = Comment
