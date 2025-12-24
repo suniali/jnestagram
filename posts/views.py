@@ -25,9 +25,9 @@ class PostListView(ListView):
         ).prefetch_related(
             'tag'
         )
-        tag_name = self.request.GET.get('tag')
-        if tag_name:
-            queryset = queryset.filter(tag__name=tag_name)
+        tag_slug = self.request.GET.get('tag')
+        if tag_slug:
+            queryset = queryset.filter(tag__slug=tag_slug)
             
         return queryset.order_by('-created_at').distinct()
 
