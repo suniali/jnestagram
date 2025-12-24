@@ -59,7 +59,7 @@ class PostListView(ListView):
 class PostCreateView(LoginRequiredMixin,CreateView):
     model=Post
     form_class=PostForm
-    template_name="posts/post.html"
+    template_name="posts/post_create_update.html"
     success_url=reverse_lazy('home')
     
     def get_context_data(self, **kwargs):
@@ -96,7 +96,7 @@ class PostCreateView(LoginRequiredMixin,CreateView):
 class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model=Post
     form_class=PostForm
-    template_name='posts/post.html'
+    template_name='posts/post_create_update.html'
     success_url=reverse_lazy('home')
     
     def test_func(self):

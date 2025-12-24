@@ -1,98 +1,57 @@
-{% extends 'base.html' %}
-{% block layout %}
-    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-100 px-4 py-12">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl mt-1 mb-6 p-8 md:p-10">
-            <div class="text-center mb-6">
-                <h2 class="text-3xl font-bold text-gray-800 font1 titleBlip">
-                    {% if object %}
-                        Update Post
-                    {% else %}
-                        Create New Post
-                    {% endif %}
-                </h2>
-                <p class="text-gray-600 mt-2">Share your thoughts with the world.</p>
+ <article class="card">
+            <div class="flex items-center justify-between px-4 h-14">
+                <h3 class="text-start leading-5 mr-1">{{ post.title }}</h3>
+                <div class="text-sm text-gray-400 truncate">
+                    flickr<a href="" class="hover:underline ml-1" target="blank">@{{ post.user.username }}</a>
+                </div>
             </div>
-            <form method="POST" enctype="multipart/form-data" action="" x-data="{ selectedTags: {{ selected_tag_ids|default:'[]' }}, imagePreview:
-                {% if object.image %}
-                    '{{ object.image.url }}'
-                {% else %}
-                    null
-                {% endif %}
-                , toggleTag(id) { if (this.selectedTags.includes(id)) { this.selectedTags = this.selectedTags.filter(i => i !== id); } else { this.selectedTags.push(id); } } }">
-                {% csrf_token %}
-                <div class="mb-6">
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Title</label>
-                    <input type="text"
-                           name="title"
-                           value="{{ object.title }}"
-                           placeholder="Enter post title"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+            <figure>
+                <a href="">
+                    <img class="w-full" src="{{ post.image.url }}">
+                </a>
+            </figure>
+            <div class="p-4 pb-2">
+                <p class="text-lg text-gray-800 font-medium mb-2 px-1 ">{{ post.text }}</p>
+                <div class="flex items-center gap-2 text-sm mb-3 flex-wrap">
+                    {% for tag in post.tag.all %}
+                        <a href=""
+                           class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">{{ tag.name }}</a>
+                    {% empty %}
+                        <span class="text-gray-400">No Tags</span>
+                    {% endfor %}
                 </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Content</label>
-                    <textarea name="text"
-                              rows="5"
-                              placeholder="Write your content here..."
-                              class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">{{object.text}}</textarea>
-                </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Feature Image</label>
-                    <div @click="$refs.fileInput.click()"
-                         class="relative cursor-pointer border-2 border-dashed border-gray-300 rounded-xl h-64 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition overflow-hidden">
-                        <template x-if="imagePreview">
-                            <img :src="imagePreview" class="w-full h-full object-cover">
-                        </template>
-                        <template x-if="!imagePreview">
-                            <div class="text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                    </path>
-                                </svg>
-                                <p class="mt-1 text-sm text-gray-500">Click to upload image</p>
-                            </div>
-                        </template>
+                <div class="flex items-center justify-between text-sm px-2">
+                    <a class="font-bold text-gray-500 hover:underline" href="{% if not user.is_authenticated %} {% url 'login' %} {% else %} {% url 'add_comment' post.pk %} {% endif %}">
+                        Comments {{ post.approved_comments_count }}
+                        <span class="font-light">| {{ post.created_at|timesince }}</span>
+                    </a>
+                    <div class="flex items-center gap-4 [&>a:hover]:underline">
+                        <div class="text-center">
+                            {% if user.is_authenticated %}
+                                <div x-data="{ liked: {{ post.is_liked|yesno:'true,false' }}, totalLikes: {{ post.total_likes }}, animating: false, async toggle() { if (this.animating) return;  const csrf = document.querySelector('[name=csrfmiddlewaretoken]')?.value || document.querySelector('meta[name=csrf-token]')?.content;  if (!csrf) { console.error('CSRF token not found!'); return; }  try { const res = await fetch('/like/{{ post.pk }}/', { method: 'POST', headers: { 'X-CSRFToken': csrf, 'X-Requested-With': 'XMLHttpRequest' } });  if (!res.ok) return;  const data = await res.json();  this.liked = data.liked; this.totalLikes = data.total_likes;  if (data.liked) { this.animating = true; this.$refs.heart.style.transform = 'scale(1.5)'; setTimeout(() => { this.$refs.heart.style.transform = 'scale(1)'; this.animating = false; }, 300); } } catch (err) { console.error(err); } } }"
+                                     @click="toggle()"
+                                     class="cursor-pointer inline-block select-none flex items-center justify-between gap-1">
+                                    <img x-ref="heart"
+                                         src="https://img.icons8.com/small/96/fire-heart.png"
+                                         alt="Like"
+                                         class="w-6 h-6 mx-auto transition-transform duration-500">
+                                    <span class="block text-sm text-gray-700 mt-1" x-text="totalLikes"></span>
+                                </div>
+                            {% else %}
+                                <a href="{% url 'login' %}?next={{ request.path }}" class="inline-block">
+                                    <img x-ref="heart"
+                                         src="https://img.icons8.com/small/96/fire-heart.png"
+                                         alt="Like"
+                                         class="w-6 h-6 mx-auto transition-transform duration-300">
+                                    <span class="block text-sm text-gray-700 mt-1" x-text="totalLikes"></span>
+                                </a>
+                            {% endif %}
+                        </div>
+                        {% if user.is_authenticated and user == post.user %}
+                            <a href="{% url 'update_post' post.id %}?next={{ request.path }}">Edit</a>
+                            <a class="cursor-pointer select-none hover:underline" href="{% url 'delete_post' post.id %}?next={{ request.path }}">Delete</a>
+                        {% endif %}
                     </div>
-                    <input type="file"
-                           name="image"
-                           x-ref="fileInput"
-                           class="hidden"
-                           accept="image/*"
-                           @change="const file = $event.target.files[0]; if (file) { imagePreview = URL.createObjectURL(file) }">
                 </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Select Tags</label>
-                    <div class="flex flex-wrap gap-2">
-                        {% for tag in tags %}
-                            <button type="button"
-                                    @click="toggleTag({{ tag.id }})"
-                                    :class="selectedTags.includes({{ tag.id }}) ? 'bg-violet-600 text-white border-violet-600' : 'bg-white text-violet-600 border-violet-300'"
-                                    class="px-4 py-1.5 rounded-xl border text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-sm hover:text-violet-100">
-                                {{ tag.name }}
-                            </button>
-                        {% endfor %}
-                    </div>
-                    <input type="hidden" name="selected_tags" :value="selectedTags.join(',')">
-                </div>
-                <div class="flex items-center gap-2 bg-violet-50 p-3 rounded-xl">
-                    <input type="checkbox"
-                           name="is_public"
-                           id="is_public"
-                           checked="{{ object.is_public }}"
-                           class="w-5 h-4 text-violet-600 border-violet-300 rounded-xl focus:ring-violet-500 ">
-                    <label for="is_public"
-                           class="text-sm font-medium text-gray-600 select-none cursor-pointer -m-0.5">
-                        Make this post Public
-                    </label>
-                </div>
-                <hr class="border-gray-100 my-6">
-                <button type="submit"
-                        class="w-full bg-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition duration-300">
-                    SAVE POST
-                </button>
-            </form>
-        </div>
-    </div>
-{% endblock %}
+            </div>
+        </article>
