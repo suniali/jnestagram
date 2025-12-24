@@ -1,7 +1,10 @@
+import uuid
+
 from django.db import models
 from django.conf import settings 
 
 class Tag(models.Model):
+    id=models.CharField(max_length=100, primary_key=True,unique=True,default=uuid.uuid4,editable=False)
     name = models.CharField(max_length=30, unique=True)
     icon= models.ImageField(upload_to='tags/%Y/%m/%d', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -16,6 +19,7 @@ class Tag(models.Model):
         return self.name
 
 class Post(models.Model):
+    id = models.CharField(max_length=100, primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to='posts/%Y/%m/%d')
@@ -43,6 +47,7 @@ class Post(models.Model):
         return self.comments.filter(is_approved=True)
 
 class Comment(models.Model):
+    id = models.CharField(max_length=100, primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='comments')
     text = models.TextField()
@@ -60,6 +65,7 @@ class Comment(models.Model):
         return f'Comment by {self.user.username} on {self.post.title}'
         
 class Like(models.Model):
+    id = models.CharField(max_length=100, primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='likes')
     created_at = models.DateTimeField(auto_now_add=True)
