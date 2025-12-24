@@ -7,6 +7,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=20,db_index=True)
     slug = models.SlugField(max_length=20,unique=True)
     icon= models.ImageField(upload_to='tags/%Y/%m/%d', null=True, blank=True)
+    order=models.IntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -14,6 +15,7 @@ class Tag(models.Model):
         db_table = 'tags'
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
+        ordering = ('order',)
         
     def __str__(self):
         return self.name
