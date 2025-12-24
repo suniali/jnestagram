@@ -4,8 +4,8 @@ from django.db import models
 from django.conf import settings 
 
 class Tag(models.Model):
-    id=models.CharField(max_length=100, primary_key=True,unique=True,default=uuid.uuid4,editable=False)
-    name = models.CharField(max_length=30, unique=True)
+    name = models.CharField(max_length=20,db_index=True)
+    slug = models.SlugField(max_length=20,unique=True)
     icon= models.ImageField(upload_to='tags/%Y/%m/%d', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -24,7 +24,7 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to='posts/%Y/%m/%d')
     text = models.TextField()
-    tag= models.ManyToManyField(Tag, related_name='posts',blank=True,null=True)
+    tag= models.ManyToManyField(Tag, related_name='posts',blank=True)
     is_active = models.BooleanField(default=True)
     is_public = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -35,16 +35,11 @@ class Post(models.Model):
         db_table = 'posts'
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
+        indexes=[models.Index(fields=['is_active','is_public','-created_at'])]
         
     def __str__(self):
         return self.title
 
-    def total_likes(self):
-        return self.likes.count()
-
-    @property
-    def approved_comments(self):
-        return self.comments.filter(is_approved=True)
 
 class Comment(models.Model):
     id = models.CharField(max_length=100, primary_key=True, unique=True, default=uuid.uuid4, editable=False)
@@ -60,6 +55,7 @@ class Comment(models.Model):
         db_table = 'comments'
         verbose_name = 'Comment'
         verbose_name_plural = 'Comments'
+        indexes=[models.Index(fields=['post','is_approved','-created_at'])]
 
     def __str__(self):
         return f'Comment by {self.user.username} on {self.post.title}'
@@ -75,3 +71,4 @@ class Like(models.Model):
         db_table = 'likes'
         verbose_name = 'Like'
         verbose_name_plural = 'Likes'
+        indexes=[models.Index(fields=['post','user'])]

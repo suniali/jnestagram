@@ -7,7 +7,7 @@
             <p class="text-3xl text-gray-400 mb-4">📭</p>
             <p class="text-2xl text-gray-600 mb-8">No posts published yet</p>
             {% if user.is_authenticated %}
-                <a href=""
+                <a href="{% url 'create_post' %}?next={{ request.path }}"
                    class="px-8 py-4 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition transform hover:scale-105 shadow-lg">
                     Create Your First Post!
                 </a>
