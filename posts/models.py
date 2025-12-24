@@ -25,6 +25,8 @@ class Post(models.Model):
     image = models.ImageField(upload_to='posts/%Y/%m/%d')
     text = models.TextField()
     tag= models.ManyToManyField(Tag, related_name='posts',blank=True)
+    likes_count=models.PositiveIntegerField(default=0)
+    comments_count=models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     is_public = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -35,7 +37,10 @@ class Post(models.Model):
         db_table = 'posts'
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
-        indexes=[models.Index(fields=['is_active','is_public','-created_at'])]
+        indexes=[
+            models.Index(fields=['-likes_count','-created_at']),
+            models.Index(fields=['is_active','is_public','-created_at'])
+        ]
         
     def __str__(self):
         return self.title

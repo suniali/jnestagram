@@ -22,13 +22,13 @@
                 </div>
                 <div class="flex items-center justify-between text-sm px-2">
                     <a class="font-bold text-gray-500 hover:underline" href="{% if not user.is_authenticated %} {% url 'login' %} {% else %} {% url 'add_comment' post.id %} {% endif %}">
-                        Comments {{ post.approved_comments_count }}
+                        Comments {{ post.comments_count }}
                         <span class="font-light">| {{ post.created_at|timesince }}</span>
                     </a>
                     <div class="flex items-center gap-4 [&>a:hover]:underline">
                         <div class="text-center">
                             {% if user.is_authenticated %}
-                                <div x-data="{ liked: {{ post.is_liked|yesno:'true,false' }}, totalLikes: {{ post.total_likes }}, animating: false, async toggle() { if (this.animating) return;  const csrf = document.querySelector('[name=csrfmiddlewaretoken]')?.value || document.querySelector('meta[name=csrf-token]')?.content;  if (!csrf) { console.error('CSRF token not found!'); return; }  try { const res = await fetch('/like/{{ post.pk }}/', { method: 'POST', headers: { 'X-CSRFToken': csrf, 'X-Requested-With': 'XMLHttpRequest' } });  if (!res.ok) return;  const data = await res.json();  this.liked = data.liked; this.totalLikes = data.total_likes;  if (data.liked) { this.animating = true; this.$refs.heart.style.transform = 'scale(1.5)'; setTimeout(() => { this.$refs.heart.style.transform = 'scale(1)'; this.animating = false; }, 300); } } catch (err) { console.error(err); } } }"
+                                <div x-data="{ liked: {{ post.is_liked|yesno:'true,false' }}, totalLikes: {{ post.likes_count }}, animating: false, async toggle() { if (this.animating) return;  const csrf = document.querySelector('[name=csrfmiddlewaretoken]')?.value || document.querySelector('meta[name=csrf-token]')?.content;  if (!csrf) { console.error('CSRF token not found!'); return; }  try { const res = await fetch('/like/{{ post.pk }}/', { method: 'POST', headers: { 'X-CSRFToken': csrf, 'X-Requested-With': 'XMLHttpRequest' } });  if (!res.ok) return;  const data = await res.json();  this.liked = data.liked; this.totalLikes = data.total_likes;  if (data.liked) { this.animating = true; this.$refs.heart.style.transform = 'scale(1.5)'; setTimeout(() => { this.$refs.heart.style.transform = 'scale(1)'; this.animating = false; }, 300); } } catch (err) { console.error(err); } } }"
                                      @click="toggle()"
                                      class="cursor-pointer inline-block select-none flex items-center justify-between gap-1">
                                     <img x-ref="heart"

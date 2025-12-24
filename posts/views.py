@@ -24,13 +24,6 @@ class PostListView(ListView):
             'user'
         ).prefetch_related(
             'tag'
-        ).annotate(
-            approved_comments_count=Count(
-                'comments', 
-                filter=Q(comments__is_approved=True), 
-                distinct=True
-            ),
-            total_likes=Count('likes', distinct=True),
         )
         tag_name = self.request.GET.get('tag')
         if tag_name:
@@ -45,10 +38,7 @@ class PostListView(ListView):
         
         context['current_tag'] = self.request.GET.get('tag')
         
-        top_posts= Post.objects.filter(is_active=True, is_public=True).annotate(
-            score=Count('likes',distinct=True) +
-            Count('comments', filter=Q(comments__is_approved=True),distinct=True)
-        ).select_related('user').order_by('-score')[:4]
+        top_posts= Post.objects.filter(is_active=True, is_public=True).order_by('-likes_count','-comments_count')[:4]
 
         context['top_posts']= top_posts
         return context
@@ -65,13 +55,6 @@ class PostDetailView(DetailView):
             'tag',
             'likes',
             Prefetch('comments', queryset=approved_comments,to_attr='approved_comments_list')
-        ).annotate(
-            approved_comments_count=Count(
-                'comments',
-                filter=Q(comments__is_approved=True),
-                distinct=True
-            ),
-            total_likes=Count('likes',distinct=True),
         )
 
     def get_context_data(self, **kwargs):
@@ -80,10 +63,7 @@ class PostDetailView(DetailView):
         context['tags'] = Tag.objects.all()
         context['current_tag'] = self.request.GET.get('tag')
 
-        context['top_posts'] = Post.objects.filter(is_active=True, is_public=True).annotate(
-            score=Count('likes', distinct=True) +
-                  Count('comments', filter=Q(comments__is_approved=True), distinct=True)
-        ).order_by('-score')[:4]
+        context['top_posts'] = Post.objects.filter(is_active=True, is_public=True).order_by('-likes_count','-comments_count')[:4]
 
         return context
 
@@ -316,6 +296,6 @@ def like_post(request, post_id):
         like_queryset.create(user=request.user, post=post)
         liked = True
 
-    total_likes=post.likes.count()
+    total_likes=post.likes_count
 
     return JsonResponse({'liked': liked, 'total_likes': total_likes})
