@@ -19,11 +19,16 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
 
+from .views import NotFoundView,InternalServerErrorView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('posts.urls')),
     path('',include('profiles.urls')),
 ]
+
+handler404 = NotFoundView.as_view()
+handler500 = InternalServerErrorView.as_view()
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

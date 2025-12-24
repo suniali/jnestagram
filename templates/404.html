@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}404 - Page Not Found{% endblock %}
+
+{% block layout %}
+    <div class="min-h-[70vh] flex items-center justify-center p-6">
+        <div class="max-w-2xl w-full text-center">
+            <div class="relative">
+                <h1 class="text-[120px] md:text-[180px] font-black text-slate-100 select-none">404</h1>
+
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <div class="bg-white/40 backdrop-blur-md p-10 rounded-[3rem] shadow-2xl border border-white/20">
+                        <div class="w-20 h-20 bg-indigo-50 text-indigo-500 rounded-3xl flex items-center justify-center mx-auto mb-6 rotate-12">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+
+                        <h2 class="text-3xl font-black text-slate-800 mb-4">Lost in Space?</h2>
+                        <p class="text-slate-500 mb-8 leading-relaxed">
+                            The page you are looking for doesn't exist or has been moved. <br>
+                            Don't worry, you can find your way back below.
+                        </p>
+
+                        <div class="flex flex-col md:flex-row gap-4 justify-center">
+                            <a href="/" class="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold transition-all shadow-lg shadow-indigo-200">
+                                Back to Home
+                            </a>
+                            <button onclick="history.back()" class="px-8 py-4 bg-slate-800 text-white hover:bg-slate-900 rounded-2xl font-bold transition-all">
+                                Go Back
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
