@@ -17,7 +17,7 @@ class PostListView(ListView):
     model = Post
     template_name = 'posts/home.html'
     context_object_name = 'posts'
-    paginate_by =2
+    paginate_by =10
 
     def get_queryset(self):
         queryset = Post.objects.filter(is_active=True, is_public=True).select_related(
