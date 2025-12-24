@@ -1,3 +1,5 @@
+{% load static %}
+
 <aside x-show="mobileSidebarOpen"
        x-cloak
        class="md:!block col-span-full md:col-span-1 lg:mr-[20%] order-1 md:order-2"
@@ -11,7 +13,7 @@
                 <li class="my-2 {% if current_tag == tag.name %}highlight{% endif %}">
                     <a href="{% url 'home' %}?tag={{ tag.slug }}">
                         <img class="w-8 h-8 object-cover mr-2"
-                             src="{% if tag and tag.icon %}{{ tag.icon.url }}{% else %} https://img.icons8.com/small/96/null/landscape.png {% endif %}">
+                             src="{% if tag and tag.icon %}{{ tag.icon.url }}{% else %} {% static 'images/icon_landscape.svg' %} {% endif %}">
                         <span class="font-bold text-sm">{{ tag.name }}</span>
                     </a>
                 </li>
@@ -21,7 +23,7 @@
     <section class="card p-4">
         <div class="flex items-center">
             <img class="w-7 mr-2"
-                 src="https://img.icons8.com/ios-glyphs/90/null/fire-heart.png" />
+                 src="{% static 'images/fireheart_black.svg' %}" />
             <h2 class="my-2">Top Posts</h2>
         </div>
         <ul class="hoverlist">
@@ -30,9 +32,9 @@
                     <a class="flex items-stretch justify-between">
                         <div class="flex items-center truncate">
                             <img class="w-10 h-10 rounded-lg object-cover mr-3 shrink-0"
-                                 src="{% if top_post.image %}{{ top_post.image.url }}{% else %}https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg{% endif %}   ">
+                                 src="{% if top_post.image %}{{ top_post.image.url }}{% else %}{% static 'images/icon_landscape.svg' %}{% endif %}   ">
                             <img class="w-4 h-4 rounded-full object-cover mr-1 mt-1"
-                                 src="https://img.icons8.com/small/96/A9A9A9/happy.png">
+                                 src="{% static 'images/avatar_default.svg' %}">
                             <span class="font-bold text-sm mr-1">{{ top_post.user.username }}</span>
                         </div>
                         <span class="text-sm font-light text-grey-500 shrink-0">{{ top_post.likes.count }} Likes</span>

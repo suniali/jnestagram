@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404,redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib import messages
-from django.db.models import Q,Count,Prefetch
+from django.db.models import Prefetch,OuterRef,Exists,Value,BooleanField
 from django.http import JsonResponse,HttpResponseRedirect
 from django.urls import reverse,reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -20,15 +20,26 @@ class PostListView(ListView):
     paginate_by =10
 
     def get_queryset(self):
+        is_liked=Like.objects.filter(user=self.request.user,).exists()
         queryset = Post.objects.filter(is_active=True, is_public=True).select_related(
             'user'
         ).prefetch_related(
             'tag'
         )
+
         tag_slug = self.request.GET.get('tag')
         if tag_slug:
             queryset = queryset.filter(tag__slug=tag_slug)
-            
+
+        if self.request.user.is_authenticated:
+            user_likes=Like.objects.filter(
+                user=self.request.user,
+                post_id=OuterRef('pk')
+            )
+            queryset = queryset.annotate(is_liked=Exists(user_likes))
+        else:
+            queryset = queryset.annotate(is_liked=Value(False,output_field=BooleanField()))
+
         return queryset.order_by('-created_at').distinct()
 
     def get_context_data(self, **kwargs):
