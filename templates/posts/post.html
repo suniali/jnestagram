@@ -14,8 +14,8 @@
     </figure>
     <div class="p-4 pb-2">
         <a class="flex items-center gap-1 mb-4" href="">
-            <img class="w-6 h-6 object-cover rounded-full -mt-1" src="{% if user.is_authenticated and user.profile.avatar %} {{ user.profile.avatar.url }} {% else %} {% static 'images/avatar_default.svg' %} {% endif %}">
-            <span class="font-bold hover:underline">{{ user.username|capfirst }}</span><span class="text-gray-400 text-sm"> @{{ user.username }}</span>
+            <img class="w-6 h-6 object-cover rounded-full -mt-1" src="{% if post.user.profile.avatar %} {{ post.user.profile.avatar.url }} {% else %} {% static 'images/avatar_default.svg' %} {% endif %}">
+            <span class="font-bold hover:underline">{{ post.user.username|capfirst }}</span><span class="text-gray-400 text-sm"> @{{ post.user.username }}</span>
         </a>
         <p class="text-5xl mb-10 px-4 font1 ">{{ post.text }}</p>
         <div class="flex items-center gap-2 text-sm mb-3 flex-wrap">
