@@ -20,7 +20,6 @@ class PostListView(ListView):
     paginate_by =10
 
     def get_queryset(self):
-        is_liked=Like.objects.filter(user=self.request.user,).exists()
         queryset = Post.objects.filter(is_active=True, is_public=True).select_related(
             'user'
         ).prefetch_related(
