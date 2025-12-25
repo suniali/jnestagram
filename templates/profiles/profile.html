@@ -69,6 +69,52 @@
                                     <input type="email" name="email" value="{{ request.user.email }}" class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/20">
                                 </div>
                                 <div>
+                                    <label class="block text-sm font-semibold text-slate-600 mb-1">Country</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+                                            <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+
+                                        <select name="country"
+                                                {% if profile.country %} disabled {% endif %}
+                                                class="w-full pl-10 pr-10 py-3 border rounded-xl outline-none transition-all appearance-none
+                                                {% if profile.country %}
+                                                    bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed
+                                                {% else %}
+                                                    bg-white border-slate-200 focus:ring-2 focus:ring-indigo-500/20 text-slate-700 hover:border-indigo-300 cursor-pointer
+                                                {% endif %}">
+
+                                            <option value="" disabled {% if not profile.country %}selected{% endif %}>Select your country</option>
+
+                                            {% for country in countries %}
+                                                <option value="{{ country.id }}"
+                                                        {% if profile.country and profile.country.id == country.id %}selected{% endif %}>
+                                                    {{ country.name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+
+                                        {% if profile.country %}
+                                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+                                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                            </div>
+                                        {% else %}
+                                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+                                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if profile.country %}
+                                        <p class="text-[10px] text-amber-600 mt-1.5 flex items-center gap-1 font-medium">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            Country is locked based on your profile settings.
+                                        </p>
+                                    {% endif %}
+                                </div>
+                                <div>
                                     <label class="block text-sm font-semibold text-slate-600 mb-1">Bio</label>
                                     <textarea name="bio" rows="3" class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none resize-none focus:ring-2 focus:ring-indigo-500/20">{{ profile.bio|default_if_none:'' }}</textarea>
                                 </div>

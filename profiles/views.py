@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from django.shortcuts import render,redirect,get_object_or_404
 
-from .models import Profile
+from .models import Profile,Country
 from posts.models import Post,Comment
 
 User = get_user_model()
@@ -162,10 +162,12 @@ class ProfileView(LoginRequiredMixin,View):
         profile, created = Profile.objects.get_or_create(user=request.user)
         users_posts=Post.objects.filter(user=request.user,is_active=True).order_by('-created_at')
         pending_comments=Comment.objects.filter(post__user=request.user,is_approved=False).select_related('user','post')
+        countries=Country.objects.filter(is_active=True).order_by('name')
         context={
             'profile': profile,
             'user_posts':users_posts,
             'pending_comments':pending_comments,
+            'countries':countries,
         }
         return render(request, self.template_name,context)
     
@@ -175,23 +177,31 @@ class ProfileView(LoginRequiredMixin,View):
         
         email=request.POST.get('email')
         phone_number=request.POST.get('phone_number')
-        country=request.POST.get('country')
+        country_id=request.POST.get('country')
         avatar=request.FILES.get('avatar')
         bio=request.POST.get('bio')
         
         # Update user and profile
         try:
             with transaction.atomic():
-                user.email=email
-                user.save()
+                if email and email != user.email:
+                    if User.objects.filter(email=email).exclude(id=user.id).exists():
+                        messages.error(request, 'This email is already in use.')
+                        return redirect('profile')
+                    user.email = email
+                    user.save()
                 
                 profile.phone_number=phone_number
-                if country:
-                    profile.country=country
+                if not profile.country and country_id:
+                    try:
+                        selected_country = Country.objects.get(id=country_id)
+                        profile.country = selected_country
+                    except (Country.DoesNotExist, ValueError):
+                        messages.error(self.request,'Country Not Found!')
                 if avatar:
                     profile.avatar=avatar
-                if bio:
-                    profile.bio=bio
+
+                profile.bio=bio
                 profile.save()
                 
                 messages.success(request, 'Your profile has been updated successfully!')
