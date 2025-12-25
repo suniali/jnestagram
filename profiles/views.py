@@ -1,6 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError
-from django.db import transaction
+from django.db import IntegrityError,transaction
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model,login,logout,authenticate,update_session_auth_hash
