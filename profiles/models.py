@@ -22,6 +22,7 @@ class Profile(models.Model):
     phone_number=models.BigIntegerField(blank=True,null=True,unique=True,db_index=True)
     country=models.ForeignKey(to=Country,related_name='country',on_delete=models.SET_NULL,null=True,blank=True)
     avatar=models.ImageField(blank=True,upload_to='avatars/')
+    bio=models.TextField(max_length=500,blank=True,null=True)
 
     class Meta:
         db_table = 'profiles'

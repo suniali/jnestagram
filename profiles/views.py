@@ -177,6 +177,7 @@ class ProfileView(LoginRequiredMixin,View):
         phone_number=request.POST.get('phone_number')
         country=request.POST.get('country')
         avatar=request.FILES.get('avatar')
+        bio=request.POST.get('bio')
         
         # Update user and profile
         try:
@@ -189,6 +190,8 @@ class ProfileView(LoginRequiredMixin,View):
                     profile.country=country
                 if avatar:
                     profile.avatar=avatar
+                if bio:
+                    profile.bio=bio
                 profile.save()
                 
                 messages.success(request, 'Your profile has been updated successfully!')
