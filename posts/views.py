@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404,redirect
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib import messages
@@ -199,7 +199,7 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
 class CommentCreateView(LoginRequiredMixin,CreateView):
     model = Comment
     form_class = CommentForm
-    template_name = "posts/comment.html"
+    template_name = "posts/comments.html"
 
     def get_context_data(self, **kwargs):
         context= super().get_context_data(**kwargs)

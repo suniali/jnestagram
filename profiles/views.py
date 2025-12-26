@@ -1,14 +1,15 @@
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError,transaction
+from django.db.models import  Prefetch,Value,BooleanField,OuterRef,Exists
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model,login,logout,authenticate,update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import View
+from django.views.generic import View,DetailView
 from django.shortcuts import render,redirect,get_object_or_404
 
 from .models import Profile,Country
-from posts.models import Post,Comment
+from posts.models import Post,Comment,Like
 
 User = get_user_model()
 
@@ -209,6 +210,37 @@ class ProfileView(LoginRequiredMixin,View):
             messages.error(request, 'An error occurred. Please try again.')
             
         return redirect('profile')
+
+class PublicProfileView(DetailView):
+    model = Profile
+    template_name = 'profiles/public_profile.html'
+    slug_field = 'user__username'
+    slug_url_kwarg = 'username'
+
+    def get_queryset(self):
+        queryset=Profile.objects.select_related('user','country')
+
+        posts=Post.objects.filter(is_active=True).order_by('-created_at')
+
+        top_posts=Post.objects.filter(user__profile__in=queryset,is_active=True).order_by('-likes_count')[:5]
+
+        top_comments=Comment.objects.filter(is_approved=True).order_by('-created_at')[:5]
+
+        if self.request.user.is_authenticated:
+            user_likes=Like.objects.filter(
+                user=self.request.user,
+                post=OuterRef('pk')
+            )
+            posts=posts.annotate(is_liked=Exists(user_likes))
+        else:
+            posts=posts.annotate(is_liked=Value(False,output_field=BooleanField()))
+
+        return queryset.prefetch_related(
+            Prefetch('user__posts',queryset=posts,to_attr='all_posts'),
+            Prefetch('user__posts',queryset=top_posts,to_attr='top_posts'),
+            Prefetch('user__comments',queryset=top_comments,to_attr='top_comments'),
+        )
+
 
 @login_required
 def approve_comment(request,pk):

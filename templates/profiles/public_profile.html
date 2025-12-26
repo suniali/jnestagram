@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block layout %}
+    <div id="profile" class="flex flex-col items-center mt-8">
+
+        <div class="w-full md:w-[36rem] lg:w-[50rem]">
+            <div class="card p-6">
+                <div class="text-center flex flex-col items-center">
+                    {% if profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" class="w-32 h-32 rounded-3xl object-cover border-4 border-white shadow-2xl ring-1 ring-slate-200">
+                    {% else %}
+                        <div class="w-32 h-32 rounded-3xl bg-indigo-500 flex items-center justify-center text-white text-4xl font-bold border-4 border-white shadow-2xl">
+                            {{ request.user.username|slice:":1"|upper }}
+                        </div>
+                    {% endif %}
+                    <div class="text-center max-w-md">
+                        <h1>{{ profile.user.realname }}</h1>
+                        <div class="text-gray-400 mb-2 mt-3">@{{ profile.user.username }}</div>
+                        <div class="mt-2 text-sm text-gray-400">
+                            "{{ profile.bio }}"
+                        </div>
+                        <div class="flex items-center justify-center mx-auto mt-2">
+                            <img class="object-cover h-6 mr-1 opacity-60" src="https://img.icons8.com/material-outlined/50/000000/marker.png">
+                            {{ profile.country|default:'-' }}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div  x-data="{ activeTab: 'allPosts'}">
+            <div id="tabs" class="flex justify-center my-4 gap-2">
+                <a class="tab" :class="{ 'selected': activeTab === 'allPosts' }" @click="activeTab = 'allPosts'"> Latest </a>
+                <a class="tab" :class="{ 'selected': activeTab === 'topPosts' }" @click="activeTab = 'topPosts' ">Top Posts</a>
+                <a class="tab" :class="{ 'selected': activeTab === 'topComments' }" @click="activeTab = 'topComments' ">Top Comments</a>
+            </div>
+
+            <div id="tab-contents" class="w-full flex flex-col items-center mt-4">
+
+                <div x-show=" activeTab === 'allPosts'" x-transition class="grid place-items-start gap-x-8 max-w-xl mx-auto lg:grid-cols-2 lg:max-w-5xl xl:grid-cols-3 xl:max-w-7xl">
+                    {% for post in profile.user.all_posts %}
+                        {% include 'posts/post.html' %}
+                    {% empty %}
+                        <div class="col-span-full text-center py-16 bg-gray-50 rounded-xl mt-1">
+                            <p class="text-3xl text-gray-400 mb-4">📭</p>
+                            <p class="text-2xl text-gray-600 mb-8">No posts published yet</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div x-show="activeTab === 'topPosts'" x-transition class="grid place-items-start gap-x-8 max-w-xl mx-auto lg:grid-cols-2 lg:max-w-5xl xl:grid-cols-3 xl:max-w-7xl">
+                    {% for post in profile.user.top_posts %}
+                        {% include 'posts/post.html' %}
+                    {% empty %}
+                        <div class="col-span-full text-center py-16 bg-gray-50 rounded-xl mt-1">
+                            <p class="text-3xl text-gray-400 mb-4">📭</p>
+                            <p class="text-2xl text-gray-600 mb-8">No Top posts yet</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <section x-show="activeTab === 'topComments'" x-transition class=" w-screen mx-auto max-w-xl">
+                    {% include 'posts/comment.html' %}
+                </section>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
