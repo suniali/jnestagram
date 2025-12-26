@@ -42,7 +42,8 @@
                             </svg>
                         </label>
                     </div>
-                    <h2 class="text-2xl font-bold text-slate-800">{{ request.user.username }}</h2>
+                    <h2 class="text-2xl font-bold text-slate-800">@{{ request.user.username }}</h2>
+                    <span class="text-sm text-gray-400 mt-1">"{{ user.profile.bio|slice:'20' }}"</span>
                     <button @click="showSettings = !showSettings" class="mt-4 flex items-center gap-2 px-6 py-2 bg-slate-100 border border-slate-200 rounded-2xl text-xs font-bold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-all">
                         <span x-text="showSettings ? 'Close Settings' : 'Edit Profile & Details'"></span>
                     </button>
@@ -116,7 +117,8 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-slate-600 mb-1">Bio</label>
-                                    <textarea name="bio" rows="3" class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none resize-none focus:ring-2 focus:ring-indigo-500/20">{{ profile.bio|default_if_none:'' }}</textarea>
+                                    <textarea name="bio" rows="3" class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none resize-none focus:ring-2 focus:ring-indigo-500/20"
+                                    placeholder="Describe your self...">{{ profile.bio|default_if_none:'' }}</textarea>
                                 </div>
                             </div>
                         </div>
