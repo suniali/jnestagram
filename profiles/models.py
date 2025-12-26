@@ -31,6 +31,13 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    @property
+    def realname(self):
+        if self.user.first_name and self.user.last_name:
+            return f'{self.user.first_name} {self.user.last_name}'
+        else:
+            return self.user.username
     
 
 # TODO: Add Device Model Too
