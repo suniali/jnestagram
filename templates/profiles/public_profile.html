@@ -62,7 +62,17 @@
                 </div>
 
                 <section x-show="activeTab === 'topComments'" x-transition class=" w-screen mx-auto max-w-xl">
-                    {% include 'posts/comment.html' %}
+                    <section class="my-4">
+                        <div class="flex flex-col gap-3">
+                            {% for comment in profile.user.top_comments %}
+                                {% include 'posts/comment.html' %}
+                            {% empty %}
+                                <div class="text-center py-10 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+                                    <p class="text-slate-400">No highlights yet.</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </section>
                 </section>
 
             </div>

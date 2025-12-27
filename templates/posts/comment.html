@@ -1,49 +1,63 @@
-<section class="my-4">
-    <div class="flex flex-col gap-3">
-        {% for comment in profile.user.top_comments %}
-            <div class="group flex flex-col md:flex-row md:items-center justify-between bg-white p-4 rounded-2xl border border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all duration-300">
-
-                <div class="flex items-start gap-4 flex-1">
-                    <div class="mt-1 flex-shrink-0">
-                        <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-white transition-colors">
-                            <svg class="w-5 h-5 text-slate-400 group-hover:text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col">
-                        <p class="text-slate-700 text-sm md:text-base leading-relaxed">
-                            {{ comment.text|truncatechars:200 }}
-                        </p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">On Post:</span>
-                            <a href="{% url 'post_detail' comment.post.id %}" class="text-xs font-medium text-indigo-600 hover:underline">
-                                {{ comment.post.title|truncatechars:40 }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between md:justify-end gap-6 mt-4 md:mt-0 md:ml-6 border-t md:border-t-0 pt-3 md:pt-0">
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-sm font-bold text-slate-600">{{ comment.likes_count|default:"0" }}</span>
-                        <svg class="w-5 h-5 text-rose-500" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-
-                    <a href="{% url 'post_detail' comment.post.id %}" class="p-2 rounded-xl bg-slate-100 text-slate-500 hover:bg-indigo-600 hover:text-white transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        {% empty %}
-            <div class="text-center py-10 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                <p class="text-slate-400">No highlights yet.</p>
-            </div>
-        {% endfor %}
+{% load static  %}
+<comment class="card p-4 !mb-4">
+    <div class="flex justify-between items-center">
+        <a class="flex items-center gap-1 mb-2" href="">
+            <img class="w-8 h-8 object-cover rounded-full" src="{% static 'images/avatar_default.svg' %}">
+            <span class="font-bold hover:underline">{{ comment.user.first_name }}</span>
+            <span class="text-sm font-normal text-gray-400">@{{ comment.user.username }}</span>
+        </a>
     </div>
-</section>
+    <p class="text-xl px-2 break-words leading-relaxed">
+        {{ comment.text }}
+    </p>
+    <div x-data="{ repliesOpen: false }" class="flex items-center justify-between flex-wrap text-sm px-2 mt-2">
+        <a @click="repliesOpen = !repliesOpen" class="font-bold hover:underline cursor-pointer text-violet-500">
+            <div class="inline-block" x-bind:class="repliesOpen && 'rotate-90 duration-300'">
+                <svg transform ="rotate(90)" width="9" height="9" viewBox="0 0 25 25">
+                    <path d="M24 22h-24l12-20z"/>
+                </svg>
+            </div>
+            Replies
+            <span class="font-light text-gray-500 ml-1">1</span>
+        </a>
+        <div class="flex items-center gap-4 [&>a:hover]:underline">
+            <div class="flex items-center gap-1">
+                <img class="w-5 -mt-1" src="{% static 'images/fireheart_black.svg' %}">
+                1
+            </div>
+            <a href="">Like</a>
+            <a href="">Delete</a>
+        </div>
+
+        <div x-show="repliesOpen" x-cloak class="basis-full mt-3 pl-8 grid grid-cols-1">
+
+            <reply class="flex items-end justify-between py-4 border-t">
+                <div class="flex">
+                    <a href="">
+                        <img class="w-8 h-8 object-cover rounded-full mr-2" src="{% static 'images/avatar_default.svg' %}">
+                    </a>
+                    <div class="w-fit">
+                        <a class="block" href="">
+                            <span class="font-bold hover:underline">Homer</span>
+                            <span class="text-sm text-gray-400">@homersimpson</span>
+                        </a>
+                        <div class="mr-3">This is a reply from Homer</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 [&>a:hover]:underline">
+                    <div class="flex items-center gap-1">
+                        <img class="w-5 -mt-1" src="{% static 'images/fireheart_black.svg' %}">
+                        1
+                    </div>
+                    <a href="">Like</a>
+                    <a href="">Delete</a>
+                </div>
+            </reply>
+
+            <form method="POST" class="replyform flex justify-between" autocomplete="off">
+                <input type="text" name="reply" placeholder="Add reply ..." maxlength="150">
+                <button class="block" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</comment>
