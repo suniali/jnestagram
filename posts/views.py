@@ -270,12 +270,18 @@ class CommentUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
 
 class CommentDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Comment
-    template_name = 'posts/comment_confirm_delete.html'
+    template_name = 'layouts/generic_delete.html'
     success_url = reverse_lazy('post_detail')
 
     def test_func(self):
         comment=self.get_object()
         return self.request.user==comment.user or self.request.user==comment.post.user
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['object_type']=f'Comment : {self.object.text}'
+        context['cancel_url']=reverse_lazy('add_comment',kwargs={'pk':self.object.post.id})
+        return context
 
     def get_success_url(self):
         messages.warning(self.request, "Comment deleted successfully.")
