@@ -51,10 +51,6 @@ class PostListView(ListView):
         top_posts= Post.objects.filter(is_active=True, is_public=True).order_by('-likes_count','-comments_count')[:4]
         context['top_posts']= top_posts
 
-        if self.request.user.is_authenticated:
-            pending_commnets = Comment.objects.filter(post__user=self.request.user, is_approved=False)
-            context['pending_comments']=pending_commnets
-
 
         return context
 
