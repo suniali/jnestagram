@@ -18,7 +18,7 @@
             <a class="tab">Top Comments</a>
         </div>
 
-        <div id="tab-contents">
+        <div id="tab-contents max-w-sm md:max-w-xl">
             {% for comment in post.approved_comments_list %}
                 <comment class="card p-4 !mb-4">
                     <div class="flex justify-between items-center">
@@ -28,7 +28,7 @@
                             <span class="text-sm font-normal text-gray-400">@{{ comment.user.username }}</span>
                         </a>
                     </div>
-                    <p class="text-xl px-2">
+                    <p class="text-xl px-2 break-words leading-relaxed">
                         {{ comment.text }}
                     </p>
                     <div x-data="{ repliesOpen: false }" class="flex items-center justify-between flex-wrap text-sm px-2 mt-2">

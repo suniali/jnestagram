@@ -216,11 +216,11 @@
                                 <div class="flex items-center gap-2">
                                     <span class="font-bold text-slate-800">{{ comment.user.username }}</span>
                                     <span class="text-xs text-slate-400">on</span>
-                                    <span class="text-xs font-medium text-indigo-600">{{ comment.post.title|truncatechars:30 }}</span>
+                                    <span class="text-xs font-medium text-indigo-600">{{ comment.post.title|truncatechars:20 }}</span>
                                 </div>
                                 <span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-bold uppercase tracking-tighter">Pending</span>
                             </div>
-                            <p class="text-slate-600 text-sm mb-4 bg-slate-50 p-3 rounded-xl">"{{ comment.text }}"</p>
+                            <p class="text-slate-600 text-sm mb-4 bg-slate-50 p-3 rounded-xl break-words leading-relaxed">"{{ comment.text }}"</p>
                             <div class="flex gap-3">
                                 <a href="{% url 'approve_comment' comment.pk %}?next={{ request.path }}" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white text-center py-2 rounded-xl text-sm font-bold transition shadow-lg shadow-emerald-100">Approve</a>
                                 <a href="{% url 'delete_comment' comment.pk %}?next={{ request.path }}" class="px-4 py-2 border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-xl text-sm font-bold transition">Reject</a>
