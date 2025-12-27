@@ -23,7 +23,7 @@ class PostListView(ListView):
         queryset = Post.objects.filter(is_active=True, is_public=True).select_related(
             'user'
         ).prefetch_related(
-            'tag'
+            'tag',
         )
 
         tag_slug = self.request.GET.get('tag')
@@ -47,10 +47,15 @@ class PostListView(ListView):
         context['tags'] = Tag.objects.all()
         
         context['current_tag'] = self.request.GET.get('tag')
-        
-        top_posts= Post.objects.filter(is_active=True, is_public=True).order_by('-likes_count','-comments_count')[:4]
 
+        top_posts= Post.objects.filter(is_active=True, is_public=True).order_by('-likes_count','-comments_count')[:4]
         context['top_posts']= top_posts
+
+        if self.request.user.is_authenticated:
+            pending_commnets = Comment.objects.filter(post__user=self.request.user, is_approved=False)
+            context['pending_comments']=pending_commnets
+
+
         return context
 
 class PostDetailView(DetailView):
