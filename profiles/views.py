@@ -4,9 +4,10 @@ from django.db.models import  Prefetch,Value,BooleanField,OuterRef,Exists
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model,login,logout,authenticate,update_session_auth_hash
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import View,DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from django.views.generic import View,DetailView,DeleteView
 from django.shortcuts import render,redirect,get_object_or_404
+from django.urls import reverse_lazy
 
 from .models import Profile,Country
 from posts.models import Post,Comment,Like
@@ -241,6 +242,20 @@ class PublicProfileView(DetailView):
             Prefetch('user__comments',queryset=top_comments,to_attr='top_comments'),
         )
 
+class UserDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
+    model = User
+    template_name = 'layouts/generic_delete.html'
+    success_url = reverse_lazy('home')
+
+    def test_func(self):
+        user=self.get_object()
+        return self.request.user == user
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['object_type']=f'User : {self.request.user.username}'
+        context['cancel_url']=reverse_lazy('profile')
+        return context
 
 @login_required
 def approve_comment(request,pk):

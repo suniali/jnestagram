@@ -4,7 +4,8 @@ from django.conf.urls.static import static
 
 from .views import (LoginView,RegisterView,
                     LogoutView,ForgotPasswordView,
-                    ResetPasswordView,ProfileView,PublicProfileView,approve_comment)
+                    ResetPasswordView,ProfileView,PublicProfileView,
+                    UserDeleteView,approve_comment)
 
 urlpatterns = [
     path('login/', LoginView.as_view() ,name='login'),
@@ -14,5 +15,6 @@ urlpatterns = [
     path('reset-password/<str:username>/', ResetPasswordView.as_view(), name='reset_password'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('profile/<str:username>/',PublicProfileView.as_view(), name='public_profile'),
+    path('profile/<pk>/delete/',UserDeleteView.as_view(), name='delete_profile'),
     path('comment/approve/<pk>/', approve_comment, name='approve_comment'),
 ]
