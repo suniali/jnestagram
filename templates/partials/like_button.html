@@ -4,7 +4,7 @@
         <a hx-get="{% url 'like_post' post.id %}"
            hx-target="#like-{{ post.id }}"
            hx-swap="outerHTML"
-           class="flex items-center gap-1.5">
+           class="flex items-center gap-1">
 
             <img class="w-5 transition-transform group-hover:scale-125 duration-300 -mt-1"
                  src="{% if is_liked %}{% static 'images/fireheart_red.svg' %}{% else %}{% static 'images/fireheart.svg' %}{% endif %}">
@@ -15,11 +15,13 @@
         </a>
     </div>
 {% else %}
-    <a href="{% url 'login' %}?next={{ request.path }}" class="cursor-poiner inline-block">
-        <img
-                src="{% static 'images/fireheart.svg' %}"
-                class="w-6 h-6 mx-auto transition-transform duration-300">
-        <span class="block text-sm text-gray-700 mt-1" >{{ post.likes_count }}</span>
-    </a>
+
+        <a class="flex items-center gap-1" href="{% url 'login' %}?next={{ request.path }}">
+            <img
+                    src="{% static 'images/fireheart.svg' %}"
+                    class="w-6 h-6 mx-auto transition-transform duration-300 -mt-1">
+            <span class="text-sm text-gray-700 mt-1" >{{ post.likes_count }}</span>
+        </a>
+
 {% endif %}
 
