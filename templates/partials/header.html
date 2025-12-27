@@ -60,7 +60,7 @@
                                     </span>
                                 </span>
                             {% endif %}
-                            <img class="h-full w-full rounded-full object-cover border border-violet-400 shadow-sm"
+                            <img class="h-full w-full rounded-full object-cover shadow-sm"
                                  src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}https://img.icons8.com/small/96/ffffff/user-male-circle.png{% endif %}" />
                         </span>
                         {{ request.user.username }}
