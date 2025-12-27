@@ -5,12 +5,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model,login,logout,authenticate,update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
-from django.views.generic import View,DetailView,DeleteView
+from django.views.generic import View,DetailView,DeleteView,UpdateView
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
 
 from .models import Profile,Country
 from posts.models import Post,Comment,Like
+from .forms import ProfileForm
 
 User = get_user_model()
 
@@ -52,13 +53,32 @@ class RegisterView(View):
             user.save()
             login(request, user)  # Auto-login after registration
             messages.success(request, f'Welcome, {user.username}! Your account has been created.')
-            return redirect('home')
+            return redirect('complate_profile')
         except IntegrityError:
             messages.error(request, 'Username or email is already taken.')
         except ValidationError as e:
             messages.error(request, str(e))
 
         return render(request, self.template_name)
+
+class ComplateProfileView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+    model = Profile
+    form_class = ProfileForm
+    template_name = 'profiles/complate_profile.html'
+    success_url = reverse_lazy('home')
+
+    def test_func(self):
+        profile = self.get_object()
+        return self.request.user == profile.user
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['countries']=Country.objects.all()
+        return context
+
+    def get_object(self):
+        profile, created = Profile.objects.get_or_create(user=self.request.user)
+        return profile
     
 class LoginView(View):
     template_name = 'profiles/login.html'

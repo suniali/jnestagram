@@ -5,11 +5,12 @@ from django.conf.urls.static import static
 from .views import (LoginView,RegisterView,
                     LogoutView,ForgotPasswordView,
                     ResetPasswordView,ProfileView,PublicProfileView,
-                    UserDeleteView,approve_comment)
+                    UserDeleteView,ComplateProfileView,approve_comment)
 
 urlpatterns = [
     path('login/', LoginView.as_view() ,name='login'),
     path('register/', RegisterView.as_view() ,name='register'),
+    path('register/complate/',ComplateProfileView.as_view() ,name='complate_profile'),
     path('logout/', LogoutView.as_view() ,name='logout'),
     path('forgot-password/', ForgotPasswordView.as_view(), name='forgot_password'),
     path('reset-password/<str:username>/', ResetPasswordView.as_view(), name='reset_password'),
