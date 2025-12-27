@@ -1,63 +1,72 @@
-{% load static  %}
-<comment class="card p-4 !mb-4">
-    <div class="flex justify-between items-center">
-        <a class="flex items-center gap-1 mb-2" href="">
-            <img class="w-8 h-8 object-cover rounded-full" src="{% static 'images/avatar_default.svg' %}">
-            <span class="font-bold hover:underline">{{ comment.user.first_name }}</span>
-            <span class="text-sm font-normal text-gray-400">@{{ comment.user.username }}</span>
+{% load static %}
+<comment class="card p-5 !mb-6 shadow-sm border border-gray-100 rounded-2xl block bg-white">
+    <div class="flex justify-between items-center mb-3">
+        <a class="flex items-center gap-3" href="">
+            <img class="w-10 h-10 object-cover rounded-full ring-2 ring-gray-50" src="{% if comment.user.profile.avatar %}{{ comment.user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
+            <div class="flex flex-col">
+                <span class="font-bold text-gray-800 hover:text-violet-600 transition-colors">{{ comment.user.first_name }}</span>
+                <span class="text-xs text-gray-400">@{{ comment.user.username }}</span>
+            </div>
         </a>
     </div>
-    <p class="text-xl px-2 break-words leading-relaxed">
+
+    <p class="text-lg text-gray-700 px-1 break-words leading-relaxed mb-4">
         {{ comment.text }}
     </p>
-    <div x-data="{ repliesOpen: false }" class="flex items-center justify-between flex-wrap text-sm px-2 mt-2">
-        <a @click="repliesOpen = !repliesOpen" class="font-bold hover:underline cursor-pointer text-violet-500">
-            <div class="inline-block" x-bind:class="repliesOpen && 'rotate-90 duration-300'">
-                <svg transform ="rotate(90)" width="9" height="9" viewBox="0 0 25 25">
-                    <path d="M24 22h-24l12-20z"/>
-                </svg>
+
+    <div x-data="{ repliesOpen: false }" class="text-sm">
+        <div class="flex items-center justify-between flex-wrap pt-3 border-t border-gray-100">
+            <a @click="repliesOpen = !repliesOpen" class="flex items-center gap-2 font-bold cursor-pointer text-violet-600 hover:bg-violet-50 px-3 py-1.5 rounded-lg transition-all">
+                <div class="transition-transform duration-300" :class="repliesOpen ? 'rotate-180' : 'rotate-90'">
+                    <svg width="10" height="10" viewBox="0 0 25 25" fill="currentColor">
+                        <path d="M24 22h-24l12-20z"/>
+                    </svg>
+                </div>
+                <span>Replies</span>
+                <span class="bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full text-[11px]">{{ comment.replies|length }}</span>
+            </a>
+
+            <div class="flex items-center gap-2">
+                <a href="" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-rose-50 text-gray-600 hover:text-rose-600 transition-all group">
+                    <img class="w-4 h-4 transition-transform group-hover:scale-110" src="{% static 'images/fireheart_black.svg' %}" style="filter: grayscale(1); group-hover:filter(none);">
+                    <span class="font-semibold">1</span>
+                </a>
+
+                <a href="{% url 'update_comment' comment.id %}?next={{ request.path }}" class="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-blue-50 text-gray-500 hover:text-blue-600 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                    <span class="font-medium">Edit</span>
+                </a>
+
+                {% if request.user == comment.post.user %}
+                    <a href="{% url 'delete_comment' comment.id %}?next={{ request.path }}" class="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        <span class="font-medium text-xs">Delete</span>
+                    </a>
+                {% endif %}
             </div>
-            Replies
-            <span class="font-light text-gray-500 ml-1">1</span>
-        </a>
-        <div class="flex items-center gap-4 [&>a:hover]:underline">
-            <div class="flex items-center gap-1">
-                <img class="w-5 -mt-1" src="{% static 'images/fireheart_black.svg' %}">
-                1
-            </div>
-            <a href="">Like</a>
-            <a href="">Delete</a>
         </div>
 
-        <div x-show="repliesOpen" x-cloak class="basis-full mt-3 pl-8 grid grid-cols-1">
+        <div x-show="repliesOpen" x-cloak x-transition.opacity class="basis-full mt-4 pl-4 border-l-2 border-gray-100 space-y-4">
 
-            <reply class="flex items-end justify-between py-4 border-t">
-                <div class="flex">
-                    <a href="">
-                        <img class="w-8 h-8 object-cover rounded-full mr-2" src="{% static 'images/avatar_default.svg' %}">
-                    </a>
-                    <div class="w-fit">
-                        <a class="block" href="">
-                            <span class="font-bold hover:underline">Homer</span>
-                            <span class="text-sm text-gray-400">@homersimpson</span>
-                        </a>
-                        <div class="mr-3">This is a reply from Homer</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4 [&>a:hover]:underline">
-                    <div class="flex items-center gap-1">
-                        <img class="w-5 -mt-1" src="{% static 'images/fireheart_black.svg' %}">
-                        1
-                    </div>
-                    <a href="">Like</a>
-                    <a href="">Delete</a>
-                </div>
-            </reply>
-
-            <form method="POST" class="replyform flex justify-between" autocomplete="off">
-                <input type="text" name="reply" placeholder="Add reply ..." maxlength="150">
-                <button class="block" type="submit">Submit</button>
+            <form method="POST" class="replyform flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-100 focus-within:border-violet-200 focus-within:bg-white transition-all" autocomplete="off" action="{% url 'replay' comment.id %}?next={{ request.path }}">
+                {% csrf_token %}
+                <input type="text" name="text" class="flex-1 bg-transparent border-none focus:ring-0 text-sm placeholder:text-gray-400" placeholder="Write a reply..." maxlength="150" required>
+                <button class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 rounded-lg font-medium transition-all text-xs" type="submit">Reply</button>
             </form>
+
+            <div class="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                {% for replay in comment.replies %}
+                    <div class="bg-gray-50/50 rounded-xl">
+                        {% include 'posts/replay.html' %}
+                    </div>
+                {% empty %}
+                    <p class="text-xs text-gray-400 pl-2">No replies yet.</p>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </comment>

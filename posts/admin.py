@@ -1,9 +1,9 @@
 from django.contrib import admin
 
-from .models import Post, Tag,Comment,Like
+from .models import Post, Tag,Comment,Like,Replay
 
-class CommentInline(admin.TabularInline):
-    model = Comment
+class ReplayInline(admin.TabularInline):
+    model = Replay
     extra = 1
 
 
@@ -18,8 +18,14 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('is_active', 'is_public', 'created_at')
     search_fields = ('title', 'text', 'user__username')
     filter_horizontal = ('tag',)
-    inlines = [CommentInline]
-    
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('user','post', 'text','is_approved', 'created_at')
+    list_filter = ('is_approved','created_at')
+    search_fields = ('text','post',)
+    inlines = [ReplayInline]
+
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
     list_display = ('user', 'post', 'created_at')

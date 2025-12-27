@@ -1,16 +1,15 @@
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView,DetailView
+
+from django.shortcuts import get_object_or_404,redirect,render
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView,DetailView,View
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib import messages
 from django.db.models import Prefetch,OuterRef,Exists,Value,BooleanField
-from django.http import JsonResponse,HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse,reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from .models import Post,Tag,Like,Comment
-from .form import PostForm, CommentForm
+from .models import Post,Tag,Like,Comment,Replay
+from .form import PostForm, CommentForm,ReplayForm
 
 
 class PostListView(ListView):
@@ -207,13 +206,20 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
 
         post=get_object_or_404(Post, pk=self.kwargs['pk'])
 
+        replays=Replay.objects.select_related('user').all()
+
         approved_comments= Comment.objects.select_related('user').filter(
             post=post,
             is_approved=True
+        ).prefetch_related(
+            Prefetch('replays',queryset=replays,to_attr='replies')
         ).order_by('-created_at')
 
-        context['post'] = post
-        context['comments'] = approved_comments
+
+        context.update({
+            'post': post,
+            'comments': approved_comments,
+        })
         return context
     def form_valid(self, form):
         form.instance.user=self.request.user
@@ -299,20 +305,86 @@ class CommentDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
 
         return  str(self.success_url)
 
-@require_POST
-@login_required
-def like_post(request, post_id):
-    post = get_object_or_404(Post.objects.only('id'), pk=post_id)
+class ReplayCreateView(LoginRequiredMixin,View):
+    def post(self,request,*args,**kwargs):
+        form = ReplayForm(request.POST)
 
-    like_queryset=Like.objects.filter(user=request.user, post=post)
+        comment = get_object_or_404(Comment, pk=kwargs['pk'])
 
-    if like_queryset.exists():
-        like_queryset.delete()
-        liked = False
-    else:
-        like_queryset.create(user=request.user, post=post)
-        liked = True
+        if form.is_valid():
+            replay = form.save(commit=False)
+            replay.user = request.user
+            replay.comment = comment
+            replay.save()
+            messages.success(request, 'Your replay has been published.')
+        else:
+            messages.error(request, 'Error submitting your replay.')
 
-    total_likes=post.likes_count
 
-    return JsonResponse({'liked': liked, 'total_likes': total_likes})
+        next_url = request.GET.get('next')
+        is_secure = url_has_allowed_host_and_scheme(
+            url=next_url,
+            allowed_hosts={request.get_host()},
+            require_https=request.is_secure(),
+        )
+
+        if next_url and is_secure:
+            return redirect(next_url)
+
+        return redirect('add_comment', pk=comment.post.pk)
+
+class ReplayDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
+    model = Replay
+    template_name = 'layouts/generic_delete.html'
+    success_url = reverse_lazy('add-comment')
+    def test_func(self):
+        replay=self.get_object()
+        user=replay.comment.post.user
+        return self.request.user==user
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        replay=self.get_object()
+        context['object_type'] = f'Replay : {replay.text}'
+        context['cancel_url']=reverse_lazy('add_comment',kwargs={'pk':replay.comment.post.pk})
+        return context
+    def get_success_url(self):
+        messages.warning(self.request, "Replay deleted successfully.")
+
+        next_url=self.request.GET.get('next')
+        is_secure = url_has_allowed_host_and_scheme(
+            url=next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        )
+
+        if next_url and is_secure:
+            return next_url
+
+        return  str(self.success_url)
+
+class LikePostView(LoginRequiredMixin,View):
+    model = Like
+    template_name = 'posts/home.html'
+    def get(self, request,*args, **kwargs):
+        post_id=kwargs.get('pk')
+        post = get_object_or_404(Post, pk=post_id)
+
+        if post.user== request.user:
+            messages.error(request, 'You cannot like this post.')
+            return render(request,'partials/like_button.html',{'post':post})
+
+        like_queryset = Like.objects.filter(user=request.user, post=post)
+
+        if like_queryset.exists():
+            like_queryset.delete()
+            is_liked=False
+        else:
+            like_queryset.create(user=request.user, post=post)
+            is_liked=True
+
+        post.refresh_from_db()
+
+
+        return render(request,'partials/like_button.html',{'post':post,'is_liked':is_liked})
+

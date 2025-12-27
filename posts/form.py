@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Post, Comment
+from .models import Post, Comment, Replay, Like
 
 
 class PostForm(forms.ModelForm):
@@ -12,3 +12,9 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model=Comment
         fields=['text']
+
+class ReplayForm(forms.ModelForm):
+    class Meta:
+        model=Replay
+        fields=['text']
+
