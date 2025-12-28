@@ -1,7 +1,7 @@
 {% load static %}
 <comment class="card p-5 !mb-6 shadow-sm border border-gray-100 rounded-2xl block bg-white">
     <div class="flex justify-between items-center mb-3">
-        <a class="flex items-center gap-3" href="">
+        <a class="flex items-center gap-3" href="{% url 'public_profile' comment.user.username %}">
             <img class="w-10 h-10 object-cover rounded-full ring-2 ring-gray-50" src="{% if comment.user.profile.avatar %}{{ comment.user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
             <div class="flex flex-col">
                 <span class="font-bold text-gray-800 hover:text-violet-600 transition-colors">{{ comment.user.first_name }}</span>
