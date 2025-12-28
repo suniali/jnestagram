@@ -1,0 +1,14 @@
+<div x-data="{ show: false }"
+     x-init="setTimeout(() => show = true, 50)"
+     x-show="show"
+     x-transition:enter="transition-all cubic-bezier(0.4, 0, 0.2, 1) duration-700"
+     x-transition:enter-start="opacity-0 max-h-0 transform -translate-y-2"
+     x-transition:enter-end="opacity-100 max-h-[500px] transform translate-y-0"
+     class="overflow-hidden">
+
+    {% include 'posts/replay.html' %}
+</div>
+
+<span hx-swap-oob="true" id="replay-count-{{ comment.id }}" class="bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full text-[11px]">
+    {{ count }}
+</span>

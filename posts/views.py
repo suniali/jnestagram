@@ -395,7 +395,10 @@ class ReplayCreateView(LoginRequiredMixin,View):
         if next_url and is_secure:
             return redirect(next_url)
 
-        return redirect('add_comment', pk=comment.post.pk)
+        count=Replay.objects.filter(comment=comment).count()
+
+
+        return render(request,"posts/add_replay.html",{'replay':replay,'comment':comment,'count':count})
 
 class ReplayDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Replay

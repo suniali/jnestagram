@@ -1,33 +1,35 @@
 {% load static %}
-<div class="replay-card p-4 mb-2 border-b border-gray-100 last:border-0 hover:bg-white/50 transition-all rounded-xl">
-    <div class="flex justify-between items-center mb-2">
-        <a class="flex items-center gap-2" href="">
-            <img class="w-7 h-7 object-cover rounded-full ring-1 ring-gray-100"
-                 src="{% if replay.user.profile.avatar %}{{ replay.user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
-            <div class="flex flex-col">
-                <span class="font-bold text-gray-800 text-xs hover:text-violet-600 transition-colors">{{ replay.user.first_name }}</span>
-                <span class="text-[10px] text-gray-400">@{{ replay.user.username }}</span>
-            </div>
-        </a>
+<div class="bg-gray-50/50 rounded-xl">
+    <div class="replay-card p-4 mb-2 border-b border-gray-100 last:border-0 hover:bg-white/50 transition-all rounded-xl">
+        <div class="flex justify-between items-center mb-2">
+            <a class="flex items-center gap-2" href="">
+                <img class="w-7 h-7 object-cover rounded-full ring-1 ring-gray-100"
+                     src="{% if replay.user.profile.avatar %}{{ replay.user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
+                <div class="flex flex-col">
+                    <span class="font-bold text-gray-800 text-xs hover:text-violet-600 transition-colors">{{ replay.user.first_name }}</span>
+                    <span class="text-[10px] text-gray-400">@{{ replay.user.username }}</span>
+                </div>
+            </a>
 
-        <span class="text-[10px] text-gray-300">{{ replay.created_at|timesince }} ago</span>
-    </div>
+            <span class="text-[10px] text-gray-300">{{ replay.created_at|timesince }} ago</span>
+        </div>
 
-    <p class="text-sm text-gray-600 px-1 break-words leading-relaxed mb-3">
-        {{ replay.text }}
-    </p>
+        <p class="text-sm text-gray-600 px-1 break-words leading-relaxed mb-3">
+            {{ replay.text }}
+        </p>
 
-    <div class="flex items-center justify-end gap-2 text-xs">
+        <div class="flex items-center justify-end gap-2 text-xs">
 
-        {% include 'partials/likes/replay_like.html' with obj=replay %}
+            {% include 'partials/likes/replay_like.html' with obj=replay %}
 
-        {% if request.user == comment.post.user  %}
-            <a href="{% url 'delete_replay' replay.id %}?next={{ request.path }}" class="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600 transition-all">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        <span class="font-medium text-xs">Delete</span>
-                    </a>
-        {% endif %}
+            {% if request.user == comment.post.user  %}
+                <a href="{% url 'delete_replay' replay.id %}?next={{ request.path }}" class="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    <span class="font-medium text-xs">Delete</span>
+                </a>
+            {% endif %}
+        </div>
     </div>
 </div>
