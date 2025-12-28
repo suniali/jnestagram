@@ -65,24 +65,48 @@ class PostDetailView(DetailView):
     context_object_name = 'post'
 
     def get_queryset(self):
+        replays=Replay.objects.select_related('user')
         approved_comments=Comment.objects.filter(is_approved=True)
-
-        queryset= Post.objects.filter(is_active=True).select_related('user').prefetch_related(
-            'tag',
-            'likes',
-            Prefetch('comments', queryset=approved_comments,to_attr='approved_comments_list')
-        )
+        queryset= Post.objects.filter(is_active=True).select_related('user')
 
         if self.request.user.is_authenticated:
             post_type = ContentType.objects.get_for_model(Post)
-            user_likes=Like.objects.filter(
+            comment_type = ContentType.objects.get_for_model(Comment)
+            replay_type=ContentType.objects.get_for_model(Replay)
+            user_post_likes=Like.objects.filter(
                 user=self.request.user,
                 content_type=post_type,
                 object_id=Cast(OuterRef('pk'),CharField()),
             )
-            queryset = queryset.annotate(is_liked=Exists(user_likes))
+            user_comment_likes=Like.objects.filter(
+                user=self.request.user,
+                content_type=comment_type,
+                object_id=Cast(OuterRef('pk'),CharField()),
+            )
+            user_replay_likes=Like.objects.filter(
+                user=self.request.user,
+                content_type=replay_type,
+                object_id=Cast(OuterRef('pk'),CharField()),
+            )
+            queryset = queryset.annotate(is_liked=Exists(user_post_likes))
+            approved_comments=approved_comments.annotate(is_liked=Exists(user_comment_likes))
+            replays=replays.annotate(is_liked=Exists(user_replay_likes))
         else:
             queryset = queryset.annotate(is_liked=Value(False,output_field=BooleanField()))
+            approved_comments=approved_comments.annotate(is_liked=Value(False,output_field=BooleanField()))
+            replays=replays.annotate(is_liked=Value(False,output_field=BooleanField()))
+
+        approved_comments=approved_comments.prefetch_related(
+            Prefetch('replays', queryset=replays, to_attr='replies'),
+        )
+
+        top_comments=approved_comments.order_by('-likes_count','-replays_count')[:4]
+        queryset=queryset.prefetch_related(
+            'tag',
+            'likes',
+            Prefetch('comments', queryset=approved_comments,to_attr='approved_comments_list'),
+            Prefetch('comments', queryset=top_comments, to_attr='top_comments'),
+        )
 
         return queryset
 
@@ -296,7 +320,7 @@ class CommentUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
 
     def test_func(self):
         comment=self.get_object()
-        return self.request.user==comment.user
+        return self.request.user==comment.post.user
 
     def form_valid(self, form):
         form.instance.is_approved=False
@@ -322,7 +346,7 @@ class CommentDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
 
     def test_func(self):
         comment=self.get_object()
-        return self.request.user==comment.user or self.request.user==comment.post.user
+        return self.request.user==comment.post.user
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
