@@ -48,19 +48,19 @@
         </div>
 
         <div x-show="repliesOpen" x-cloak x-transition.opacity class="basis-full mt-4 pl-4 border-l-2 border-gray-100 space-y-4">
-
-            <form class="replyform flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-100 focus-within:border-violet-200 focus-within:bg-white transition-all"
-                  autocomplete="off"
-                  hx-post="{% url 'replay' comment.id %}"
-                  hx-target="#replay-content"
-                  hx-swap="afterbegin"
-                  hx-on::after-request="this.reset()"
-            >
-                {% csrf_token %}
-                <input type="text" name="text" class="flex-1 bg-transparent border-none focus:ring-0 text-sm placeholder:text-gray-400" placeholder="Write a reply..." maxlength="150" required>
-                <button class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 rounded-lg font-medium transition-all text-xs" type="submit">Reply</button>
-            </form>
-
+            {% if request.user.is_authenticated %}
+                <form class="replyform flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-100 focus-within:border-violet-200 focus-within:bg-white transition-all"
+                      autocomplete="off"
+                      hx-post="{% url 'replay' comment.id %}"
+                      hx-target="#replay-content"
+                      hx-swap="afterbegin"
+                      hx-on::after-request="this.reset()"
+                >
+                    {% csrf_token %}
+                    <input type="text" name="text" class="flex-1 bg-transparent border-none focus:ring-0 text-sm placeholder:text-gray-400" placeholder="Write a reply..." maxlength="150" required>
+                    <button class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 rounded-lg font-medium transition-all text-xs" type="submit">Reply</button>
+                </form>
+            {% endif %}
             <div id="replay-content" class="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {% for replay in comment.replies %}
                     {% include 'posts/replay.html' %}
