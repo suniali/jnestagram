@@ -230,21 +230,31 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
         approved_comments= Comment.objects.select_related('user').filter(
             post=post,
             is_approved=True
-        ).prefetch_related(
-            Prefetch('replays',queryset=replays,to_attr='replies')
-        ).order_by('-created_at')
+        )
 
         if self.request.user.is_authenticated:
-            post_type = ContentType.objects.get_for_model(Comment)
-            user_likes = Like.objects.filter(
+            comment_type = ContentType.objects.get_for_model(Comment)
+            replay_type=ContentType.objects.get_for_model(Replay)
+            user_comment_likes = Like.objects.filter(
                 user=self.request.user,
-                content_type=post_type,
+                content_type=comment_type,
                 object_id=Cast(OuterRef('pk'), CharField()),
             )
-            approved_comments = approved_comments.annotate(is_liked=Exists(user_likes))
+            user_replay_likes=Like.objects.filter(
+                user=self.request.user,
+                content_type=replay_type,
+                object_id=Cast(OuterRef('pk'), CharField()),
+            )
+            approved_comments = approved_comments.annotate(is_liked=Exists(user_comment_likes))
+            replays=replays.annotate(is_liked=Exists(user_replay_likes))
         else:
             approved_comments = approved_comments.annotate(is_liked=Value(False, output_field=BooleanField()))
+            replays=replays.annotate(is_liked=Value(False, output_field=BooleanField()))
 
+
+        approved_comments=approved_comments.prefetch_related(
+            Prefetch('replays',queryset=replays,to_attr='replies')
+        ).order_by('-created_at')
 
         context.update({
             'post': post,

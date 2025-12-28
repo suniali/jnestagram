@@ -98,6 +98,8 @@ class Replay(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='replays')
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='replays')
     text = models.TextField()
+    likes=GenericRelation(Like,related_query_name='replays')
+    likes_count=models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -105,7 +107,10 @@ class Replay(models.Model):
         db_table = 'replays'
         verbose_name = 'Replay'
         verbose_name_plural = 'Replays'
-        indexes=[models.Index(fields=['comment','-created_at'])]
+        indexes=[
+            models.Index(fields=['-likes_count','-created_at']),
+            models.Index(fields=['comment','-created_at'])
+        ]
 
     def __str__(self):
         return  self.text
