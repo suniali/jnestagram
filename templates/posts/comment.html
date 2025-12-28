@@ -27,10 +27,7 @@
             </a>
 
             <div class="flex items-center gap-2">
-                <a href="" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-rose-50 text-gray-600 hover:text-rose-600 transition-all group">
-                    <img class="w-4 h-4 transition-transform group-hover:scale-110" src="{% static 'images/fireheart_black.svg' %}" style="filter: grayscale(1); group-hover:filter(none);">
-                    <span class="font-semibold">1</span>
-                </a>
+                {% include 'partials/likes/comment_like.html' with obj=comment %}
 
                 <a href="{% url 'update_comment' comment.id %}?next={{ request.path }}" class="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-blue-50 text-gray-500 hover:text-blue-600 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

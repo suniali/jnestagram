@@ -234,6 +234,17 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
             Prefetch('replays',queryset=replays,to_attr='replies')
         ).order_by('-created_at')
 
+        if self.request.user.is_authenticated:
+            post_type = ContentType.objects.get_for_model(Comment)
+            user_likes = Like.objects.filter(
+                user=self.request.user,
+                content_type=post_type,
+                object_id=Cast(OuterRef('pk'), CharField()),
+            )
+            approved_comments = approved_comments.annotate(is_liked=Exists(user_likes))
+        else:
+            approved_comments = approved_comments.annotate(is_liked=Value(False, output_field=BooleanField()))
+
 
         context.update({
             'post': post,
