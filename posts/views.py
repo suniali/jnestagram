@@ -1,10 +1,13 @@
 
 from django.shortcuts import get_object_or_404,redirect,render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView,DetailView,View
-from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib import messages
-from django.db.models import Prefetch,OuterRef,Exists,Value,BooleanField
-from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from django.contrib.contenttypes.models import ContentType
+from django.db import transaction
+from django.db.models import Prefetch,OuterRef,Exists,Value,BooleanField,CharField
+from django.db.models.functions import Cast
+from django.http import HttpResponseRedirect,HttpResponse
 from django.urls import reverse,reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
 
@@ -29,10 +32,13 @@ class PostListView(ListView):
         if tag_slug:
             queryset = queryset.filter(tag__slug=tag_slug)
 
+
         if self.request.user.is_authenticated:
+            post_type = ContentType.objects.get_for_model(Post)
             user_likes=Like.objects.filter(
                 user=self.request.user,
-                post_id=OuterRef('pk')
+                content_type=post_type,
+                object_id=Cast(OuterRef('pk'),CharField()),
             )
             queryset = queryset.annotate(is_liked=Exists(user_likes))
         else:
@@ -363,28 +369,52 @@ class ReplayDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
 
         return  str(self.success_url)
 
-class LikePostView(LoginRequiredMixin,View):
+class LikeView(LoginRequiredMixin,View):
     model = Like
     template_name = 'posts/home.html'
-    def get(self, request,*args, **kwargs):
-        post_id=kwargs.get('pk')
-        post = get_object_or_404(Post, pk=post_id)
+    def get(self, request,model_name,obj_id):
+        if not request.user.is_authenticated:
+            return HttpResponse(status=401)
 
-        if post.user== request.user:
-            messages.error(request, 'You cannot like this post.')
-            return render(request,'partials/like_button.html',{'post':post})
+        models_map={
+            'post':Post,
+            'comment':Comment,
+            'replay':Replay,
+        }
 
-        like_queryset = Like.objects.filter(user=request.user, post=post)
+        target_model=models_map.get(model_name.lower())
+        if not target_model:
+            return HttpResponse('Model Not Found!',status=404)
 
-        if like_queryset.exists():
-            like_queryset.delete()
-            is_liked=False
-        else:
-            like_queryset.create(user=request.user, post=post)
-            is_liked=True
+        obj=get_object_or_404(target_model, pk=obj_id)
 
-        post.refresh_from_db()
+        with transaction.atomic():
+            content_type=ContentType.objects.get_for_model(obj)
+            object_id_str = str(obj.id)
+            like_qs = Like.objects.filter(user=request.user, content_type=content_type,object_id=object_id_str)
 
+            if like_qs.exists():
+                like_qs.delete()
+                is_liked=False
+            else:
+                Like.objects.get_or_create(
+                    user=request.user,
+                    content_type=content_type,
+                    object_id=object_id_str
+                )
+                is_liked=True
 
-        return render(request,'partials/like_button.html',{'post':post,'is_liked':is_liked})
+            total_likes = Like.objects.filter(
+                content_type=content_type,
+                object_id=object_id_str
+            ).count()
+
+            obj.likes_count=total_likes
+            obj.save(update_fields=['likes_count'])
+
+        obj.is_liked = is_liked
+        template_name=f'partials/likes/{model_name.lower()}_like.html'
+        return render(request,template_name,{
+                'obj':obj,
+        })
 

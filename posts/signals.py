@@ -6,14 +6,14 @@ from .models import Post,Comment,Like
 @receiver(post_save, sender=Like)
 def update_like_count_on_save(sender, instance, created,**kwargs):
     if created:
-        instance.post.likes_count+=1
-        instance.post.save(update_fields=['likes_count'])
+        instance.content_object.likes_count+=1
+        instance.content_object.save(update_fields=['likes_count'])
 
 @receiver(post_delete, sender=Like)
 def update_like_count_on_delete(sender, instance,**kwargs):
-    if instance.post.likes_count >0:
-        instance.post.likes_count-=1
-        instance.post.save(update_fields=['likes_count'])
+    if instance.content_object.likes_count >0:
+        instance.content_object.likes_count-=1
+        instance.content_object.save(update_fields=['likes_count'])
 
 @receiver(post_save, sender=Comment)
 def update_comments_count_on_save(sender, instance, created, **kwargs):

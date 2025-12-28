@@ -33,7 +33,7 @@
             </a>
             <div class="flex items-center gap-4 [&>a:hover]:underline">
                 <div class="text-center">
-                    {% include 'partials/like_button.html' with is_liked=post.is_liked %}
+                    {% include 'partials/likes/post_like.html' with obj=post  %}
                 </div>
                 {% if user.is_authenticated and user == post.user %}
                     <a href="{% url 'update_post' post.id %}?next={{ request.path }}">Edit</a>

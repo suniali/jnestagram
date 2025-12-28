@@ -1,13 +1,13 @@
 from django.urls import path
 
-from .views import (PostListView, LikePostView, PostCreateView, PostUpdateView,
+from .views import (PostListView, LikeView, PostCreateView, PostUpdateView,
                     PostDeleteView, CommentCreateView, CommentUpdateView,
                     CommentDeleteView, PostDetailView,ReplayCreateView,ReplayDeleteView)
 
 urlpatterns = [
     path('',PostListView.as_view(),name='home'),
     path('<pk>',PostDetailView.as_view(),name='post_detail'),
-    path('<pk>/like/', LikePostView.as_view(), name='like_post'),
+    path('like/<str:model_name>/<str:obj_id>/', LikeView.as_view(), name='like'),
     path('create/', PostCreateView.as_view(), name='create_post'),
     path('<pk>/update/',PostUpdateView.as_view(),name='update_post'),
     path('<pk>/delete/',PostDeleteView.as_view(),name='delete_post'),
