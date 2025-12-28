@@ -403,7 +403,6 @@ class ReplayCreateView(LoginRequiredMixin,View):
 class ReplayDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Replay
     template_name = 'layouts/generic_delete.html'
-    success_url = reverse_lazy('add-comment')
     def test_func(self):
         replay=self.get_object()
         user=replay.comment.post.user
@@ -413,10 +412,11 @@ class ReplayDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         context=super().get_context_data(**kwargs)
         replay=self.get_object()
         context['object_type'] = f'Replay : {replay.text}'
-        context['cancel_url']=reverse_lazy('add_comment',kwargs={'pk':replay.comment.post.pk})
+        context['cancel_url']=reverse_lazy('post_detail',kwargs={'pk':replay.comment.post.pk})
         return context
     def get_success_url(self):
         messages.warning(self.request, "Replay deleted successfully.")
+        post_id=self.get_object().comment.post.pk
 
         next_url=self.request.GET.get('next')
         is_secure = url_has_allowed_host_and_scheme(
@@ -428,7 +428,7 @@ class ReplayDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         if next_url and is_secure:
             return next_url
 
-        return  str(self.success_url)
+        return  reverse('post_detail',kwargs={'pk':post_id})
 
 class LikeView(LoginRequiredMixin,View):
     model = Like
