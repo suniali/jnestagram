@@ -1,6 +1,6 @@
 import uuid
 
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey,GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
 from django.db import models
@@ -23,6 +23,22 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+
+class Like(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.CharField(max_length=100)
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'content_type', 'object_id')
+
+    def __str__(self):
+        return f"{self.user} liked {self.content_object}"
+
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
@@ -30,6 +46,7 @@ class Post(models.Model):
     image = models.ImageField(upload_to='posts/%Y/%m/%d')
     text = models.TextField()
     tag= models.ManyToManyField(Tag, related_name='posts',blank=True)
+    likes=GenericRelation(Like,related_query_name='posts')
     likes_count=models.PositiveIntegerField(default=0)
     comments_count=models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
@@ -86,18 +103,3 @@ class Replay(models.Model):
 
     def __str__(self):
         return  self.text
-        
-class Like(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.CharField(max_length=100)
-    content_object = GenericForeignKey('content_type', 'object_id')
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'content_type', 'object_id')
-
-    def __str__(self):
-        return f"{self.user} liked {self.content_object}"

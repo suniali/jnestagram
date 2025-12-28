@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError,transaction
-from django.db.models import  Prefetch,Value,BooleanField,OuterRef,Exists
+from django.db.models import  Prefetch,Value,BooleanField,OuterRef,Exists,CharField
+from django.db.models.functions import Cast
+from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model,login,logout,authenticate,update_session_auth_hash
@@ -248,9 +250,11 @@ class PublicProfileView(DetailView):
         top_comments=Comment.objects.filter(is_approved=True).order_by('-created_at')[:5]
 
         if self.request.user.is_authenticated:
+            post_type=ContentType.objects.get_for_model(Post)
             user_likes=Like.objects.filter(
                 user=self.request.user,
-                post=OuterRef('pk')
+                content_type=post_type,
+                object_id=Cast(OuterRef('pk'),CharField())
             )
             posts=posts.annotate(is_liked=Exists(user_likes))
         else:

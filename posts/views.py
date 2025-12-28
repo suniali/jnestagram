@@ -67,11 +67,24 @@ class PostDetailView(DetailView):
     def get_queryset(self):
         approved_comments=Comment.objects.filter(is_approved=True)
 
-        return Post.objects.filter(is_active=True).select_related('user').prefetch_related(
+        queryset= Post.objects.filter(is_active=True).select_related('user').prefetch_related(
             'tag',
             'likes',
             Prefetch('comments', queryset=approved_comments,to_attr='approved_comments_list')
         )
+
+        if self.request.user.is_authenticated:
+            post_type = ContentType.objects.get_for_model(Post)
+            user_likes=Like.objects.filter(
+                user=self.request.user,
+                content_type=post_type,
+                object_id=Cast(OuterRef('pk'),CharField()),
+            )
+            queryset = queryset.annotate(is_liked=Exists(user_likes))
+        else:
+            queryset = queryset.annotate(is_liked=Value(False,output_field=BooleanField()))
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context= super().get_context_data(**kwargs)
