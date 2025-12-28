@@ -12,7 +12,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
 
 from .models import Profile,Country
-from posts.models import Post,Comment,Like
+from posts.models import Post, Comment, Like, Replay
 from .forms import ProfileForm
 
 User = get_user_model()
@@ -247,18 +247,39 @@ class PublicProfileView(DetailView):
 
         top_posts=Post.objects.filter(user__profile__in=queryset,is_active=True).order_by('-likes_count')[:5]
 
-        top_comments=Comment.objects.filter(is_approved=True).order_by('-created_at')[:5]
+        top_comments=Comment.objects.filter(is_approved=True).order_by('-likes_count','-replays_count')[:5]
+        replays=Replay.objects.select_related('user')
 
         if self.request.user.is_authenticated:
             post_type=ContentType.objects.get_for_model(Post)
-            user_likes=Like.objects.filter(
+            comment_type=ContentType.objects.get_for_model(Comment)
+            replay_type=ContentType.objects.get_for_model(Replay)
+            user_post_likes=Like.objects.filter(
                 user=self.request.user,
                 content_type=post_type,
                 object_id=Cast(OuterRef('pk'),CharField())
             )
-            posts=posts.annotate(is_liked=Exists(user_likes))
+            user_comment_likes=Like.objects.filter(
+                user=self.request.user,
+                content_type=comment_type,
+                object_id=Cast(OuterRef('pk'),CharField())
+            )
+            user_replay_likes=Like.objects.filter(
+                user=self.request.user,
+                content_type=replay_type,
+                object_id=Cast(OuterRef('pk'),CharField())
+            )
+            posts=posts.annotate(is_liked=Exists(user_post_likes))
+            top_comments=top_comments.annotate(is_liked=Exists(user_comment_likes))
+            replays=replays.annotate(is_liked=Exists(user_replay_likes))
         else:
             posts=posts.annotate(is_liked=Value(False,output_field=BooleanField()))
+            top_comments=top_comments.annotate(is_liked=Value(False,output_field=BooleanField()))
+            replays=replays.annotate(is_liked=Value(False,output_field=BooleanField()))
+
+        top_comments=top_comments.prefetch_related(
+                Prefetch('replays', queryset=replays, to_attr='replies'),
+        )
 
         return queryset.prefetch_related(
             Prefetch('user__posts',queryset=posts,to_attr='all_posts'),

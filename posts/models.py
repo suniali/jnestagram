@@ -104,6 +104,7 @@ class Replay(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['-created_at']
         db_table = 'replays'
         verbose_name = 'Replay'
         verbose_name_plural = 'Replays'

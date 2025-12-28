@@ -19,7 +19,7 @@
             <a class="tab" :class="{selected : activeTab === 'topComments'}" @click="activeTab = 'topComments'">Top Comments</a>
         </div>
 
-        <div class="tab-contents max-w-sm md:max-w-xl" x-show="activeTab === 'newest'" x-transition>
+        <div class="tab-contents max-w-full" x-show="activeTab === 'newest'" x-transition>
             {% for comment in post.approved_comments_list %}
                 {% include 'posts/comment.html' %}
             {% endfor %}
