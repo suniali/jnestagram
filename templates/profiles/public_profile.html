@@ -61,7 +61,7 @@
                             {% for comment in profile.user.top_comments %}
                                 {% include 'posts/comment.html' %}
                             {% empty %}
-                                {% include 'partials/no_highlights.html' %}
+                                {% include 'partials/no_comment.html' %}
                             {% endfor %}
                         </div>
                     </section>

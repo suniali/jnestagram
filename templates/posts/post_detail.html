@@ -22,6 +22,8 @@
         <div class="tab-contents max-w-full" x-show="activeTab === 'newest'" x-transition>
             {% for comment in post.approved_comments_list %}
                 {% include 'posts/comment.html' %}
+            {% empty %}
+                {% include 'partials/no_post.html' %}
             {% endfor %}
 
         </div>
@@ -29,6 +31,8 @@
         <div class="tab-contents" x-show="activeTab === 'topComments'" x-transition>
             {% for comment in post.top_comments %}
                 {% include 'posts/comment.html' %}
+            {% empty %}
+                {% include 'partials/no_comment.html' %}
             {% endfor %}
         </div>
     </div>
