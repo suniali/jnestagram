@@ -41,17 +41,17 @@
 
                 <div x-show=" activeTab === 'allPosts'" x-transition class="grid place-items-start gap-x-8 max-w-xl mx-auto lg:grid-cols-2 lg:max-w-5xl xl:grid-cols-3 xl:max-w-7xl">
                     {% for post in profile.user.all_posts %}
-                        {% include 'posts/post.html' %}
+                        {% include 'partials/posts/post.html' %}
                     {% empty %}
-                        {% include 'partials/no_post.html' %}
+                        {% include 'partials/posts/no_post.html' %}
                     {% endfor %}
                 </div>
 
                 <div x-show="activeTab === 'topPosts'" x-transition class="grid place-items-start gap-x-8 max-w-xl mx-auto lg:grid-cols-2 lg:max-w-5xl xl:grid-cols-3 xl:max-w-7xl">
                     {% for post in profile.user.top_posts %}
-                        {% include 'posts/post.html' %}
+                        {% include 'partials/posts/post.html' %}
                     {% empty %}
-                        {% include 'partials/no_post.html' %}
+                        {% include 'partials/posts/no_post.html' %}
                     {% endfor %}
                 </div>
 
@@ -59,9 +59,9 @@
                     <section class="my-4">
                         <div class="flex flex-col gap-3">
                             {% for comment in profile.user.top_comments %}
-                                {% include 'posts/comment.html' %}
+                                {% include 'partials/posts/comment.html' %}
                             {% empty %}
-                                {% include 'partials/no_comment.html' %}
+                                {% include 'partials/posts/no_comment.html' %}
                             {% endfor %}
                         </div>
                     </section>
