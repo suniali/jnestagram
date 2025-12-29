@@ -8,5 +8,5 @@
         {% include 'partials/posts/comment.html' %}
     </div>
 {% empty %}
-    <p>No comments yet.</p>
+    {% include 'partials/posts/no_comment.html' %}
 {% endfor %}

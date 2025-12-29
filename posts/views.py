@@ -100,7 +100,7 @@ class PostDetailView(DetailView):
             Prefetch('replays', queryset=replays, to_attr='replies'),
         )
 
-        top_comments=approved_comments.order_by('-likes_count','-replays_count')[:4]
+        top_comments=approved_comments.filter(likes__isnull=False).distinct().order_by('-likes_count')[:4]
         queryset=queryset.prefetch_related(
             'tag',
             'likes',
@@ -116,9 +116,9 @@ class PostDetailView(DetailView):
 
 
         if 'top' in self.request.GET:
-            comments=list(post.approved_comments_list)
+            comments = post.top_comments
         else:
-            comments = list(post.top_comments)
+            comments=post.approved_comments_list
 
         context['display_comments']=comments
         context['tags'] = Tag.objects.all()
