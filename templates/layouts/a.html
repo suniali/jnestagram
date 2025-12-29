@@ -18,6 +18,7 @@
         <main class="col-span-full md:col-span-2 md:mr-[5%] lg:mx-[10%] order-2 md:order-1">
             {% block content %}{% endblock %}
         </main>
-        {% include 'partials/sidebar.html' %}
+        {% load sidebar %}
+        {% sidebar_view %}
     </content>
 {% endblock %}

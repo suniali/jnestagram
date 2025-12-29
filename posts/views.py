@@ -48,14 +48,11 @@ class PostListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        context['tags'] = Tag.objects.all()
-        
-        context['current_tag'] = self.request.GET.get('tag')
 
         top_posts= Post.objects.filter(is_active=True, is_public=True).order_by('-likes_count','-comments_count')[:4]
         context['top_posts']= top_posts
 
+        context['current_tag'] = self.request.GET.get('tag')
 
         return context
 
@@ -121,7 +118,6 @@ class PostDetailView(DetailView):
             comments=post.approved_comments_list
 
         context['display_comments']=comments
-        context['tags'] = Tag.objects.all()
         context['current_tag'] = self.request.GET.get('tag')
 
         context['top_posts'] = Post.objects.filter(is_active=True, is_public=True).order_by('-likes_count','-comments_count')[:4]
