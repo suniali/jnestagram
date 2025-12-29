@@ -1,0 +1,12 @@
+{% for comment in display_comments %}
+    <div x-data="{ show: false }"
+         x-init="setTimeout(() => show = true, {{ forloop.counter0 }} * 50)"
+         x-show="show"
+         x-transition:enter="transition ease-out duration-500"
+         x-transition:enter-start="opacity-0 transform translate-y-4 scale-95"
+         x-transition:enter-end="opacity-100 transform translate-y-0 scale-100">
+        {% include 'partials/posts/comment.html' %}
+    </div>
+{% empty %}
+    <p>No comments yet.</p>
+{% endfor %}

@@ -112,13 +112,30 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context= super().get_context_data(**kwargs)
+        post=self.object
 
+
+        if 'top' in self.request.GET:
+            comments=list(post.approved_comments_list)
+        else:
+            comments = list(post.top_comments)
+
+        context['display_comments']=comments
         context['tags'] = Tag.objects.all()
         context['current_tag'] = self.request.GET.get('tag')
 
         context['top_posts'] = Post.objects.filter(is_active=True, is_public=True).order_by('-likes_count','-comments_count')[:4]
 
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.htmx:
+            return render(
+                self.request,
+                'partials/posts/comments_container.html',
+                {'display_comments': context['display_comments']})
+
+        return super().render_to_response(context, **response_kwargs)
 
 class PostCreateView(LoginRequiredMixin,CreateView):
     model=Post
@@ -398,7 +415,7 @@ class ReplayCreateView(LoginRequiredMixin,View):
         count=Replay.objects.filter(comment=comment).count()
 
 
-        return render(request,"posts/add_replay.html",{'replay':replay,'comment':comment,'count':count})
+        return render(request,"partials/posts/add_replay.html",{'replay':replay,'comment':comment,'count':count})
 
 class ReplayDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Replay

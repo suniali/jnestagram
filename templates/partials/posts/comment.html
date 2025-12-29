@@ -1,5 +1,5 @@
 {% load static %}
-<comment class="card p-5 !mb-6 shadow-sm border border-gray-100 rounded-2xl block bg-white">
+<comment class="card p-5 !mb-4 shadow-sm border border-gray-100 rounded-2xl block bg-white">
     <div class="flex justify-between items-center mb-3">
         <a class="flex items-center gap-3" href="{% url 'public_profile' comment.user.username %}">
             <img class="w-10 h-10 object-cover rounded-full ring-2 ring-gray-50" src="{% if comment.user.profile.avatar %}{{ comment.user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
@@ -52,7 +52,7 @@
                 <form class="replyform flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-100 focus-within:border-violet-200 focus-within:bg-white transition-all"
                       autocomplete="off"
                       hx-post="{% url 'replay' comment.id %}"
-                      hx-target="#replay-content"
+                      hx-target="#replay-container-{{ comment.id }}"
                       hx-swap="afterbegin"
                       hx-on::after-request="this.reset()"
                 >
@@ -61,9 +61,9 @@
                     <button class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 rounded-lg font-medium transition-all text-xs" type="submit">Reply</button>
                 </form>
             {% endif %}
-            <div id="replay-content" class="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+            <div id="replay-container-{{ comment.id }}" class="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {% for replay in comment.replies %}
-                    {% include 'posts/replay.html' %}
+                    {% include 'partials/posts/replay.html' %}
                 {% empty %}
                     <p class="text-xs text-gray-400 pl-2">No replies yet.</p>
                 {% endfor %}

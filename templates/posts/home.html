@@ -1,9 +1,9 @@
 {% extends 'layouts/a.html' %}
 {% block content %}
     {% for post in posts %}
-        {% include 'posts/post.html' %}
+        {% include 'partials/posts/post.html' %}
     {% empty %}
-        {% include 'partials/no_post_full.html' %}
+        {% include 'partials/posts/no_post_full.html' %}
     {% endfor %}
 
     {#    Pagination #}
