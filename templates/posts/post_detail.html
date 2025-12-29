@@ -15,16 +15,14 @@
     {% endif %}
 
     <div class="mb-20">
-        <div id="tabs transition-all duration-300" class="ml-4 flex gap-2 mb-4" hx-target="#comment-container" hx-swap="innerHTML transition:true"
-             x-data="{ activeTab: '{% if 'top' in request.GET %}top{% else %}newest{% endif %}' }">
-            <a class="tab" hx-get="{% url 'post_detail' post.id %}"
-               @click="activeTab = 'newest'"
-               :class="{selected : activeTab === 'newest'}">
+        <div id="tabs transition-all duration-300" class="ml-4 flex gap-2 mb-4"
+             hx-target="#comment-container"
+             hx-swap="innerHTML transition:true"
+             _="on htmx:afterOnLoad take .selected for event.target">
+            <a class="tab selected" hx-get="{% url 'post_detail' post.id %}">
                     Newest First
             </a>
-            <a class="tab transition-all duration-300" hx-get="{% url 'post_detail' post.id %}?top"
-               @click="activeTab = 'top'"
-               :class="{selected : activeTab === 'top'}">
+            <a class="tab transition-all duration-300" hx-get="{% url 'post_detail' post.id %}?top">
                     Top Comments
             </a>
         </div>
