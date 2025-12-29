@@ -100,7 +100,7 @@ class PostDetailView(DetailView):
             Prefetch('replays', queryset=replays, to_attr='replies'),
         )
 
-        top_comments=approved_comments.order_by('-likes_count','-replays_count')[:4]
+        top_comments=approved_comments.filter(likes__isnull=False).distinct().order_by('-likes_count')[:4]
         queryset=queryset.prefetch_related(
             'tag',
             'likes',
