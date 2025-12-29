@@ -37,7 +37,7 @@
                                  src="{% static 'images/avatar_default.svg' %}">
                             <span class="font-bold text-sm mr-1">{{ top_post.user.username }}</span>
                         </div>
-                        <span class="text-sm font-light text-grey-500 shrink-0">{{ top_post.likes.count }} Likes</span>
+                        <span class="text-sm font-light text-grey-500 shrink-0">{{ top_post.likes.count }} Like{{ top_post.likes.count|pluralize:'s' }}</span>
                     </a>
                 </li>
             {% empty %}
