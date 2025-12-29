@@ -302,15 +302,6 @@ class CommentUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        next_url=self.request.GET.get('next')
-        is_secure=url_has_allowed_host_and_scheme(
-            url=next_url,
-            allowed_hosts={self.request.get_host()},
-            require_https=self.request.is_secure(),
-        )
-        if next_url and is_secure:
-            return next_url
-
         return reverse('post_detail',kwargs={'pk':self.object.post.pk})
 
 class CommentDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
