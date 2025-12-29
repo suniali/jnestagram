@@ -29,7 +29,7 @@
         <ul class="hoverlist">
             {% for top_post in top_posts %}
                 <li>
-                    <a class="flex items-stretch justify-between">
+                    <a class="flex items-stretch justify-between" href="{% url 'post_detail' top_post.id %}">
                         <div class="flex items-center truncate">
                             <img class="w-10 h-10 rounded-lg object-cover mr-3 shrink-0"
                                  src="{% if top_post.image %}{{ top_post.image.url }}{% else %}{% static 'images/icon_landscape.svg' %}{% endif %}   ">
