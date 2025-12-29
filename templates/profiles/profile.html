@@ -118,7 +118,7 @@
                                 <div>
                                     <label class="block text-sm font-semibold text-slate-600 mb-1">Bio</label>
                                     <textarea name="bio" rows="3" class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none resize-none focus:ring-2 focus:ring-indigo-500/20"
-                                    placeholder="Describe your self...">{{ profile.bio|default_if_none:'' }}</textarea>
+                                              placeholder="Describe your self...">{{ profile.bio|default_if_none:'' }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -189,21 +189,7 @@
                                     <a @click="showConfirm = true" class="cursor-pointer select-none p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                     </a>
-                                    <template x-if="showConfirm">
-                                        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
-                                            <div class="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full mx-4">
-                                                <h3 class="text-lg font-bold mb-4 text-gray-900">Are you sure?</h3>
-                                                <p class="text-gray-600 mb-6 text-sm">This post will be hidden from public view.</p>
-                                                <div class="flex justify-end space-x-3">
-                                                    <button @click="showConfirm = false" class="px-4 py-2 text-gray-500 font-medium">Cancel</button>
-                                                    <form method="POST" action="{% url 'delete_post' post.pk %}?next={{ request.path }}">
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700">Yes, Disable it</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </template>
+                                   {% include 'partials/posts/delete_dialog.html' with object_text=post.title object_id=post.id %}
                                 </div>
                             </div>
                         {% empty %}
