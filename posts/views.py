@@ -133,7 +133,7 @@ class PostDetailView(DetailView):
             return render(
                 self.request,
                 'partials/posts/comments_container.html',
-                {'display_comments': context['display_comments']})
+                {'display_comments': context['display_comments'],'post':self.object},)
 
         return super().render_to_response(context, **response_kwargs)
 
@@ -232,7 +232,7 @@ class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     
 class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Post
-    template_name = 'posts/post_delete.html'
+    template_name = 'posts/post_detail.html'
     success_url = reverse_lazy('home')
     def test_func(self):
         post=self.get_object()
@@ -242,78 +242,35 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         messages.success(self.request, "Post successfully deleted.")
         return super().delete(request, *args, **kwargs)
 
-    def get_success_url(self):
-        next_url=self.request.GET.get('next')
-
-        is_safe = url_has_allowed_host_and_scheme(
-            url=next_url,
-            allowed_hosts=self.request.get_host(),
-            require_https=self.request.is_secure(),
-        )
-
-        if next_url and is_safe:
-            return next_url
-
-        return str(self.success_url)
 
 class CommentCreateView(LoginRequiredMixin,CreateView):
     model = Comment
     form_class = CommentForm
-    template_name = "posts/comments.html"
+    template_name = "posts/post_detail.html"
 
-    def get_context_data(self, **kwargs):
-        context= super().get_context_data(**kwargs)
-
-        post=get_object_or_404(Post, pk=self.kwargs['pk'])
-
-        replays=Replay.objects.select_related('user').all()
-
-        approved_comments= Comment.objects.select_related('user').filter(
-            post=post,
-            is_approved=True
-        )
-
-        if self.request.user.is_authenticated:
-            comment_type = ContentType.objects.get_for_model(Comment)
-            replay_type=ContentType.objects.get_for_model(Replay)
-            user_comment_likes = Like.objects.filter(
-                user=self.request.user,
-                content_type=comment_type,
-                object_id=Cast(OuterRef('pk'), CharField()),
-            )
-            user_replay_likes=Like.objects.filter(
-                user=self.request.user,
-                content_type=replay_type,
-                object_id=Cast(OuterRef('pk'), CharField()),
-            )
-            approved_comments = approved_comments.annotate(is_liked=Exists(user_comment_likes))
-            replays=replays.annotate(is_liked=Exists(user_replay_likes))
-        else:
-            approved_comments = approved_comments.annotate(is_liked=Value(False, output_field=BooleanField()))
-            replays=replays.annotate(is_liked=Value(False, output_field=BooleanField()))
-
-
-        approved_comments=approved_comments.prefetch_related(
-            Prefetch('replays',queryset=replays,to_attr='replies')
-        ).order_by('-created_at')
-
-        context.update({
-            'post': post,
-            'comments': approved_comments,
-        })
-        return context
     def form_valid(self, form):
         form.instance.user=self.request.user
-
         form.instance.post_id=self.kwargs['pk']
 
         if self.request.user.is_staff or  self.request.user.is_superuser:
             form.instance.is_approved=True
-            messages.success(self.request,'Your comment has been published.')
+            msg='Your comment has been published.'
         else:
             form.instance.is_approved=False
-            messages.info(self.request, 'Your comment is awaiting approval.')
+            msg='Your comment is awaiting approval.'
 
+        self.object=form.save()
+
+        if self.request.htmx:
+            comment=Comment.objects.select_related('user','post','post__user').get(pk=self.object.id)
+            response=render(self.request,'partials/posts/add_comment.html',{
+                                'comment':comment,
+                                'post':comment.post,
+                                'msg':msg,
+                            })
+            return response
+
+        messages.success(self.request, msg)
         return super().form_valid(form)
     def get_success_url(self):
         next_url=self.request.GET.get('next')
@@ -367,24 +324,16 @@ class CommentDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
+        post_id=self.object.post.id
         context['object_type']=f'Comment : {self.object.text}'
-        context['cancel_url']=reverse_lazy('add_comment',kwargs={'pk':self.object.post.id})
+        context['cancel_url']=reverse_lazy('post_detail',kwargs={'pk':post_id})
         return context
 
     def get_success_url(self):
         messages.warning(self.request, "Comment deleted successfully.")
 
-        next_url=self.request.GET.get('next')
-        is_secure = url_has_allowed_host_and_scheme(
-            url=next_url,
-            allowed_hosts={self.request.get_host()},
-            require_https=self.request.is_secure(),
-        )
-
-        if next_url and is_secure:
-            return next_url
-
-        return  str(self.success_url)
+        post_id=self.object.post.id
+        return reverse('post_detail',kwargs={'pk':post_id})
 
 class ReplayCreateView(LoginRequiredMixin,View):
     def post(self,request,*args,**kwargs):

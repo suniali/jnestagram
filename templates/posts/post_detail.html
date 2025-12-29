@@ -6,7 +6,12 @@
     {% include 'partials/posts/post.html' %}
     {% if request.user.is_authenticated %}
         <div class="card !pb-0 -mt-3">
-            <form method="POST" class="replyform flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-100 focus-within:border-violet-200 focus-within:bg-white transition-all" autocomplete="off" action="{% url 'add_comment' post.pk %}">
+            <form class="replyform flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-100 focus-within:border-violet-200 focus-within:bg-white transition-all"
+                  autocomplete="off"
+                  hx-post="{% url 'add_comment' post.pk %}"
+                  hx-target="#comment-container"
+                  hx-swap="afterbegin"
+                  hx-on::after-request="this.reset()">
                 {% csrf_token %}
                 <input type="text" name="text" class="flex-1 bg-transparent border-none focus:ring-0 text-sm placeholder:text-gray-400" placeholder="Add comment ..." maxlength="150">
                 <button @click="open = false" class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 rounded-xl font-bold transition-all text-sm" type="submit">Add Comment</button>

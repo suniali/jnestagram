@@ -1,0 +1,17 @@
+<div x-data="{ show: false }"
+     x-init="setTimeout(() => show = true, 50)"
+     x-show="show"
+     x-transition:enter="transition-all cubic-bezier(0.4, 0, 0.2, 1) duration-700"
+     x-transition:enter-start="opacity-0 max-h-0 transform -translate-y-2"
+     x-transition:enter-end="opacity-100 max-h-[500px] transform translate-y-0"
+     class="overflow-hidden">
+    {% include 'partials/posts/comment.html' %}
+</div>
+<span hx-swap-oob="true" id="comment-count-{{ post.pk }}" class="bg-gray-100 text-gray-600 text-sm px-3 py-1 rounded-full">
+            {{ comments.count }}
+</span>
+
+<a hx-swap-oob="true" id="comment-count-{{ post.pk }}" class="font-bold text-gray-500 hover:underline" href="{% if not user.is_authenticated %} {% url 'login' %} {% else %} {% url 'add_comment' post.id %} {% endif %}">
+    Comments {{ post.comments_count }}
+    <span class="font-light">| {{ post.created_at|timesince }}</span>
+</a>

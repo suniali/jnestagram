@@ -54,8 +54,7 @@
                       hx-post="{% url 'replay' comment.id %}"
                       hx-target="#replay-container-{{ comment.id }}"
                       hx-swap="afterbegin"
-                      hx-on::after-request="this.reset()"
-                >
+                      hx-on::after-request="this.reset()">
                     {% csrf_token %}
                     <input type="text" name="text" class="flex-1 bg-transparent border-none focus:ring-0 text-sm placeholder:text-gray-400" placeholder="Write a reply..." maxlength="150" required>
                     <button class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 rounded-lg font-medium transition-all text-xs" type="submit">Reply</button>

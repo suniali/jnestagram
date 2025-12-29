@@ -27,7 +27,7 @@
             {% endfor %}
         </div>
         <div class="flex items-center justify-between text-sm px-2">
-            <a class="font-bold text-gray-500 hover:underline" href="{% if not user.is_authenticated %} {% url 'login' %} {% else %} {% url 'add_comment' post.id %} {% endif %}">
+            <a id="comment-count-{{ post.pk }}" class="font-bold text-gray-500 hover:underline" href="{% url 'post_detail' post.id %}">
                 Comments {{ post.comments_count }}
                 <span class="font-light">| {{ post.created_at|timesince }}</span>
             </a>
