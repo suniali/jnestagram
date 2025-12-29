@@ -2,7 +2,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.db.models import F
 
-from .models import Comment,Like
+from .models import Comment,Like,Replay
 
 @receiver(post_save, sender=Like)
 def update_like_count_on_save(sender, instance, created,**kwargs):
@@ -38,3 +38,22 @@ def update_comments_count_on_delete(sender, instance, **kwargs):
         approved_count = instance.post.comments.filter(is_approved=True).count()
         instance.post.comments_count = approved_count
         instance.post.save(update_fields=['comments_count'])
+
+@receiver(post_save, sender=Replay)
+def update_replay_count_on_save(sender, instance, created, **kwargs):
+    comment=instance.comment
+    if created and comment and hasattr(comment,'replays_count'):
+        comment.replays_count += 1
+        comment.save(update_fields=['replays_count'])
+    else:
+        replays_count=comment.replays.count()
+        if comment.replays_count!=replays_count:
+            comment.replays_count=replays_count
+            comment.save(update_fields=['replays_count'])
+
+@receiver(post_delete, sender=Replay)
+def update_replay_count_on_delete(sender, instance,**kwargs):
+    comment=instance.comment
+    if comment and hasattr(comment,'replays_count') and comment.replays_count > 0:
+        comment.replays_count-=1
+        comment.save(update_fields=['replays_count'])
