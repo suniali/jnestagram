@@ -10,7 +10,7 @@
         <h2 class="font-bold">Categories</h2>
         <ul class="hoverlist">
             {% for tag in tags %}
-                <li class="my-2 {% if current_tag == tag.name %}highlight{% endif %}">
+                <li class="my-2 {% if current_tag == tag.slug %}highlight{% endif %}">
                     <a href="{% url 'home' %}?tag={{ tag.slug }}">
                         <img class="w-8 h-8 object-cover mr-2"
                              src="{% if tag and tag.icon %}{{ tag.icon.url }}{% else %} {% static 'images/icon_landscape.svg' %} {% endif %}">
