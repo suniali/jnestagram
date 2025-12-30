@@ -1,0 +1,14 @@
+<div class="grid place-items-start gap-x-8 mx-auto {% if profile.user.all_posts.count == 1 %} grid-cols-1 max-w-xl {% elif profile.user.all_posts.count == 2 %}grid-cols-1 max-w-xl lg:grid-cols-2 lg:max-w-5xl {% else %}grid-cols-1  max-w-xl lg:grid-cols-2 lg:max-w-5xl xl:grid-cols-3 xl:max-w-7xl {% endif %} ">
+    {% for post in posts %}
+        <div x-data="{ show: false }"
+             x-init="setTimeout(() => show = true, {{ forloop.counter0 }} * 50)"
+             x-show="show"
+             x-transition:enter="transition ease-out duration-500"
+             x-transition:enter-start="opacity-0 transform translate-y-4 scale-95"
+             x-transition:enter-end="opacity-100 transform translate-y-0 scale-100">
+            {% include 'partials/posts/post.html' %}
+        </div>
+    {% empty %}
+        {% include 'partials/posts/no_post.html' %}
+    {% endfor %}
+</div>

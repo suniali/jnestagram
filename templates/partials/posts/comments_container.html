@@ -1,5 +1,5 @@
 {% for comment in display_comments %}
-    <div x-data="{ show: false }"
+    <div class="w-screen max-w-md md:max-w-2xl" x-data="{ show: false }"
          x-init="setTimeout(() => show = true, {{ forloop.counter0 }} * 50)"
          x-show="show"
          x-transition:enter="transition ease-out duration-500"
