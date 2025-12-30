@@ -243,8 +243,8 @@ class PublicProfileView(DetailView):
     def get_queryset(self):
         queryset=Profile.objects.select_related('user','country')
         posts_qs=Post.objects.filter(is_active=True).order_by('-created_at')
-        top_posts_qs=Post.objects.filter(is_active=True).order_by('-likes_count')[:5]
-        top_comments_qs=Comment.objects.filter(is_approved=True).order_by('-likes_count','-replays_count')[:5]
+        top_posts_qs=Post.objects.filter(is_active=True,likes_count__gt=0).order_by('-likes_count')[:5]
+        top_comments_qs=Comment.objects.filter(is_approved=True,likes_count__gt=0).order_by('-likes_count','-replays_count')[:5]
         replays_qs=Replay.objects.select_related('user')
 
         if self.request.user.is_authenticated:

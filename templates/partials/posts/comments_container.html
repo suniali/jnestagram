@@ -1,10 +1,13 @@
 {% for comment in display_comments %}
-    <div class="w-screen max-w-md md:max-w-2xl" x-data="{ show: false }"
+    <div class="w-full md:w-[36rem] lg:w-[50rem] mx-auto flex gap-2" x-data="{ show: false }"
          x-init="setTimeout(() => show = true, {{ forloop.counter0 }} * 50)"
          x-show="show"
          x-transition:enter="transition ease-out duration-500"
          x-transition:enter-start="opacity-0 transform translate-y-4 scale-95"
          x-transition:enter-end="opacity-100 transform translate-y-0 scale-100">
+        <a href="{% url 'post_detail' comment.post.id %}" class="mt-2">
+            <img class="w-20 h-20 object-cover rounded-xl hover:scale-95 max-w-none" src="{{ comment.post.image.url }}">
+        </a>
         {% include 'partials/posts/comment.html' %}
     </div>
 {% empty %}
