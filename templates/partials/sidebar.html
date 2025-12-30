@@ -26,18 +26,18 @@
                  src="{% static 'images/fireheart_black.svg' %}" />
             <h2 class="font-bold my-2">Top Posts</h2>
         </div>
+        {% load sidebar %}
         <ul class="hoverlist">
             {% for top_post in top_posts %}
-                <li>
+                <li class="{% if top_post|is_liked_by:user %} font-bold bg-gray-100 {% else %} font-light {% endif %}">
                     <a class="flex items-stretch justify-between" href="{% url 'post_detail' top_post.id %}">
                         <div class="flex items-center truncate">
                             <img class="w-10 h-10 rounded-lg object-cover mr-3 shrink-0"
-                                 src="{% if top_post.image %}{{ top_post.image.url }}{% else %}{% static 'images/icon_landscape.svg' %}{% endif %}   ">
-                            <img class="w-4 h-4 rounded-full object-cover mr-1 mt-1"
-                                 src="{% static 'images/avatar_default.svg' %}">
-                            <span class="font-bold text-sm mr-1">{{ top_post.user.username }}</span>
+                                 src="{% if top_post.image %}{{ top_post.image.url }}{% else %}{% static 'images/icon_landscape.svg' %}{% endif %}">
+                            <span class=" text-sm mr-1">@ {{ top_post.user.username }}</span>
                         </div>
-                        <span class="text-sm font-light text-grey-500 shrink-0">{{ top_post.likes.count }} Like{{ top_post.likes.count|pluralize:'s' }}</span>
+
+                        <span class="text-sm text-grey-400 shrink-0">{{ top_post.likes_count }} Like{{ top_post.likes_count|pluralize:'s' }}</span>
                     </a>
                 </li>
             {% empty %}
