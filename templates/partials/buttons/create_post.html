@@ -1,0 +1,15 @@
+<a href="{% url 'create_post' %}?next={{ request.path }}"
+   class="flex items-center gap-2 px-3 py-2 text-white hover:text-violet-600  rounded-lg transition-all duration-200 group relative">
+
+    <div class="relative">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="w-6 h-6 transition-transform group-hover:translate-x-1"
+             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                  d="M12 4v16m8-8H4" />
+        </svg>
+    </div>
+
+    <span class="hidden md:block font-medium text-sm">Create Post</span>
+
+</a>

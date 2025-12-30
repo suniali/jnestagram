@@ -50,15 +50,6 @@
                     </a>
                 </li>
             {% else %}
-                <li>
-                <a href="{% url 'create_post' %}?next={{ request.path }}"
-                   class="inline-flex items-center gap-2  px-4 py-2 rounded-lg text-sm font-semibold text-violet-400  hover:bg-gray-100 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span>Create Post</span>
-                </a>
-            </li>
                 <li x-data="{ dropdownOpen: false }" class="relative">
                     <a @click="dropdownOpen = !dropdownOpen"
                        @click.away="dropdownOpen = false"
@@ -84,16 +75,22 @@
                     </a>
                     <div x-show="dropdownOpen"
                          x-cloak
-                         class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
+                         class="absolute right-0 bg-gray-800 text-black shadow rounded-lg w-40 p-2 z-20"
                          x-transition:enter="duration-300 ease-out"
                          x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
                          x-transition:enter-end="opacity-100 translate-y-0 scale-100">
-                        <ul class="hoverlist [&>li>a]:justify-end">
+                        <ul class="flex flex-col items-start hoverlist [&>li>a]:justify-end">
                             <li>
-                                <a href="{% url 'profile' %}">My Profile</a>
+                                {% include 'partials/buttons/create_post.html' %}
                             </li>
                             <li>
-                                <a href="{% url 'logout' %}">Log Out</a>
+                                {% include 'partials/buttons/my_profile.html' %}
+                            </li>
+                            <li>
+                                {% include 'partials/buttons/inbox.html' %}
+                            </li>
+                            <li>
+                                {% include 'partials/buttons/logout.html' %}
                             </li>
                         </ul>
                     </div>
