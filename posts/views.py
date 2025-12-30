@@ -108,7 +108,6 @@ class PostDetailView(DetailView):
         context= super().get_context_data(**kwargs)
         post=self.object
 
-
         if 'top' in self.request.GET:
             comments = post.top_comments
         else:
@@ -117,7 +116,7 @@ class PostDetailView(DetailView):
         context['display_comments']=comments
         context['current_tag'] = self.request.GET.get('tag')
 
-        context['top_posts'] = Post.objects.filter(is_active=True, is_public=True,likes_count__gt=0).order_by('-likes_count','-comments_count')[:4]
+        context['top_posts'] = Post.objects.select_related('user').filter(is_active=True, is_public=True,likes_count__gt=0).order_by('-likes_count','-comments_count')[:4]
 
         return context
 
