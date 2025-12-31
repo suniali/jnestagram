@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('posts.urls')),
     path('',include('profiles.urls')),
+    path('',include('inboxes.urls')),
 ]
 
 handler404 = NotFoundView.as_view()

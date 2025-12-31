@@ -1,0 +1,50 @@
+<main id='chats-container' class="flex-1 flex flex-col bg-white relative">
+    <header class="h-24 px-10 flex justify-between items-center border-b border-slate-50 shrink-0">
+        <div class="flex items-center gap-5">
+            {% if conversation.other_user.profile.avatar %}
+                <img src="{{ conversation.other_user.profile.avatar.url }}"  class="w-14 h-14 rounded-2xl object-cover shadow-sm">
+            {% else %}
+                {% load inbox_tags %}
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white font-black text-lg shadow-lg">{{ conversation.other_user.username|short_username }}</div>
+            {% endif %}
+            <div>
+                <h2 class="text-lg font-black text-slate-900 leading-none">{{ conversation.other_user.username|capfirst }}</h2>
+                <div class="flex items-center gap-1.5 mt-1.5">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest">In Chat</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-4">
+            <button class="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-50 text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2.5"/></svg></button>
+            <button class="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-900 text-white hover:bg-black shadow-xl shadow-slate-200 transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" stroke-width="3"/></svg></button>
+        </div>
+    </header>
+
+    <div id="message-list" onload="this.scrollTop = this.scrollHeight" class="flex-1 overflow-y-auto p-10 space-y-8 bg-slate-50/30 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div class="flex justify-center">
+            <span class="px-5 py-1.5 bg-white border border-slate-100 rounded-full text-[10px] font-black text-slate-400 uppercase tracking-widest shadow-sm">Today</span>
+        </div>
+        {% for message in messages %}
+            {% if request.user.id == message.sender.id %}
+                {% include 'inboxes/outcome_message.html' %}
+            {% else %}
+                {% include 'inboxes/income_message.html' %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <footer class="p-8 bg-white/80 backdrop-blur-xl border-t border-slate-50 shrink-0">
+        <div class="flex items-center gap-4 bg-slate-100 p-2.5 rounded-[2.2rem] border-2 border-transparent focus-within:border-violet-100 focus-within:bg-white transition-all duration-500 shadow-inner">
+            <button class="w-12 h-12 flex items-center justify-center rounded-full text-slate-400 hover:text-violet-600 hover:bg-violet-50 transition-all">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-width="2.5"/></svg>
+            </button>
+            <input type="text" placeholder="Start typing your message..."
+                   class="flex-1 bg-transparent border-none focus:ring-0 text-sm font-bold text-slate-700 placeholder:text-slate-300">
+            <button class="w-14 h-14 flex items-center justify-center rounded-[1.8rem] bg-violet-600 text-white hover:bg-violet-700 shadow-lg shadow-violet-200 transition-all active:scale-90 hover:rotate-3 transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+        </div>
+    </footer>
+</main>

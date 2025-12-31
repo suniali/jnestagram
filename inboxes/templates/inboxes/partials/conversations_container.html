@@ -1,0 +1,36 @@
+{% load static %}
+
+{% for conv in conversations %}
+    <div hx-get="{% url 'inbox' %}?pk={{ conv.id }}"
+         hx-target="#chats-container"
+         hx-swap="outerHTML transition:true"
+         hx-push-url="true"
+         _="on click
+            remove .bg-violet-600 .text-white .shadow-xl .shadow-violet-200 from .chat-item
+            add .bg-white .text-slate-800 to .chat-item
+
+            remove .bg-white .text-slate-800 from me
+            add .bg-violet-600 .text-white .shadow-xl .shadow-violet-200 to me
+
+         "
+
+         class="chat-item flex items-center gap-4 p-5 rounded-[1.8rem] cursor-pointer transform hover:scale-[1.02] transition-all duration-300 group mb-2
+                {% if request.GET.pk == conv.id|stringformat:'s' %} bg-violet-600 text-white shadow-xl shadow-violet-200 {% else %} bg-white text-slate-800 hover:bg-slate-50 {% endif %}">
+
+        <div class="relative flex-shrink-0">
+            <img src="{% if conv.other_user.profile.avatar %}{{ conv.other_user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}"
+                 class="w-14 h-14 rounded-2xl object-cover shadow-sm">
+            <span class="absolute -top-1 -right-1 w-4 h-4 bg-green-400 border-[3px] border-white rounded-full transition-colors group-[.bg-violet-600]:border-violet-600"></span>
+        </div>
+
+        <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-center mb-1">
+                <h3 class="font-bold truncate transition-colors">{{ conv.other_user.username|capfirst }}</h3>
+                <span class="text-[10px] font-black opacity-70">{{ conv.lastmessage_created|date:"H:i" }}</span>
+            </div>
+            <p class="text-xs truncate font-medium opacity-60">
+                {{ conv.messages.last.text|default:"No messages yet"|truncatechars:30 }}
+            </p>
+        </div>
+    </div>
+{% endfor %}
