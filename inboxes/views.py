@@ -4,6 +4,7 @@ from django.views.generic import ListView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, Http404
 from django.db.models import Q
+from django.utils import timezone
 
 from .models import Conversation, Message
 
@@ -35,6 +36,7 @@ class ConversationListView(LoginRequiredMixin, ListView):
                 for conv in conversations:
                     conv.other_user = conv.participants.exclude(id=request.user.id).first()
 
+                messages.last().is_seen=True
                 return render(self.request, 'inboxes/conversation.html', {
                     'conversations': conversations,
                     'conversation': conversation,
@@ -112,6 +114,8 @@ class NewMessageView(LoginRequiredMixin, View):
                     sender=request.user,
                     text=message_text,
                 )
+
+                conversation.lastmessage_created = timezone.now()
 
                 messages = conversation.messages.all().order_by('created_at')
                 return render(request, 'inboxes/conversation.html',

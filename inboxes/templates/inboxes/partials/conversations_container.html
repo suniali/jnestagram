@@ -21,13 +21,15 @@
         <div class="relative flex-shrink-0">
             <img src="{% if conv.other_user.profile.avatar %}{{ conv.other_user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}"
                  class="w-14 h-14 rounded-2xl object-cover shadow-sm">
-            <span class="absolute -top-1 -right-1 w-4 h-4 bg-green-400 border-[3px] border-white rounded-full transition-colors group-[.bg-violet-600]:border-violet-600"></span>
+            {% if conv.messages.last.is_seen == False %}
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-green-400 border-[3px] border-white rounded-full transition-colors group-[.bg-violet-600]:border-violet-600"></span>
+            {% endif %}
         </div>
 
         <div class="flex-1 min-w-0">
             <div class="flex justify-between items-center mb-1">
                 <h3 class="font-bold truncate transition-colors">{{ conv.other_user.username|capfirst }}</h3>
-                <span class="text-[10px] font-black opacity-70">{{ conv.lastmessage_created|date:"H:i" }}</span>
+                <span class="text-[10px] font-black opacity-70">{{ conv.lastmessage_created }}</span>
             </div>
             <p class="text-xs truncate font-medium opacity-60">
                 {{ conv.messages.last.text|default:"No messages yet"|truncatechars:30 }}
