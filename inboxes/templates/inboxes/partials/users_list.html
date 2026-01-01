@@ -1,0 +1,49 @@
+{% load static %}
+<div id="user-list" class="flex flex-col gap-3 p-1">
+    {% for user in users %}
+        <div class="group flex items-center gap-4 p-3.5 bg-white/50 border border-slate-100/50 rounded-[1.6rem] hover:bg-violet-600 hover:shadow-xl hover:shadow-violet-200 transition-all duration-500 cursor-pointer"
+             hx-get="{% url 'inbox_newmessage' user.id %}"
+             hx-target="#new-message-container"
+             hx-swap="innerHTML"
+             _="on htmx:afterOnLoad remove .hidden from #new-message-modal">
+            <div class="relative">
+                <div class="w-14 h-14 rounded-2xl overflow-hidden border-2 border-white shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+                    <img class="w-full h-full object-cover"
+                         src="
+
+
+                                 {% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
+                </div>
+                <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+            </div>
+
+            <div class="flex-1 min-w-0">
+                <div class="flex flex-col">
+                    <span class="font-black text-slate-800 group-hover:text-white transition-colors duration-300 text-base leading-tight">
+                        {{ user.profile.realname|default:user.username }}
+                    </span>
+                    <span class="text-xs font-bold text-slate-400 group-hover:text-violet-200 transition-colors duration-300 mt-0.5">
+                        @{{ user.username }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 group-hover:bg-white/20 text-slate-300 group-hover:text-white transition-all duration-500">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+    {% empty %}
+        <div class="flex flex-col items-center justify-center py-16 text-center">
+            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-4 text-slate-200">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="3"/>
+                </svg>
+            </div>
+            <h3 class="text-slate-400 font-black text-lg">No User Found</h3>
+            <p class="text-slate-300 text-sm font-medium">Try searching with a different name</p>
+        </div>
+    {% endfor %}
+    <div id="new-message-container"></div>
+</div>

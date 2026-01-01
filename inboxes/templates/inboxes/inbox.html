@@ -2,25 +2,33 @@
 {% load static %}
 
 {% block layout %}
-    <div  class="relative flex flex-col lg:flex-row h-[85vh] bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100 m-4 sm:m-8">
+    <div class="relative flex flex-col lg:flex-row h-[85vh] bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100 m-4 sm:m-8">
         <aside class="hidden lg:flex w-[380px] flex-col bg-white border-r border-slate-100">
             <div class="p-8 pb-6">
                 <div class="flex items-center justify-between mb-8">
                     <h1 class="text-3xl font-black text-slate-900 tracking-tight">Chats</h1>
                     <div class="flex gap-2">
-                        <button class="p-2.5 bg-slate-50 rounded-2xl text-slate-400 hover:text-violet-600 hover:bg-violet-50 transition-all">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-width="2"/></svg>
+                        <button _="on click remove .hidden from #search-modal"
+                                class="p-2.5 bg-slate-50 rounded-2xl text-slate-400 hover:text-violet-600 hover:bg-violet-50 transition-all">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                                      stroke-width="2"/>
+                            </svg>
                         </button>
                     </div>
+                    {% include 'inboxes/partials/search_dialog.html' %}
                 </div>
                 <div class="relative group">
                     <input type="text" placeholder="Search for people..."
                            class="w-full pl-12 pr-4 py-4 bg-slate-100 border-none rounded-2xl text-sm focus:ring-2 focus:ring-violet-500/20 focus:bg-white transition-all">
-                    <svg class="w-5 h-5 absolute left-4 top-4 text-slate-400 group-focus-within:text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2.5"/></svg>
+                    <svg class="w-5 h-5 absolute left-4 top-4 text-slate-400 group-focus-within:text-violet-500"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2.5"/>
+                    </svg>
                 </div>
             </div>
-            <div  id="conversations-container"
-                  class="flex-1 overflow-y-auto px-4 pb-4 space-y-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div id="conversations-container"
+                 class="flex-1 overflow-y-auto px-4 pb-4 space-y-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {% include 'inboxes/partials/conversations_container.html' %}
             </div>
         </aside>
