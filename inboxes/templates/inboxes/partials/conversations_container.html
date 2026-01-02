@@ -5,18 +5,10 @@
          hx-target="#chats-container"
          hx-swap="outerHTML transition:true"
          hx-push-url="true"
-         _="on click
-            remove .bg-violet-600 .text-white .shadow-xl .shadow-violet-200 from .chat-item
-            add .bg-white .text-slate-800 to .chat-item
-
-            remove .bg-white .text-slate-800 from me
-            add .bg-violet-600 .text-white .shadow-xl .shadow-violet-200 to me
-            add .hover:bg-violet-700
-
-         "
+         id="conversation-item-{{ conv.id }}"
 
          class="chat-item flex items-center gap-4 p-5 rounded-[1.8rem] cursor-pointer transform hover:scale-[1.02] transition-all duration-300 group mb-2
-                {% if request.GET.pk == conv.id|stringformat:'s' %} bg-violet-600 text-white shadow-xl shadow-violet-200 {% else %} bg-white text-slate-800 hover:bg-slate-50 {% endif %}">
+                {% if conversation and conversation.id == conv.id %} bg-violet-600 text-white shadow-xl shadow-violet-200 hover:bg-violet-700 {% else %} bg-white text-slate-800 hover:bg-slate-50 {% endif %}">
 
         <div class="relative flex-shrink-0">
             <img src="{% if conv.other_user.profile.avatar %}{{ conv.other_user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}"

@@ -18,7 +18,7 @@
 
         <form
                 hx-target="#chats-container"
-                hx-swap="outerHTML"
+                hx-swap="outerHTML transition:true"
                 _="on htmx:afterRequest add .hidden to #new-message-modal then add .hidden to #search-modal">
             {% csrf_token %}
 
