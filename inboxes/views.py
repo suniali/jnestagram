@@ -128,6 +128,3 @@ class NewMessageView(LoginRequiredMixin, View):
                     'conversation': conversation,
                     'conversations':conversations
                 })
-
-        else:
-            raise Http404('ID Not Found!')
