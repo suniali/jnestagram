@@ -118,8 +118,16 @@ class NewMessageView(LoginRequiredMixin, View):
                 conversation.lastmessage_created = timezone.now()
 
                 messages = conversation.messages.all().order_by('created_at')
-                return render(request, 'inboxes/conversation.html',
-                              {'messages': messages, 'conversation': conversation})
+                conversations = Conversation.objects.filter(participants=request.user).prefetch_related(
+                    'participants').order_by('-lastmessage_created')
+                for conv in conversations:
+                    conv.other_user = conv.participants.exclude(id=request.user.id).first()
+
+                return render(request, 'inboxes/conversation.html',{
+                    'messages': messages,
+                    'conversation': conversation,
+                    'conversations':conversations
+                })
 
         else:
             raise Http404('ID Not Found!')
