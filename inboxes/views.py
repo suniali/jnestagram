@@ -54,7 +54,7 @@ class ConversationListView(LoginRequiredMixin, ListView):
 
         for conv in conversations:
             all_participants = conv.participants.all()
-            conv.other_user = next((u for u in all_participants if u.id != self.request.user), None)
+            conv.other_user = next((u for u in all_participants if u.id != self.request.user.id), None)
 
             if active_pk and str(conv.id) == active_pk:
                 context['conversation'] = conv
