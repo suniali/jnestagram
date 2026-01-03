@@ -5,10 +5,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, Http404
 from django.db.models import Q
 from django.utils import timezone
+from cryptography.fernet import Fernet
 
 from .models import Conversation, Message
+from jnestagram.local_settings import ENCRYPT_KEY
 
 User = get_user_model()
+f=Fernet(ENCRYPT_KEY)
 
 
 class ConversationListView(LoginRequiredMixin, ListView):
@@ -31,8 +34,8 @@ class ConversationListView(LoginRequiredMixin, ListView):
                     conversation.is_seen = True
                     conversation.save()
 
-                messages = Message.objects.filter(conversation=conversation).select_related('sender').order_by(
-                    'created_at')
+                inbox_messages=Message.objects.filter(conversation=conversation).select_related('sender').order_by('created_at')
+
 
                 conversations = Conversation.objects.filter(participants=request.user).prefetch_related(
                     'participants').order_by('-lastmessage_created')
@@ -42,7 +45,7 @@ class ConversationListView(LoginRequiredMixin, ListView):
                 return render(self.request, 'inboxes/conversation.html', {
                     'conversations': conversations,
                     'conversation': conversation,
-                    'messages': messages,
+                    'inbox_messages': inbox_messages,
                 })
 
         return super().get(request, *args, **kwargs)
@@ -63,9 +66,13 @@ class ConversationListView(LoginRequiredMixin, ListView):
                     conv.is_seen = True
                     conv.save()
 
-                context['conversation'] = conv
-                context['messages'] = Message.objects.filter(conversation=conv).select_related('sender').order_by(
+                # Decrypting
+                inbox_messages=Message.objects.filter(conversation=conv).select_related('sender').order_by(
                     'created_at')
+
+
+                context['conversation'] = conv
+                context['inbox_messages'] = inbox_messages
 
         context['conversations'] = conversations
         return context
@@ -115,24 +122,29 @@ class NewMessageView(LoginRequiredMixin, View):
                     conversation.participants.add(request.user, recipient)
 
                 conversation.other_user = conversation.participants.exclude(id=request.user.id).first()
+
+                # Encrypting
+                message_encrypted = f.encrypt(message_text.encode('utf-8')).decode('utf-8')
+
                 Message.objects.create(
                     conversation=conversation,
                     sender=request.user,
-                    text=message_text,
+                    text=message_encrypted,
                 )
 
                 conversation.lastmessage_created = timezone.now()
                 conversation.is_seen=False
 
-                messages = conversation.messages.all().order_by('created_at')
                 conversations = Conversation.objects.filter(participants=request.user).prefetch_related(
                     'participants').order_by('-lastmessage_created')
                 for conv in conversations:
                     conv.other_user = conv.participants.exclude(id=request.user.id).first()
 
                 conversation.save()
+
+                inbox_messages = conversation.messages.all().order_by('created_at')
                 context={
-                    'messages': messages,
+                    'inbox_messages': inbox_messages,
                     'conversation': conversation,
                     'conversations':conversations
                 }

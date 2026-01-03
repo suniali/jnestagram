@@ -1,6 +1,11 @@
 from django import template
 
+from cryptography.fernet import Fernet
+
+from jnestagram.local_settings import ENCRYPT_KEY
+
 register = template.Library()
+f=Fernet(ENCRYPT_KEY)
 
 @register.filter
 def short_username(value):
@@ -9,3 +14,10 @@ def short_username(value):
     parts = value.split()
     res = "".join([part[0].upper() for part in parts[:2]])
     return res
+
+@register.filter
+def decrypt(value):
+    if not value:
+        return ""
+    decrypt_message=f.decrypt(value)
+    return decrypt_message.decode("utf-8")

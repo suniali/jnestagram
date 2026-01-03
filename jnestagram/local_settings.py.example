@@ -3,6 +3,7 @@ BASE_URL = ''
 
 # Security
 SECRET_KEY = ''
+ENCRYPT_KEY = b''
 
 DEBUG = False
 

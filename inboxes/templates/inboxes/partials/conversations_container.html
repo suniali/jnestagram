@@ -26,8 +26,9 @@
                 <h3 class="font-bold truncate transition-colors">{{ conv.other_user.username|capfirst }}</h3>
                 <span class="text-[10px] font-black opacity-70">{{ conv.lastmessage_created }}</span>
             </div>
+            {% load inbox_tags %}
             <p class="text-xs truncate font-medium opacity-60">
-                {{ conv.messages.last.text|default:"No messages yet"|truncatechars:30 }}
+                {{ conv.messages.last.text|decrypt|default:"No messages yet"|truncatechars:30 }}
             </p>
         </div>
     </div>
