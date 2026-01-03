@@ -13,8 +13,8 @@
         <div class="relative flex-shrink-0">
             <img src="{% if conv.other_user.profile.avatar %}{{ conv.other_user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}"
                  class="w-14 h-14 rounded-2xl object-cover shadow-sm">
-            {% if conv.messages.last.is_seen == False %}
-                <span class="absolute -top-1 -right-1 w-4 h-4 bg-green-400 border-[3px] border-white rounded-full transition-colors group-[.bg-violet-600]:border-violet-600"></span>
+            {% if conv.is_seen == False and conv.messages.last.sender != request.user %}
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-blue-400 border-[3px] border-gray-100 rounded-full transition-colors group-[.bg-violet-600]:border-violet-600"></span>
             {% endif %}
         </div>
 

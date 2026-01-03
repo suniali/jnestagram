@@ -27,6 +27,9 @@ class ConversationListView(LoginRequiredMixin, ListView):
             if conversation_id:
                 conversation = get_object_or_404(Conversation, pk=conversation_id, participants=request.user)
                 conversation.other_user = conversation.participants.exclude(id=request.user.id).first()
+                if conversation.is_seen == False and conversation.messages.last().sender != request.user:
+                    conversation.is_seen = True
+                    conversation.save()
 
                 messages = Message.objects.filter(conversation=conversation).select_related('sender').order_by(
                     'created_at')
@@ -36,7 +39,6 @@ class ConversationListView(LoginRequiredMixin, ListView):
                 for conv in conversations:
                     conv.other_user = conv.participants.exclude(id=request.user.id).first()
 
-                messages.last().is_seen=True
                 return render(self.request, 'inboxes/conversation.html', {
                     'conversations': conversations,
                     'conversation': conversation,
@@ -57,6 +59,10 @@ class ConversationListView(LoginRequiredMixin, ListView):
             conv.other_user = next((u for u in all_participants if u.id != self.request.user.id), None)
 
             if active_pk and str(conv.id) == active_pk:
+                if conv.is_seen == False and conv.messages.last().sender != self.request.user:
+                    conv.is_seen = True
+                    conv.save()
+
                 context['conversation'] = conv
                 context['messages'] = Message.objects.filter(conversation=conv).select_related('sender').order_by(
                     'created_at')
@@ -116,6 +122,7 @@ class NewMessageView(LoginRequiredMixin, View):
                 )
 
                 conversation.lastmessage_created = timezone.now()
+                conversation.is_seen=False
 
                 messages = conversation.messages.all().order_by('created_at')
                 conversations = Conversation.objects.filter(participants=request.user).prefetch_related(
@@ -123,6 +130,7 @@ class NewMessageView(LoginRequiredMixin, View):
                 for conv in conversations:
                     conv.other_user = conv.participants.exclude(id=request.user.id).first()
 
+                conversation.save()
                 context={
                     'messages': messages,
                     'conversation': conversation,
