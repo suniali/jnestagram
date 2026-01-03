@@ -8,10 +8,10 @@ from django.utils import timezone
 from cryptography.fernet import Fernet
 
 from .models import Conversation, Message
-from jnestagram.local_settings import ENCRYPT_KEY
+from jnestagram.settings import env
 
 User = get_user_model()
-f=Fernet(ENCRYPT_KEY)
+f=Fernet(env('ENCRYPT_KEY'))
 
 
 class ConversationListView(LoginRequiredMixin, ListView):

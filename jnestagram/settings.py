@@ -11,17 +11,26 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from environ import Env
 
-from .local_settings import *
 
+env=Env()
+Env.read_env()
+ENVIRONMENT=env('ENVIRONMENT',default='production')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_URL = env('BASE_URL',default='')
 
+# Security
+SECRET_KEY = env('SECRET_KEY')
+ENCRYPT_KEY = env('ENCRYPT_KEY')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+ALLOWED_HOSTS = ['*']
 
-
+if ENVIRONMENT == 'development':
+    DEBUG = True
+else:
+    DEBUG = False
 
 # Application definition
 
@@ -33,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    "admin_honeypot",
     'django_cleanup.apps.CleanupConfig',
     "django_htmx",
 
@@ -82,12 +92,12 @@ WSGI_APPLICATION = 'jnestagram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': DB_ENGINE,
-        'NAME': DB_NAME,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASS,
+        'ENGINE': env('DB_ENGINE'),
+        'NAME': env('DB_NAME'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASS'),
     }
 }
 

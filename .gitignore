@@ -5,5 +5,5 @@ media/
 **/__pycache__/
 *.pyc
 
-jnestagram/local_settings.py
+jnestagram/.env
 static/tailwinds/node_modules/

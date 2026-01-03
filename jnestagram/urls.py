@@ -22,7 +22,8 @@ from django.urls import path,include
 from .views import NotFoundView,InternalServerErrorView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', include('admin_honeypot.urls')),
+    path('jnestagram-boss/', admin.site.urls),
     path('',include('posts.urls')),
     path('',include('profiles.urls')),
     path('',include('inboxes.urls')),

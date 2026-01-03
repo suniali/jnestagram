@@ -2,10 +2,10 @@ from django import template
 
 from cryptography.fernet import Fernet
 
-from jnestagram.local_settings import ENCRYPT_KEY
+from jnestagram.settings import env
 
 register = template.Library()
-f=Fernet(ENCRYPT_KEY)
+f=Fernet(env('ENCRYPT_KEY'))
 
 @register.filter
 def short_username(value):
