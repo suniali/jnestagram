@@ -4,7 +4,7 @@
      x-transition:enter="transition-all cubic-bezier(0.4, 0, 0.2, 1) duration-700"
      x-transition:enter-start="opacity-0 max-h-0 transform -translate-y-2"
      x-transition:enter-end="opacity-100 max-h-[500px] transform translate-y-0"
-     class="overflow-hidden">
+     class="w-full md:w-[36rem] lg:w-[50rem] mx-auto flex gap-2">
     {% include 'partials/posts/comment.html' %}
 </div>
 <span hx-swap-oob="true" id="comment-count-{{ post.pk }}" class="bg-gray-100 text-gray-600 text-sm px-3 py-1 rounded-full">

@@ -1,4 +1,7 @@
 {% load static %}
+<a href="{% url 'post_detail' comment.post.id %}" class="mt-2">
+    <img class="w-20 h-20 object-cover rounded-xl hover:scale-95 max-w-none" src="{{ comment.post.image.url }}">
+</a>
 <comment class="card p-5 !mb-4 shadow-sm border border-gray-100 rounded-2xl block bg-white">
     <div class="flex justify-between items-center mb-3">
         <a class="flex items-center gap-3" href="{% url 'public_profile' comment.user.username %}">
