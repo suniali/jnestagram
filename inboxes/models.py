@@ -9,6 +9,7 @@ class Conversation(models.Model):
     id=models.UUIDField(primary_key=True, default=uuid.uuid4,unique=True, editable=False)
     participants=models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='conversations')
     lastmessage_created=models.DateTimeField(default=timezone.now)
+    is_seen = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-lastmessage_created']
@@ -21,7 +22,6 @@ class Message(models.Model):
     sender=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='sent_message')
     conversation=models.ForeignKey(Conversation,on_delete=models.CASCADE,related_name='messages')
     text = models.TextField()
-    is_seen = models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
 
     class Meta:
