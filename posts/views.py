@@ -244,7 +244,9 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
         form.instance.user=self.request.user
         form.instance.post_id=self.kwargs['pk']
 
-        if self.request.user.is_staff or  self.request.user.is_superuser:
+        post=get_object_or_404(Post,pk=self.kwargs['pk'])
+
+        if self.request.user.is_staff or  self.request.user.is_superuser or self.request.user == post.user:
             form.instance.is_approved=True
             msg='Your comment has been published.'
         else:
