@@ -9,19 +9,19 @@
                   d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0l-8 5-8-5" />
         </svg>
 
-{#        {% if unread_messages %}#}
-        <span class="absolute -top-1 -right-1 flex h-3 w-3">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 border border-white"></span>
+        {% if unread_messages_count > 0 %}
+            <span class="absolute -top-1 -right-1 flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-violet-500 border border-gray-100"></span>
         </span>
-{#        {% endif %}#}
+        {% endif %}
     </div>
 
     <span class="hidden md:block font-medium text-sm">Messages</span>
 
-{#    {% if unread_messages_count > 0 %}#}
-    <span class="bg-violet-100 text-violet-600 px-1.5 py-0.5 rounded-md text-[10px] font-bold">
-{#        {{ unread_messages_count }}#}3
+    {% if unread_messages_count > 0 %}
+        <span class="bg-violet-100 text-violet-600 px-1.5 py-0.5 rounded-md text-[10px] font-bold">
+        {{ unread_messages_count }}
     </span>
-{#    {% endif %}#}
+    {% endif %}
 </a>

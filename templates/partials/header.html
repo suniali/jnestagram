@@ -12,11 +12,8 @@
         </logo>
 
         <a href="{% url 'home' %}"
-           class="inline-flex items-center gap-1 p-2 mx-6 rounded-lg text-sm font-semibold text-violet-400  hover:bg-gray-100 transition-colors duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            <span class="mt-1">Home</span>
+           class="p-3 mx-6 mt-2 rounded-xl text-lg font-bold text-white  hover:border transition-colors duration-200">
+            <span >Home</span>
         </a>
 
         <mobileicon class="md:hidden">
@@ -55,12 +52,12 @@
                        @click.away="dropdownOpen = false"
                        class="cursor-pointer select-none">
                         <span class="relative flex h-8 w-8">
-                            {% if pending_comments_count > 0 %}
+                            {% if pending_comments_count|add:unread_messages_count > 0 %}
                                 <span class="absolute -top-1 -right-1 flex h-4 w-4">
                                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
                                     <span class="relative inline-flex rounded-full h-4 w-4 bg-violet-500  items-center justify-center">
                                         <span class="text-[10px] font-bold text-white leading-none">
-                                            {{ pending_comments_count }}
+                                            {{ pending_comments_count|add:unread_messages_count }}
                                         </span>
                                     </span>
                                 </span>
