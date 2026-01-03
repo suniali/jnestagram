@@ -10,9 +10,11 @@
                 <div class="w-14 h-14 rounded-2xl overflow-hidden border-2 border-white shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
                     <img class="w-full h-full object-cover"
                          src="
-
-
-                                 {% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
+                                {% if user.profile.avatar %}
+                                    {{ user.profile.avatar.url }}
+                                {% else %}
+                                    {% static 'images/avatar_default.svg' %}
+                                {% endif %}">
                 </div>
                 <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
             </div>
@@ -45,5 +47,4 @@
             <p class="text-slate-300 text-sm font-medium">Try searching with a different name</p>
         </div>
     {% endfor %}
-    <div id="new-message-container"></div>
 </div>

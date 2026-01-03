@@ -123,8 +123,9 @@ class NewMessageView(LoginRequiredMixin, View):
                 for conv in conversations:
                     conv.other_user = conv.participants.exclude(id=request.user.id).first()
 
-                return render(request, 'inboxes/conversation.html',{
+                context={
                     'messages': messages,
                     'conversation': conversation,
                     'conversations':conversations
-                })
+                }
+                return redirect(f'/inbox/?pk={conversation.pk}',context)

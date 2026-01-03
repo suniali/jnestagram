@@ -6,28 +6,18 @@
 
         <div class="flex items-center gap-4 mb-6">
             <img class="w-14 h-14 rounded-2xl object-cover"
-                 src="
-
-
-
-
-
-                         {% if recipient.profile.avatar %}{{ recipient.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
+                 src="{% if recipient.profile.avatar %}{{ recipient.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
             <h3 class="text-xl font-black text-slate-800">Message to {{ recipient.username }}</h3>
         </div>
 
-        <form
-                hx-target="#chats-container"
-                hx-swap="outerHTML transition:true"
-                _="on htmx:afterRequest add .hidden to #new-message-modal then add .hidden to #search-modal">
+        <form method="post" action="{% url 'inbox_newmessage' recipient.id %}">
             {% csrf_token %}
-
             <textarea name="message" required autofocus
                       placeholder="Write your message..."
                       class="w-full bg-slate-50 border-none rounded-2xl p-5 min-h-[120px] focus:ring-2 focus:ring-violet-500 mb-4 resize-none"></textarea>
 
             <div class="flex gap-3">
-                <button hx-post="{% url 'inbox_newmessage' recipient.id %}"
+                <button type="submit"
                         class="flex-1 bg-violet-600 text-white font-bold py-4 rounded-2xl hover:bg-violet-700 transition-all">
                     Send Message
                 </button>
