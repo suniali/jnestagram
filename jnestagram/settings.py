@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from environ import Env
 
+import dj_database_url
+
 
 env=Env()
 Env.read_env()
@@ -106,6 +108,10 @@ DATABASES = {
         'PASSWORD': env('DB_PASS'),
     }
 }
+
+
+if ENVIRONMENT == 'production':
+    DATABASES['default']=dj_database_url.parse(env('DB_URL'))
 
 
 # Password validation

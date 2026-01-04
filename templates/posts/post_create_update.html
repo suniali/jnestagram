@@ -82,8 +82,8 @@
                         {% for tag in tags %}
                             <button type="button"
                                     @click="toggleTag({{ tag.id }})"
-                                    :class="selectedTags.includes({{ tag.id }}) ? 'bg-violet-600 text-white border-violet-600' : 'bg-white text-violet-600 border-violet-300'"
-                                    class="px-4 py-1.5 rounded-xl border text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-sm hover:text-violet-100">
+                                    :class="selectedTags.includes({{ tag.id }}) ? '!bg-violet-600 !text-white border-violet-600' : '!bg-gray-400 !text-violet-600 border-violet-300'"
+                                    class="px-4 py-1.5 !rounded-full border text-xs !bg-gray-200 !text-gray-800 font-semibold uppercase tracking-wider transition-all duration-200 shadow-sm hover:text-violet-100">
                                 {{ tag.name }}
                             </button>
                         {% endfor %}
