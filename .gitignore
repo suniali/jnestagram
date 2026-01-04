@@ -1,9 +1,13 @@
 .venv/
 .idea/
 media/
+static/
+node_modules/
 
 **/__pycache__/
+.env
+.DS_Store
 *.pyc
 
-jnestagram/.env
-node_modules/
+db.sqlite3
+
