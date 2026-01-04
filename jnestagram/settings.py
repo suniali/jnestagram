@@ -27,6 +27,11 @@ ENCRYPT_KEY = env('ENCRYPT_KEY')
 
 ALLOWED_HOSTS = ['*']
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+    'localhost:8000',
+]
+
 if ENVIRONMENT == 'development':
     DEBUG = True
 else:

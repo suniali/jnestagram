@@ -6,4 +6,4 @@ media/
 *.pyc
 
 jnestagram/.env
-static/tailwinds/node_modules/
+node_modules/
