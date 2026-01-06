@@ -2,7 +2,7 @@
 <a href="{% url 'post_detail' comment.post.id %}" class="mt-2">
     <img class="w-20 h-20 object-cover rounded-xl hover:scale-95 max-w-none" src="{{ comment.post.image.url }}">
 </a>
-<comment class="card p-5 !mb-4 shadow-sm border border-gray-100 rounded-2xl block bg-white">
+<comment class="comment-card">
     <div class="flex justify-between items-center mb-3">
         <a class="flex items-center gap-3" href="{% url 'public_profile' comment.user.username %}">
             <img class="w-10 h-10 object-cover rounded-full ring-2 ring-gray-50" src="{% if comment.user.profile.avatar %}{{ comment.user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
@@ -27,7 +27,7 @@
                     </svg>
                 </div>
                 <span>Replies</span>
-                <span id="replay-count-{{ comment.id }}" class="bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full text-[11px]">{{ comment.replies|length }}</span>
+                <span id="replay-count-{{ comment.id }}" class="badge-primary">{{ comment.replies|length }}</span>
             </a>
 
             <div class="flex items-center gap-2">
@@ -52,15 +52,23 @@
 
         <div x-show="repliesOpen" x-cloak x-transition.opacity class="basis-full mt-4 pl-4 border-l-2 border-gray-100 space-y-4">
             {% if request.user.is_authenticated %}
-                <form class="replyform flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-100 focus-within:border-violet-200 focus-within:bg-white transition-all"
-                      autocomplete="off"
+                <form class="comment-input-container"
                       hx-post="{% url 'replay' comment.id %}"
                       hx-target="#replay-container-{{ comment.id }}"
                       hx-swap="afterbegin"
                       hx-on::after-request="this.reset()">
                     {% csrf_token %}
-                    <input type="text" name="text" class="flex-1 bg-transparent border-none focus:ring-0 text-sm placeholder:text-gray-400" placeholder="Write a reply..." maxlength="150" required>
-                    <button class="!bg-violet-600 hover:bg-violet-700 !text-white !px-4 !py-1.5 !rounded-lg !font-medium transition-all text-xs" type="submit">Reply</button>
+                    <button type="submit"
+                            class="flex-none w-50 bg-primary text-white px-5 py-2 rd-full font-bold text-xs hover:bg-primary-dark transition-all active:scale-95">
+                        Reply
+                    </button>
+
+                    <div class="flex-1">
+                        <input type="text" name="text"
+                               class="input-main"
+                               placeholder="Write a reply..." required>
+                    </div>
+
                 </form>
             {% endif %}
             <div id="replay-container-{{ comment.id }}" class="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">

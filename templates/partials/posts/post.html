@@ -1,15 +1,15 @@
 {% load static %}
 
-<article class="card">
+<article class="post-card">
     <div class="flex items-center justify-between px-4 h-14">
-        <h3 class="text-start leading-5 mr-1">{{ post.title|truncatechars:20 }}</h3>
+        <h3 class="post-title">{{ post.title|truncatechars:20 }}</h3>
         <div class="text-sm text-gray-400 truncate">
             flickr<a class="hover:underline ml-1" href="{% url 'public_profile' post.user.username %}">@{{ post.user.username }}</a>
         </div>
     </div>
-    <figure>
+    <figure class="post-img-container">
         <a href="{% url 'post_detail' post.id %}">
-            <img class="w-full" src="{{ post.image.url }}">
+            <img class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" src="{{ post.image.url }}">
         </a>
     </figure>
     <div class="p-4 pb-2">
@@ -17,7 +17,7 @@
             <img class="w-6 h-6 object-cover rounded-full -mt-1" src="{% if post.user.profile.avatar %} {{ post.user.profile.avatar.url }} {% else %} {% static 'images/avatar_default.svg' %} {% endif %}">
             <span class="font-bold item-center justify-between">{{ post.user.profile.realname|capfirst }}</span><a class="text-gray-400 text-sm hover:underline cursor-pointer" href="{% url 'public_profile' post.user.username %}"> @{{ post.user.username }}</a>
         </div>
-        <p class="text-5xl mb-10 px-4 font1">{{ post.text|truncatechars:20 }}</p>
+        <p class="text-5xl mb-10 px-4 post-text-main">{{ post.text|truncatechars:20 }}</p>
         <div class="flex items-center gap-2 text-sm mb-3 flex-wrap">
             {% for tag in post.tag.all %}
                 <a href=""

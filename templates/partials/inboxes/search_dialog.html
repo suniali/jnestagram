@@ -1,5 +1,4 @@
-<div id="search-modal"
-     class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
 
     <div class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden transform transition-all"
          _="on click halt">
@@ -26,7 +25,7 @@
         </div>
 
         <div id="search-results" class="h-60 overflow-y-auto scrollbar-hide">
-            {% include 'inboxes/partials/users_list.html' %}
+            {% include 'partials/inboxes/users_list.html' %}
         </div>
     </div>
 </div>

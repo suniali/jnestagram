@@ -1,14 +1,12 @@
 {
   "scripts": {
-    "tailwind": "npx tailwindcss -i ./static/css/tailwind.css -o ./static/css/style.css --watch \n",
-    "minify": "cleancss ./static/css/style.css -o ./static/css/style.min.css"
+    "dev": "unocss \"templates/**/*.html\" -o static/css/uno.css --watch",
+    "build": "unocss \"templates/**/*.html\" -o static/css/uno.css --minify"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.23",
-    "postcss": "^8.5.6"
-  },
-  "dependencies": {
-    "clean-css-cli": "^5.6.3",
-    "tailwindcss": "^3.4.15"
+    "@iconify-json/carbon": "^1.2.15",
+    "@unocss/cli": "^66.5.12",
+    "@unocss/preset-uno": "^66.5.12",
+    "unocss": "^66.5.12"
   }
 }

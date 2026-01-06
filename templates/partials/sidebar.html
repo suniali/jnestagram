@@ -4,44 +4,52 @@
        x-cloak
        class="md:!block col-span-full md:col-span-1 lg:mr-[20%] order-1 md:order-2"
        x-transition:enter="duration-300 ease-out"
-       x-transition:enter-start="opacity-0 -mt-96"
-       x-transition:enter-end="opacity-100 mt-0">
-    <section class="card p-4">
-        <h2 class="font-bold">Categories</h2>
-        <ul class="hoverlist">
+       x-transition:enter-start="opacity-0 -translate-y-10"
+       x-transition:enter-end="opacity-100 translate-y-0">
+
+    <section class="sidebar-card">
+        <h2 font-bold mb-4 text-slate-800 flex items-center gap-2>
+            <div w-1 h-5 bg-primary rd-full></div>
+            Categories
+        </h2>
+        <ul flex flex-col gap-1>
             {% for tag in tags %}
-                <li class="my-2 {% if current_tag == tag.slug %}highlight{% endif %}">
-                    <a href="{% url 'home' %}?tag={{ tag.slug }}">
-                        <img class="w-8 h-8 object-cover mr-2"
+                <li class="{% if current_tag == tag.slug %}sidebar-active{% endif %}">
+                    <a href="{% url 'home' %}?tag={{ tag.slug }}" class="sidebar-item">
+                        <img w-8 h-8 object-cover mr-3 rd-lg
                              src="{% if tag and tag.icon %}{{ tag.icon.url }}{% else %} {% static 'images/icon_landscape.svg' %} {% endif %}">
-                        <span class="font-bold text-sm">{{ tag.name }}</span>
+                        <span font-bold text-sm class="group-hover:text-primary transition-colors">{{ tag.name }}</span>
                     </a>
                 </li>
             {% endfor %}
         </ul>
     </section>
-    <section class="card p-4">
-        <div class="flex items-center">
-            <img class="w-7 mr-2"
-                 src="{% static 'images/fireheart_black.svg' %}" />
-            <h2 class="font-bold my-2">Top Posts</h2>
+
+    <section class="sidebar-card">
+        <div flex items-center mb-4>
+            <img w-6 mr-2 src="{% static 'images/fireheart_black.svg' %}" />
+            <h2 font-bold text-slate-800>Top Posts</h2>
         </div>
+
         {% load sidebar %}
-        <ul class="hoverlist">
+        <ul flex flex-col gap-2>
             {% for top_post in top_posts %}
-                <li class="{% if top_post|is_liked_by:user %} font-bold bg-gray-100 {% else %} font-light {% endif %}">
-                    <a class="flex items-stretch justify-between" href="{% url 'post_detail' top_post.id %}">
-                        <div class="flex items-center truncate">
-                            <img class="w-10 h-10 rounded-lg object-cover mr-3 shrink-0"
+                <li class="rd-xl transition-all {% if top_post|is_liked_by:user %} bg-primary/5 {% endif %}">
+                    <a class="sidebar-item justify-between" href="{% url 'post_detail' top_post.id %}">
+                        <div flex items-center truncate>
+                            <img w-10 h-10 rd-lg object-cover mr-3 shrink-0
                                  src="{% if top_post.image %}{{ top_post.image.url }}{% else %}{% static 'images/icon_landscape.svg' %}{% endif %}">
-                            <span class=" text-sm mr-1">@ {{ top_post.user.username }}</span>
+                            <span text-sm mr-1 truncate>@{{ top_post.user.username }}</span>
                         </div>
 
-                        <span class="text-sm text-grey-400 shrink-0">{{ top_post.likes_count }} Like{{ top_post.likes_count|pluralize:'s' }}</span>
+                        <span text="xs slate-400" shrink-0 font-medium>
+                            {{ top_post.likes_count }}
+                            <span i-carbon-favorite inline-block align-middle ml-0.5></span>
+                        </span>
                     </a>
                 </li>
             {% empty %}
-                <li class="m-4">No top posts yet.</li>
+                <li p-4 text-center text-slate-400 text-sm italic>No top posts yet.</li>
             {% endfor %}
         </ul>
     </section>

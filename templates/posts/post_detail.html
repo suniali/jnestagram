@@ -1,40 +1,50 @@
 {% extends 'layouts/a.html' %}
-
 {% load static %}
 
 {% block content %}
     {% include 'partials/posts/post.html' %}
+
     {% if request.user.is_authenticated %}
-        <div class="card !pb-0 -mt-3">
-            <form class="replyform flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-100 focus-within:border-violet-200 focus-within:bg-white transition-all"
+        <div class="sidebar-card !p-2 mb-8">
+            <form class="comment-input-container"
                   autocomplete="off"
                   hx-post="{% url 'add_comment' post.pk %}"
                   hx-target="#comment-container"
                   hx-swap="afterbegin"
                   hx-on::after-request="this.reset()">
                 {% csrf_token %}
-                <input type="text" name="text" class="flex-1 bg-transparent border-none focus:ring-0 text-sm placeholder:text-gray-400" placeholder="Add comment ..." maxlength="150">
-                <button @click="open = false" class="!bg-violet-600 hover:bg-violet-700 !text-white !px-4 !py-1.5 !rounded-2xl font-bold transition-all text-sm" type="submit">Add Comment</button>
+
+                <img w-8 h-8 rd-full object-cover ml-2
+                     src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
+
+                <input type="text" name="text"
+                       class="input-main"
+                       placeholder="Write a comment..." maxlength="150">
+
+                <button type="submit"
+                        class="bg-primary hover:bg-primary-dark text-white px-5 py-2 rd-xl font-bold transition-all text-sm shadow-sm active:scale-95">
+                    Post
+                </button>
             </form>
         </div>
     {% endif %}
 
-    <div class="mb-20">
-        <div id="tabs" class="ml-4 flex gap-2 mb-4"
+    <div class="mb-20 px-2">
+        <div id="tabs" class="flex gap-2 mb-6"
              hx-target="#comment-container"
              hx-swap="innerHTML transition:true"
-             _="on htmx:afterOnLoad take .selected for event.target">
-            <a class="tab selected" hx-get="{% url 'post_detail' post.id %}">
-                    Newest First
+             _="on htmx:afterOnLoad take .tab-selected for event.target">
+
+            <a class="tab-btn tab-selected" hx-get="{% url 'post_detail' post.id %}">
+                Newest
             </a>
-            <a class="tab transition-all duration-300" hx-get="{% url 'post_detail' post.id %}?top">
-                    Top Comments
+            <a class="tab-btn" hx-get="{% url 'post_detail' post.id %}?top">
+                Top Rated
             </a>
         </div>
 
-        <div id="comment-container" class="tab-contents">
+        <div id="comment-container" class="space-y-4">
             {% include "partials/posts/comments_container.html" %}
         </div>
     </div>
-
 {% endblock %}

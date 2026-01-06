@@ -1,110 +1,105 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block layout %}
-    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-100 px-4 py-12">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl mt-1 mb-6 p-8 md:p-10">
-            <div class="text-center mb-6">
-                <h2 class="text-3xl font-bold text-gray-800 font1 titleBlip">
-                    {% if object %}
-                        Update Post
-                    {% else %}
-                        Create New Post
-                    {% endif %}
+    <div class="min-h-screen flex items-center justify-center bg-slate-50/50 px-4 py-12">
+        <div class="bg-white rd-[2.5rem] shadow-sm border border-slate-100 w-full max-w-xl p-8 md:p-10 transition-all">
+
+            <div class="text-center mb-10">
+                <h2 class="text-5xl font-black text-slate-800 font-lobster mb-3">
+                    {% if object %} Update Post {% else %} Create Post {% endif %}
                 </h2>
-                <p class="text-gray-600 mt-2">Share your thoughts with the world.</p>
+                <p class="text-slate-400 font-medium">Share your creative thoughts with the world.</p>
             </div>
-            <form method="POST" enctype="multipart/form-data" action="" x-data="{ selectedTags: {{ selected_tag_ids|default:'[]' }}, imagePreview:
-                {% if object.image %}
-                    '{{ object.image.url }}'
-                {% else %}
-                    null
-                {% endif %}
-                , toggleTag(id) { if (this.selectedTags.includes(id)) { this.selectedTags = this.selectedTags.filter(i => i !== id); } else { this.selectedTags.push(id); } } }">
+
+            <form method="POST" enctype="multipart/form-data"
+                  x-data="{
+                    selectedTags: {{ selected_tag_ids|default:'[]' }},
+                    imagePreview: '{% if object.image %}{{ object.image.url }}{% endif %}',
+                    toggleTag(id) {
+                        if (this.selectedTags.includes(id)) {
+                            this.selectedTags = this.selectedTags.filter(i => i !== id);
+                        } else {
+                            this.selectedTags.push(id);
+                        }
+                    }
+                  }">
                 {% csrf_token %}
+
                 <div class="mb-6">
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Title</label>
-                    <input type="text"
-                           name="title"
-                           value="{{ object.title }}"
-                           placeholder="Enter post title"
-                           required
-                           maxlength="30"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="block text-sm font-bold text-slate-700 mb-2 ml-2">Title</label>
+                    <input type="text" name="title" value="{{ object.title }}"
+                           placeholder="Enter a catchy title" required maxlength="30"
+                           class="input-form">
                 </div>
+
                 <div class="mb-6">
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Content</label>
-                    <textarea name="text"
-                              rows="5"
-                              placeholder="Write your content here..."
-                              required
-                              maxlength="200"
-                              class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">{{object.text}}</textarea>
+                    <label class="block text-sm font-bold text-slate-700 mb-2 ml-2">Content</label>
+                    <textarea name="text" rows="4" placeholder="What's on your mind?"
+                              required maxlength="200"
+                              class="input-form resize-none">{{ object.text }}</textarea>
                 </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Feature Image</label>
+
+                <div class="mb-8">
+                    <label class="block text-sm font-bold text-slate-700 mb-2 ml-2">Feature Image</label>
                     <div @click="$refs.fileInput.click()"
-                         class="relative cursor-pointer border-2 border-dashed border-gray-300 rounded-xl h-64 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition overflow-hidden">
+                         class="relative cursor-pointer border-2 border-dashed border-slate-200 rd-[2rem] h-64 flex items-center justify-center bg-slate-50 hover:(bg-slate-100 border-primary/30) transition-all overflow-hidden group">
+
                         <template x-if="imagePreview">
-                            <img :src="imagePreview" class="w-full h-full object-cover">
+                            <img :src="imagePreview" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                         </template>
+
                         <template x-if="!imagePreview">
                             <div class="text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                    </path>
-                                </svg>
-                                <p class="mt-1 text-sm text-gray-500">Click to upload image</p>
+                                <div i-carbon-image class="mx-auto h-12 w-12 text-slate-300 mb-2"></div>
+                                <p class="text-sm text-slate-400 font-bold">Click to upload photo</p>
                             </div>
                         </template>
+
+                        <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <div class="bg-white p-3 rd-full shadow-xl">
+                                <div i-carbon-cloud-upload class="w-6 h-6 text-primary"></div>
+                            </div>
+                        </div>
                     </div>
-                    <input type="file"
-                           name="image"
-                           x-ref="fileInput"
-                           class="hidden"
-                           accept="image/*"
+                    <input type="file" name="image" x-ref="fileInput" class="hidden" accept="image/*"
                            @change="const file = $event.target.files[0]; if (file) { imagePreview = URL.createObjectURL(file) }">
+
                     {% if form.image.errors %}
-                        {% for error in form.image.errors %}
-                            <p class="text-rose-600 text-xs font-bold mt-1 flex items-center gap-1 mt-2">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
-                                {{ error }}
-                            </p>
-                        {% endfor %}
+                        <p class="text-red-500 text-xs font-bold mt-3 flex items-center gap-1 ml-2">
+                             <div i-carbon-warning w-4 h-4></div> {{ form.image.errors.0 }}
+                        </p>
                     {% endif %}
                 </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Select Tags (Optimal)</label>
+
+                <div class="mb-8">
+                    <label class="block text-sm font-bold text-slate-700 mb-3 ml-2">Select Tags</label>
                     <div class="flex flex-wrap gap-2">
                         {% for tag in tags %}
-                            <button type="button"
-                                    @click="toggleTag({{ tag.id }})"
-                                    :class="selectedTags.includes({{ tag.id }}) ? '!bg-violet-600 !text-white border-violet-600' : '!bg-gray-400 !text-violet-600 border-violet-300'"
-                                    class="px-4 py-1.5 !rounded-full border text-xs !bg-gray-200 !text-gray-800 font-semibold uppercase tracking-wider transition-all duration-200 shadow-sm hover:text-violet-100">
+                            <button type="button" @click="toggleTag({{ tag.id }})"
+                                    :class="selectedTags.includes({{ tag.id }})
+                                            ? 'bg-primary text-white border-primary shadow-primary/20'
+                                            : 'bg-white text-slate-400 border-slate-200 hover:border-primary/50'"
+                                    class="tag-btn">
                                 {{ tag.name }}
                             </button>
                         {% endfor %}
                     </div>
                     <input type="hidden" name="selected_tags" :value="selectedTags.join(',')">
                 </div>
-                <div class="flex items-center gap-2 bg-violet-50 p-3 rounded-xl">
-                    <input type="checkbox"
-                           name="is_public"
-                           id="is_public"
-                           checked="{{ object.is_public }}"
-                           class="w-5 h-4 text-violet-600 border-violet-300 rounded-xl focus:ring-violet-500 ">
-                    <label for="is_public"
-                           class="text-sm font-medium text-gray-600 select-none cursor-pointer -m-0.5">
-                        Make this post Public
+
+                <div class="flex items-center gap-3 bg-slate-50 p-4 rd-2xl border border-slate-100 mb-10">
+                    <input type="checkbox" name="is_public" id="is_public"
+                           {% if object.is_public %}checked{% endif %}
+                           class="w-5 h-5 text-primary border-slate-300 rd-lg focus:ring-primary">
+                    <label for="is_public" class="text-sm font-bold text-slate-600 cursor-pointer select-none">
+                        Make this post visible to everyone
                     </label>
                 </div>
-                <hr class="border-gray-100 my-6">
+
                 <button type="submit"
-                        class="w-full bg-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition duration-300">
-                    SAVE POST
+                        class="w-full bg-slate-900 text-white font-black py-4 rd-2xl hover:(bg-primary shadow-xl shadow-primary/30) transition-all duration-300 transform active:scale-95 uppercase tracking-widest text-sm">
+                    {% if object %} Update Post {% else %} Save Post {% endif %}
                 </button>
             </form>
         </div>

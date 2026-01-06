@@ -3,7 +3,7 @@
     <div class="flex flex-col items-end gap-1.5">
         <div class="bg-violet-600 px-5 py-2 rounded-[1.8rem] rounded-br-none shadow-lg shadow-violet-600/20 text-white">
             {% load inbox_tags %}
-            <p class="text-[14px] leading-relaxed font-medium mt-4">
+            <p class="text-[14px] leading-relaxed font-medium">
                {{ message.text|decrypt }}
             </p>
         </div>

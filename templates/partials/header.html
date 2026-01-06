@@ -1,94 +1,77 @@
 {% load static %}
 
 <header x-data="{ mobilenavOpen: false }"
-        class="md:flex items-center justify-between [&>*]:px-8 bg-gray-800 h-20 text-white sticky top-0 z-40">
-    <div class="flex items-center justify-between h-20">
+        md="flex justify-between" items-center bg-slate-900 h-20 text-white sticky top-0 z-40 px-8>
+
+    <div flex items-center justify-between h-20>
         <logo>
-            <a class="flex items-center gap-1" href="{% url 'home' %}">
-                <img class="w-7 -mt-1"
-                     src="{% static 'images/fireheart_white.svg' %}" />
-                <span class="text-xl font-bold font1 titleBlip">Jnestagram</span>
+            <a flex items-center gap-1 href="{% url 'home' %}">
+                <img w-7 mt--1 src="{% static 'images/fireheart_white.svg' %}" />
+                <span text-xl font-bold font1>Jnestagram</span>
             </a>
         </logo>
 
-        <a href="{% url 'home' %}"
-           class="p-3 mx-6 mt-2 rounded-xl text-lg font-bold text-white  hover:border transition-colors duration-200">
-            <span >Home</span>
+        <a href="{% url 'home' %}" class="nav-link" md="block" hidden>
+            <span>Home</span>
         </a>
 
-        <mobileicon class="md:hidden">
+        <div md="hidden">
             <a @click="mobilenavOpen = !mobilenavOpen"
-               class="h-12 w-12 flex items-center justify-center cursor-pointer hover:bg-gray-700 rounded-lg">
-                <img x-show="!mobilenavOpen"
-                     class="w-6 h-6 select-none"
-                     src="https://img.icons8.com/small/64/ffffff/menu.png" />
-                <img x-show="mobilenavOpen"
-                     x-cloak
-                     class="w-6 h-6 select-none"
-                     src="https://img.icons8.com/small/64/ffffff/delete-sign.png" />
+               h-12 w-12 flex items-center justify-center cursor-pointer hover="bg-white/10" rd-lg>
+                <img x-show="!mobilenavOpen" w-6 h-6 src="https://img.icons8.com/small/64/ffffff/menu.png" />
+                <img x-show="mobilenavOpen" x-cloak w-6 h-6 src="https://img.icons8.com/small/64/ffffff/delete-sign.png" />
             </a>
-        </mobileicon>
+        </div>
     </div>
-    <nav x-show="mobilenavOpen"
-         x-cloak
-         class="md:!block bg-gray-800 h-screen w-screen md:h-auto md:w-auto -mt-20 md:mt-0 absolute md:relative z-[-1]"
+
+    <nav x-show="mobilenavOpen" x-cloak
+         md="!block relative mt-0 h-auto w-auto z-1"
+         class="bg-slate-900 h-screen w-screen absolute left-0 top-0 -mt-20 z--1"
          x-transition:enter="duration-300 ease-out"
-         x-transition:enter-start="opacity-0 -translate-y-96"
+         x-transition:enter-start="opacity-0 -translate-y-10"
          x-transition:enter-end="opacity-100 translate-y-0">
-        <ul class="flex items-center navitems flex-col md:flex-row gap-2 justify-center h-full -translate-y-10 md:translate-y-0">
+
+        <ul flex items-center flex-col md="flex-row" gap-4 justify-center h-full>
             {% if not user.is_authenticated %}
                 <li>
-                    <a href="{% url 'login' %}"
-                       class="flex items-center gap-2 hover:underline">
-                        <img class="w-6 h-6"
-                             src="https://img.icons8.com/small/64/ffffff/enter-2.png"
-                             alt="enter-2" />
-                        <span class="text-sm font-bold -mt-1">Login</span>
+                    <a href="{% url 'login' %}" flex items-center gap-2 hover="underline">
+                        <img w-6 h-6 src="https://img.icons8.com/small/64/ffffff/enter-2.png" />
+                        <span text-sm font-bold mt--1>Login</span>
                     </a>
                 </li>
             {% else %}
-                <li x-data="{ dropdownOpen: false }" class="relative">
-                    <a @click="dropdownOpen = !dropdownOpen"
-                       @click.away="dropdownOpen = false"
-                       class="cursor-pointer select-none">
-                        <span class="relative flex h-8 w-8">
+                <li x-data="{ dropdownOpen: false }" relative>
+                    <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false"
+                       flex items-center gap-2 cursor-pointer select-none>
+
+                        <div relative w-8 h-8>
                             {% if pending_comments_count|add:unread_messages_count > 0 %}
-                                <span class="absolute -top-1 -right-1 flex h-4 w-4">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-4 w-4 bg-violet-500  items-center justify-center">
-                                        <span class="text-[10px] font-bold text-white leading-none">
-                                            {{ pending_comments_count|add:unread_messages_count }}
-                                        </span>
+                                <span class="badge-ping">
+                                    <span animate-ping absolute h-full w-full rd-full bg-primary opacity-75></span>
+                                    <span relative h-4 w-4 rd-full bg-primary flex items-center justify-center>
+                                        <span text="[10px]" font-bold text-white>{{ pending_comments_count|add:unread_messages_count }}</span>
                                     </span>
                                 </span>
                             {% endif %}
-                            <img class="h-full w-full rounded-full object-cover shadow-sm"
+                            <img h-full w-full rd-full object-cover shadow-sm
                                  src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}https://img.icons8.com/small/96/ffffff/user-male-circle.png{% endif %}" />
-                        </span>
-                        {{ request.user.username }}
-                        <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'"
-                             class="w-4"
+                        </div>
+
+                        <span text-sm font-bold font-lobster>{{ request.user.username }}</span>
+                        <img :class="dropdownOpen && 'rotate-180'" duration-300 w-4
                              src="https://img.icons8.com/small/32/777777/expand-arrow.png" />
                     </a>
-                    <div x-show="dropdownOpen"
-                         x-cloak
-                         class="absolute right-0 bg-gray-800 text-black shadow rounded-lg w-40 p-2 z-20"
-                         x-transition:enter="duration-300 ease-out"
-                         x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
-                         x-transition:enter-end="opacity-100 translate-y-0 scale-100">
-                        <ul class="flex flex-col items-start hoverlist [&>li>a]:justify-end">
-                            <li>
-                                {% include 'partials/buttons/create_post.html' %}
-                            </li>
-                            <li>
-                                {% include 'partials/buttons/my_profile.html' %}
-                            </li>
-                            <li>
-                                {% include 'partials/buttons/inbox.html' %}
-                            </li>
-                            <li>
-                                {% include 'partials/buttons/logout.html' %}
-                            </li>
+
+                    <div x-show="dropdownOpen" x-cloak class="dropdown-card"
+                         x-transition:enter="duration-200 ease-out"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100">
+                        <ul flex flex-col gap-1>
+                            <li>{% include 'partials/buttons/create_post.html' %}</li>
+                            <li>{% include 'partials/buttons/my_profile.html' %}</li>
+                            <li>{% include 'partials/buttons/inbox.html' %}</li>
+                            <hr border-white/5 my-1>
+                            <li>{% include 'partials/buttons/logout.html' %}</li>
                         </ul>
                     </div>
                 </li>

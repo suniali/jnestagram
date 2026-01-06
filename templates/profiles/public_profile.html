@@ -5,9 +5,9 @@
 {% block layout %}
     <div id="profile" class="flex flex-col items-center my-8 mx-4">
 
-        <div class="w-full md:w-[36rem] lg:w-[50rem]">
-            <div class="card p-6">
-                <div class="text-center flex flex-col items-center">
+        <div class="w-full lg:w-[54rem]">
+            <div class="profile-card">
+                <div class="relative text-center flex flex-col items-center">
                     <div class="relative w-full flex items-center justify-center">
                         {# Avatar #}
                         <div class="flex-shrink-0">
@@ -23,9 +23,9 @@
                         <div hx-target="#new-message-container"
                              hx-swap="innerHTML"
                              class="absolute top-0 right-0">
-                            <button hx-get="{% url 'inbox_newmessage' user.id %}"
-                                    _="on htmx:afterOnLoad remove .hidden from #new-message-modal"
-                                    class="p-4 bg-white/80 backdrop-blur-sm border border-slate-100 rounded-full text-slate-400 hover:text-violet-600 hover:bg-white hover:shadow-lg hover:shadow-violet-100 transition-all duration-300">
+                            <button hx-get="{% url 'inbox_newmessage' profile.user.id %}"
+                                    _="on htmx:afterOnLoad remove .hidden from #new-message-container"
+                                    class="edit-btn">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
                                           stroke-width="2"/>
@@ -49,14 +49,14 @@
             </div>
         </div>
         <div>
-            <div id="tabs" class="flex justify-center my-4 gap-2" hx-target="#tab-contents" hx-swap="innerHTML"
-                 _="on htmx:afterOnLoad take .selected for event.target">
-                <a class="tab selected" hx-get="{% url 'public_profile' profile.user.username %}"> Latest </a>
-                <a class="tab" hx-get="{% url 'public_profile' profile.user.username %}?top-posts">Top Posts</a>
-                <a class="tab" hx-get="{% url 'public_profile' profile.user.username %}?top-comments">Top Comments</a>
+            <div id="tabs" class="flex justify-center my-4 gap-2" hx-target="#tab-contents" hx-swap="innerHTML transition:true"
+                 _="on htmx:afterOnLoad take .tab-selected for event.target">
+                <a class="tab-btn tab-selected" hx-get="{% url 'public_profile' profile.user.username %}"> Latest </a>
+                <a class="tab-btn" hx-get="{% url 'public_profile' profile.user.username %}?top-posts">Top Posts</a>
+                <a class="tab-btn" hx-get="{% url 'public_profile' profile.user.username %}?top-comments">Top Comments</a>
             </div>
 
-            <div id="tab-contents" class="mt-8">
+            <div id="tab-contents" class="w-full transition-all duration-300 mt-8">
                 {% if posts %}
                     {% include 'partials/posts/posts_container.html' %}
                 {% elif display_comments %}

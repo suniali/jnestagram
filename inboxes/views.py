@@ -80,7 +80,7 @@ class ConversationListView(LoginRequiredMixin, ListView):
 
 class SearchUsersView(LoginRequiredMixin, ListView):
     model = User
-    template_name = 'inboxes/partials/users_list.html'
+    template_name = 'partials/inboxes/users_list.html'
 
     def get(self, request, *args, **kwargs):
         letters = request.GET.get('search_user')
@@ -99,7 +99,7 @@ class SearchUsersView(LoginRequiredMixin, ListView):
 
 
 class NewMessageView(LoginRequiredMixin, View):
-    template_name = 'inboxes/partials/form_newmessage.html'
+    template_name = 'partials/inboxes/form_newmessage.html'
 
     def get(self, request, recipient_id):
         if recipient_id:

@@ -11,18 +11,15 @@
               href="https://img.icons8.com/small/64/000000/fire-heart.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
-              rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
         <script defer
                 src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
         <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
-        <link rel="stylesheet" type="text/css" href="{% if debug %}{% static 'css/style.css' %}{% else %}{% static 'css/style.min.css' %}{% endif %}">
+        <link rel="stylesheet" href="{% static 'css/uno.css' %}">
     </head>
     <body class="bg-slate-50  min-h-screen" >
         <div style="display: none;">{% csrf_token %}</div>
-
         {% include 'partials/message.html' %}
 
         {% include 'partials/header.html' %}

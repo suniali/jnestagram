@@ -1,0 +1,42 @@
+{% load static %}
+<div id="new-message-modal"
+     class="fixed inset-0 z-[999] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+
+    <div class="bg-white w-full max-w-md rd-[2.5rem] shadow-2xl p-8 transform transition-all outline-none border border-slate-100">
+
+        <div class="flex items-center gap-4 mb-8">
+            <div class="relative">
+                <img class="w-14 h-14 rd-2xl object-cover shadow-sm border-2 border-white ring-1 ring-slate-100"
+                     src="{% if recipient.profile.avatar %}{{ recipient.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}"
+                     alt="{{ recipient.username }}">
+                <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rd-full"></div>
+            </div>
+
+            <div class="flex flex-col items-start">
+                <h3 class="text-xl font-black text-slate-800 tracking-tight font-lobster">
+                    Message to {{ recipient.username }}
+                </h3>
+                <span class="text-xs text-slate-400 font-medium">Recipient will see this in their inbox</span>
+            </div>
+        </div>
+
+        <form method="post" action="{% url 'inbox_newmessage' recipient.id %}">
+            {% csrf_token %}
+
+            <textarea name="message" required autofocus
+                      placeholder="Write your message..."
+                      class="w-full bg-slate-50 border-1 border-transparent rd-2xl p-5 min-h-120px focus:(ring-2 ring-primary/20 bg-white border-primary) mb-6 resize-none transition-all outline-none text-slate-700 font-medium placeholder:text-slate-400"></textarea>
+
+            <div class="flex gap-3 items-end">
+                <button type="submit" class="btn-primary">
+                    Send Message
+                </button>
+
+                <button type="button" class="btn-secondary"
+                        _="on click add .hidden to #new-message-container">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
