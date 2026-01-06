@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from django_resized import ResizedImageField
+
 
 class Country(models.Model):
     name = models.CharField(max_length=50)
@@ -21,7 +23,7 @@ class Profile(models.Model):
     user=models.OneToOneField(settings.AUTH_USER_MODEL,related_name='profile',on_delete=models.CASCADE)
     phone_number=models.BigIntegerField(blank=True,null=True,unique=True,db_index=True)
     country=models.ForeignKey(to=Country,related_name='country',on_delete=models.SET_NULL,null=True,blank=True)
-    avatar=models.ImageField(blank=True,upload_to='avatars/')
+    avatar=ResizedImageField(size=[600,600],quality=85,blank=True,upload_to='avatars/')
     bio=models.TextField(max_length=500,blank=True,null=True)
 
     class Meta:
