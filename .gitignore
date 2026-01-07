@@ -1,11 +1,14 @@
 .venv/
 .idea/
+.env
+
 media/
-static/
+staticfiles/
+
 node_modules/
+dist/
 
 **/__pycache__/
-.env
 .DS_Store
 *.pyc
 
