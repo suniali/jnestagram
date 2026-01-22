@@ -41,11 +41,11 @@ class Like(models.Model):
 
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_posts')
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to='posts/%Y/%m/%d')
     text = models.TextField()
-    tag= models.ManyToManyField(Tag, related_name='posts',blank=True)
+    tag= models.ManyToManyField(Tag, related_name='tag_posts',blank=True)
     likes=GenericRelation(Like,related_query_name='posts')
     likes_count=models.PositiveIntegerField(default=0)
     comments_count=models.PositiveIntegerField(default=0)
@@ -61,7 +61,8 @@ class Post(models.Model):
         verbose_name_plural = 'Posts'
         indexes=[
             models.Index(fields=['-likes_count','-created_at']),
-            models.Index(fields=['is_active','is_public','-created_at'])
+            models.Index(fields=['is_active','is_public','-created_at']),
+            models.Index(fields=['user','-created_at']),
         ]
         
     def __str__(self):
@@ -70,8 +71,8 @@ class Post(models.Model):
 
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_comments')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='user_comments')
     text = models.TextField()
     likes=GenericRelation(Like,related_query_name='comments')
     likes_count=models.PositiveIntegerField(default=0)
@@ -87,7 +88,8 @@ class Comment(models.Model):
         verbose_name_plural = 'Comments'
         indexes=[
             models.Index(fields=['-likes_count','-created_at']),
-            models.Index(fields=['post','is_approved','-created_at'])
+            models.Index(fields=['post','is_approved','-created_at']),
+            models.Index(fields=['user','-created_at']),
         ]
 
     def __str__(self):
@@ -95,8 +97,8 @@ class Comment(models.Model):
 
 class Replay(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='replays')
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='replays')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_replays')
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='comment_replays')
     text = models.TextField()
     likes=GenericRelation(Like,related_query_name='replays')
     likes_count=models.PositiveIntegerField(default=0)
@@ -110,7 +112,8 @@ class Replay(models.Model):
         verbose_name_plural = 'Replays'
         indexes=[
             models.Index(fields=['-likes_count','-created_at']),
-            models.Index(fields=['comment','-created_at'])
+            models.Index(fields=['comment','-created_at']),
+            models.Index(fields=['user','-created_at']),
         ]
 
     def __str__(self):

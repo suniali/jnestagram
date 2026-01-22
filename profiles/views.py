@@ -275,13 +275,13 @@ class PublicProfileView(DetailView):
             replays_qs=replays_qs.annotate(is_liked=Value(False,output_field=BooleanField()))
 
         top_comments_qs=top_comments_qs.prefetch_related(
-                Prefetch('replays', queryset=replays_qs, to_attr='replies'),
+                Prefetch('comment_replays', queryset=replays_qs, to_attr='replies'),
         )
 
         queryset= queryset.prefetch_related(
-            Prefetch('user__posts',queryset=posts_qs,to_attr='all_posts'),
-            Prefetch('user__posts',queryset=top_posts_qs,to_attr='top_posts'),
-            Prefetch('user__comments',queryset=top_comments_qs,to_attr='top_comments'),
+            Prefetch('user__user_posts',queryset=posts_qs,to_attr='all_posts'),
+            Prefetch('user__user_posts',queryset=top_posts_qs,to_attr='top_posts'),
+            Prefetch('user__user_comments',queryset=top_comments_qs,to_attr='top_comments'),
         )
         return queryset
 

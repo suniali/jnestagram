@@ -91,15 +91,15 @@ class PostDetailView(DetailView):
             replays=replays.annotate(is_liked=Value(False,output_field=BooleanField()))
 
         approved_comments=approved_comments.prefetch_related(
-            Prefetch('replays', queryset=replays, to_attr='replies'),
+            Prefetch('comment_replays', queryset=replays, to_attr='replies'),
         )
 
         top_comments=approved_comments.filter(likes_count__gt=0).order_by('-likes_count')[:4]
         queryset=queryset.prefetch_related(
             'tag',
             'likes',
-            Prefetch('comments', queryset=approved_comments,to_attr='approved_comments_list'),
-            Prefetch('comments', queryset=top_comments, to_attr='top_comments'),
+            Prefetch('post_comments', queryset=approved_comments,to_attr='approved_comments_list'),
+            Prefetch('post_comments', queryset=top_comments, to_attr='top_comments'),
         )
 
         return queryset
