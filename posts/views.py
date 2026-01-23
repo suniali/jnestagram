@@ -320,36 +320,30 @@ class CommentDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         post_id=self.object.post.id
         return reverse('post_detail',kwargs={'pk':post_id})
 
-class ReplayCreateView(LoginRequiredMixin,View):
-    def post(self,request,*args,**kwargs):
-        form = ReplayForm(request.POST)
+class ReplayCreateView(LoginRequiredMixin,CreateView):
+    model = Replay
+    form_class = ReplayForm
+    template_name = 'replays/post_detail.html'
+    def form_valid(self, form):
+        form.instance.user=self.request.user
+        form.instance.comment_id=self.kwargs['pk']
 
-        comment = get_object_or_404(Comment, pk=kwargs['pk'])
+        comment = get_object_or_404(Comment, pk=self.kwargs['pk'])
+        self.object=form.save()
 
-        if form.is_valid():
-            replay = form.save(commit=False)
-            replay.user = request.user
-            replay.comment = comment
-            replay.save()
-            messages.success(request, 'Your replay has been published.')
-        else:
-            messages.error(request, 'Error submitting your replay.')
+        if self.request.htmx:
+            replay=Replay.objects.select_related('user','comment','comment__user').get(pk=self.object.id)
+            count=Replay.objects.filter(comment=comment).count()
 
+            messages.success(self.request, 'Your replay has been published.')
+            return render(self.request,"partials/posts/add_replay.html",{
+                'replay':replay,
+                'comment':comment,
+                'count':count
+            })
 
-        next_url = request.GET.get('next')
-        is_secure = url_has_allowed_host_and_scheme(
-            url=next_url,
-            allowed_hosts={request.get_host()},
-            require_https=request.is_secure(),
-        )
-
-        if next_url and is_secure:
-            return redirect(next_url)
-
-        count=Replay.objects.filter(comment=comment).count()
-
-
-        return render(request,"partials/posts/add_replay.html",{'replay':replay,'comment':comment,'count':count})
+        messages.error(self.request, 'Error submitting your replay.')
+        return super().form_valid(form)
 
 class ReplayDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Replay
