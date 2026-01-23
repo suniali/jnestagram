@@ -263,26 +263,15 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
 
         if self.request.htmx:
             comment=Comment.objects.select_related('user','post','post__user').get(pk=self.object.id)
-            response=render(self.request,'partials/posts/add_comment.html',{
+            messages.success(self.request, msg)
+            return render(self.request,'partials/posts/add_comment.html',{
                                 'comment':comment,
                                 'post':comment.post,
                                 'msg':msg,
                             })
-            return response
 
-        messages.success(self.request, msg)
         return super().form_valid(form)
-    def get_success_url(self):
-        next_url=self.request.GET.get('next')
-        is_secure=url_has_allowed_host_and_scheme(
-            url=next_url,
-            allowed_hosts={self.request.get_host()},
-            require_https=self.request.is_secure(),
-        )
-        if next_url and is_secure:
-            return next_url
 
-        return reverse('post_detail',kwargs={'pk':self.kwargs['pk']})
 
 class CommentUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Comment
@@ -297,8 +286,13 @@ class CommentUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         return self.request.user==comment.post.user
 
     def form_valid(self, form):
-        form.instance.is_approved=False
-        messages.info(self.request, "Your edit has been submitted and is awaiting re-approval.")
+        comment=self.get_object()
+        if self.request.user != comment.post.user:
+            form.instance.is_approved=False
+            messages.info(self.request, "Your edit has been submitted and is awaiting re-approval.")
+        else:
+            messages.success(self.request, "Your comment has been published.")
+
         return super().form_valid(form)
 
     def get_success_url(self):

@@ -27,7 +27,7 @@ def update_comments_count_on_save(sender, instance, created, **kwargs):
             instance.post.comments_count += 1
             instance.post.save(update_fields=['comments_count'])
     else:
-        approved_count = instance.post.comments.filter(is_approved=True).count()
+        approved_count = instance.post.post_comments.filter(is_approved=True).count()
         if instance.post.comments_count != approved_count:
             instance.post.comments_count = approved_count
             instance.post.save(update_fields=['comments_count'])
@@ -35,7 +35,7 @@ def update_comments_count_on_save(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=Comment)
 def update_comments_count_on_delete(sender, instance, **kwargs):
     if instance.is_approved:
-        approved_count = instance.post.comments.filter(is_approved=True).count()
+        approved_count = instance.post.post_comments.filter(is_approved=True).count()
         instance.post.comments_count = approved_count
         instance.post.save(update_fields=['comments_count'])
 

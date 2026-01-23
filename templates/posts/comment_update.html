@@ -2,7 +2,7 @@
 
 {% block layout %}
 <div class="edit-container w-full max-w-xl mx-auto my-8 p-6 bg-white rounded-xl shadow" >
-    <h2 class="text-3xl font-bold font1 titleBlip mb-3">Edit Your Comment</h2>
+    <h2 class="post-title mb-3">Edit Your Comment</h2>
     <hr>
     <form method="post" action="{% url 'update_comment' comment.pk %}">
         {% csrf_token %}
@@ -17,7 +17,7 @@
             <strong class="mr-1">Note:</strong> Your comment will be hidden until an admin approves it again.
         </p>
 
-        <button type="submit" class="bg-violet-500 text-white cursor-pointer rounded-xl hover:bg-violet-800">
+        <button type="submit" class="btn-primary my-4">
             Update Comment
         </button>
         <a href="javascript:history.back()" style="margin-left: 15px; text-decoration: none; color: #666;">Cancel</a>
