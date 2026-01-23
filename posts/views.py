@@ -177,9 +177,10 @@ class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model=Post
     form_class=PostForm
     template_name='posts/post_create_update.html'
+    context_object_name = 'post'
 
     def get_queryset(self):
-        return Post.objects.prefetch_related('tag')
+        return Post.objects.select_related('user').prefetch_related('tag','likes')
     
     def test_func(self):
         post=self.get_object()

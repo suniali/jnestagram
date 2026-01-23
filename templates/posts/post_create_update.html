@@ -12,8 +12,9 @@
                 <p class="text-slate-400 font-medium">Share your creative thoughts with the world.</p>
             </div>
 
-            <form method="POST" enctype="multipart/form-data"
+            <form method="POST" enctype="multipart/form-data" @submit="isSaving = true"
                   x-data="{
+                    isSaving : false,
                     selectedTags: {{ selected_tag_ids|default:'[]' }},
                     imagePreview: '{% if object.image %}{{ object.image.url }}{% endif %}',
                     toggleTag(id) {
@@ -98,8 +99,16 @@
                 </div>
 
                 <button type="submit"
-                        class="w-full bg-slate-900 text-white font-black py-4 rd-2xl hover:(bg-primary shadow-xl shadow-primary/30) transition-all duration-300 transform active:scale-95 uppercase tracking-widest text-sm">
-                    {% if object %} Update Post {% else %} Save Post {% endif %}
+                        class="w-full font-black py-4 rd-2xl transition-all duration-300 transform active:scale-95 uppercase tracking-widest text-sm border-none"
+                        :class="isSaving === true ? 'bg-gray-500 text-gray-800 disabled' : 'bg-slate-900 text-white hover:(bg-primary shadow-xl shadow-primary/30)'">
+                    <span x-show="!isSaving">
+                        {% if object %}
+                            Update Post
+                            {% else %}
+                            Save Post
+                        {% endif %}
+                    </span>
+                    <span  x-show="isSaving"> Saving ...</span>
                 </button>
             </form>
         </div>
