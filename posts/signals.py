@@ -46,7 +46,7 @@ def update_replay_count_on_save(sender, instance, created, **kwargs):
         comment.replays_count += 1
         comment.save(update_fields=['replays_count'])
     else:
-        replays_count=comment.replays.count()
+        replays_count=comment.comment_replays.count()
         if comment.replays_count!=replays_count:
             comment.replays_count=replays_count
             comment.save(update_fields=['replays_count'])
