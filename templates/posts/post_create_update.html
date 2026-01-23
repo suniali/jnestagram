@@ -99,8 +99,8 @@
                 </div>
 
                 <button type="submit"
-                        class="w-full font-black py-4 rd-2xl transition-all duration-300 transform active:scale-95 uppercase tracking-widest text-sm border-none"
-                        :class="isSaving === true ? 'bg-gray-500 text-gray-800 disabled' : 'bg-slate-900 text-white hover:(bg-primary shadow-xl shadow-primary/30)'">
+                        class="w-full"
+                        :class="isSaving === true ? 'btn-disable' : 'btn-primary'">
                     <span x-show="!isSaving">
                         {% if object %}
                             Update Post

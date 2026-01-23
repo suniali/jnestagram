@@ -65,8 +65,10 @@ export default defineConfig({
   },
   shortcuts: {
     'app-card': 'bg-white rd-custom-lg shadow-2xl border border-slate-100 overflow-hidden',
-    'btn-primary': 'py-4 px-8 bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] rd-2xl transition-all duration-300 transform active:scale-95 hover:(bg-primary shadow-xl shadow-primary/30) border-none',
+    'btn-primary': 'p-4 bg-slate-900 text-white font-black text-sm uppercase tracking-[0.2em] rd-2xl transition-all duration-300 transform active:scale-95 shadow-xl shadow-primary/30 hover:(bg-primary shadow-xl shadow-primary/30) cursor-pointer border-none',
+    'btn-normal': 'px-4 py-3 bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] rd-xl transition-all duration-300 transform active:scale-95 hover:(bg-primary shadow-lg shadow-primary/30) cursor-pointer border-none',
     'btn-secondary': 'py-4 px-8 bg-slate-100 text-slate-500 font-black text-xs uppercase tracking-[0.2em] rd-2xl transition-all duration-300 hover:(bg-slate-200 text-slate-800) border-none',
+    'btn-disable': 'py-4 px-8 bg-slate-100 text-slate-500 font-black text-xs uppercase tracking-[0.2em] rd-2xl transition-all duration-300 border-none disabled',
     'input-main': 'w-full bg-slate-100 border-none rd-2xl py-4 px-6 text-slate-700 font-medium focus:ring-2 focus:ring-primary focus:bg-white transition-all outline-none',
     // header
     'chat-avatar': 'w-14 h-14 rd-2xl object-cover shadow-sm',
