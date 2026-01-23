@@ -59,9 +59,9 @@ class PostDetailView(DetailView):
     context_object_name = 'post'
 
     def get_queryset(self):
-        replays=Replay.objects.select_related('user')
-        approved_comments=Comment.objects.filter(is_approved=True)
-        queryset= Post.objects.filter(is_active=True).select_related('user')
+        replays=Replay.objects.select_related('user','comment').prefetch_related('likes')
+        approved_comments=Comment.objects.filter(is_approved=True).select_related('user','post').prefetch_related('likes')
+        queryset= Post.objects.filter(is_active=True).select_related('user').prefetch_related('tag','likes')
 
         if self.request.user.is_authenticated:
             post_type = ContentType.objects.get_for_model(Post)
@@ -96,8 +96,6 @@ class PostDetailView(DetailView):
 
         top_comments=approved_comments.filter(likes_count__gt=0).order_by('-likes_count')[:4]
         queryset=queryset.prefetch_related(
-            'tag',
-            'likes',
             Prefetch('post_comments', queryset=approved_comments,to_attr='approved_comments_list'),
             Prefetch('post_comments', queryset=top_comments, to_attr='top_comments'),
         )
@@ -116,7 +114,14 @@ class PostDetailView(DetailView):
         context['display_comments']=comments
         context['current_tag'] = self.request.GET.get('tag')
 
-        context['top_posts'] = Post.objects.select_related('user').filter(is_active=True, is_public=True,likes_count__gt=0).order_by('-likes_count','-comments_count')[:4]
+        context['top_posts'] = Post.objects.select_related('user').prefetch_related(
+            'tag',
+            'likes'
+        ).filter(
+            is_active=True,
+            is_public=True,
+            likes_count__gt=0
+        ).order_by('-likes_count','-comments_count')[:4]
 
         return context
 

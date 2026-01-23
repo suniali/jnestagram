@@ -33,6 +33,7 @@
         <div id="tabs" class="flex gap-2 mb-6"
              hx-target="#comment-container"
              hx-swap="innerHTML transition:true"
+             hx-push-url="true"
              _="on htmx:afterOnLoad take .tab-selected for event.target">
 
             <a class="tab-btn tab-selected" hx-get="{% url 'post_detail' post.id %}">
