@@ -71,8 +71,8 @@ export default defineConfig({
     'btn-disable': 'py-4 px-8 bg-slate-100 text-slate-500 font-black text-xs uppercase tracking-[0.2em] rd-2xl transition-all duration-300 border-none disabled',
     'input-main': 'w-full bg-slate-100 border-none rd-2xl py-4 px-6 text-slate-700 font-medium focus:ring-2 focus:ring-primary focus:bg-white transition-all outline-none',
     'label-input':'text-sm font-semibold text-slate-600 px-2 my-1',
-    'help-text':'text-xs text-slate-400 mt-1 block px-2 my-2',
-    'error-text':'text-red-500 text-xs px-2 font-medium my-2',
+    'help-text':'text-xs text-slate-400 block px-2 my-2',
+    'error-text':'bg-rose-50 text-rose-500 text-xs p-3 rd-xl font-medium border border-rose-100 my-2',
     'input-image':'file:bg-primary file:text-white file:border-none file:rd-lg file:px-4 file:py-2',
     // header
     'chat-avatar': 'w-14 h-14 rd-2xl object-cover shadow-sm',

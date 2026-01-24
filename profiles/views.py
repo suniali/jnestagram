@@ -1,11 +1,16 @@
 from django.db import transaction
 from django.db.models import  Prefetch,Value,BooleanField,OuterRef,Exists,CharField
 from django.db.models.functions import Cast
+
 from django.contrib.contenttypes.models import ContentType
+
 from django.contrib import messages
+
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model,login,logout,authenticate,update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+
 from django.views.generic import View,CreateView,DetailView,DeleteView,UpdateView
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
@@ -49,31 +54,15 @@ class ComplateProfileView(LoginRequiredMixin,UpdateView):
         messages.success(self.request,'Your profile has been updated.')
         return super().form_valid(form)
     
-class LoginView(View):
+class CustomLoginView(LoginView):
     template_name = 'profiles/login.html'
-    
-    def get(self,request):
-        if request.user.is_authenticated:
-            return redirect('home')
-        
-        return render(request,self.template_name)
-    
-    def post(self,request):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        next_url = request.POST.get('next', request.GET.get('next', 'home'))
-        
-        if not username or not password:
-            messages.error(request, 'Please provide both username and password.')
-            return render(request, self.template_name)
+    redirect_authenticated_user = True
+    next_page = reverse_lazy('home')
 
-        user = authenticate(username=username, password=password)
-        if user is None:
-            messages.error(request, 'Invalid username or password.')
-            return render(request, self.template_name)
+    def form_invalid(self, form):
+        messages.error(self.request,'Invalid credentials')
+        return super().form_invalid(form)
 
-        login(request, user)
-        return redirect(next_url)
     
 class LogoutView(View):
     def get(self,request):

@@ -4,41 +4,55 @@
 {% block layout %}
     <div min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12>
 
-        <div bg-white rd-[2.5rem] shadow-xl shadow-slate-200/50 w-full max-w-md p-8 md:p-12 border border-slate-100 transition-all>
+        <div class="bg-white rd-[2.5rem] shadow-xl shadow-slate-200/50 w-full max-w-md p-8 md:p-12 border border-slate-100 transition-all"
+             x-data="{ isSaving : false }">
 
-            <div text-center mb-10>
-                <h1 text-5xl font-black text-slate-800 font-lobster titleBlip mb-3>
+            <div text-center mb-8>
+                <h1 text-5xl font-black text-slate-800 font-lobster mb-3>
                     Welcome Back
                 </h1>
                 <p text-slate-400 font-medium>Sign in to continue to your account</p>
             </div>
 
-            <form method="post" x-data>
+            <form method="post" @submit="isSaving = true">
                 {% csrf_token %}
-                <input type="hidden" name="next" value="{{ next|default:'/' }}">
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="flex items-center gap-2 error-text mb-4">
+                            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <div class="text-xs font-bold leading-none">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
 
                 <div mb-6>
-                    <label block text-sm font-black text-slate-700 mb-2 ml-2 uppercase tracking-tighter>Username</label>
+                    <label class="label-input">Username</label>
                     <input type="text" name="username" required
-                           class="input-form"
+                           class="input-main mt-1"
                            placeholder="Enter your username"
                            autocomplete="username">
                 </div>
 
                 <div mb-8>
-                    <div flex justify-between items-center mb-2 ml-2>
-                        <label block text-sm font-black text-slate-700 uppercase tracking-tighter>Password</label>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="label-input">Password</label>
                         <a href="{% url 'forgot_password' %}" text-xs font-bold text-primary hover:underline>Forgot?</a>
                     </div>
                     <input type="password" name="password" required
-                           class="input-form"
+                           class="input-main"
                            placeholder="••••••••"
                            autocomplete="current-password">
                 </div>
 
-                <button type="submit"
-                        class="w-full btn-primary">
-                    Sign In
+                <button type="submit" class="w-full" :class="isSaving === false ? 'btn-primary' : 'btn-disable'">
+                    <span x-show="!isSaving">Sign In</span>
+                    <span x-show="isSaving">Singing In ...</span>
                 </button>
             </form>
 
