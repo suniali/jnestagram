@@ -5,53 +5,38 @@
 {% block layout %}
     <div min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12>
 
-        <div bg-white rd-[2.5rem] shadow-xl shadow-slate-200/50 w-full max-w-md p-8 md:p-12 border border-slate-100 transition-all>
+        <div class="bg-white rd-[2.5rem] shadow-xl shadow-slate-200/50 w-full max-w-md p-8 md:p-12 border border-slate-100 transition-all"
+            x-data="{ isSaving : false }">
 
-        <div text-center mb-10>
-            <h1 text-5xl font-black text-slate-800 font-lobster titleBlip mb-3>
+        <div text-center mb-3>
+            <h1 text-5xl font-black text-slate-800 font-lobster mb-3>
                 Create Account
             </h1>
             <p text-slate-400 font-medium>Join us today — it's quick and easy</p>
         </div>
 
-        <form method="post" x-data>
+        <form method="post" @submit="isSaving = true">
             {% csrf_token %}
+            {% for field in form %}
+                <div class="flex flex-col">
+                    <label class="label-input" for="{{ field.id_for_label }}"> {{ field.label }}</label>
+                </div>
 
-            <div my-5>
-                <label block text-xs font-black text-slate-700 mb-2 ml-2 uppercase tracking-tighter>Username</label>
-                <input type="text" name="username" required minlength="3"
-                       class="input-form"
-                       placeholder="Choose a username"
-                       autocomplete="username">
-            </div>
+                {{ field }}
 
-            <div my-5>
-                <label block text-xs font-black text-slate-700 mb-2 ml-2 uppercase tracking-tighter>Email Address</label>
-                <input type="email" name="email" required
-                       class="input-form"
-                       placeholder="your@email.com"
-                       autocomplete="email">
-            </div>
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <p class="error-text">⚠️ {{ error }}</p>
+                    {% endfor %}
+                {% endif %}
 
-            <div my-5>
-                <label block text-xs font-black text-slate-700 mb-2 ml-2 uppercase tracking-tighter>Password</label>
-                <input type="password" name="password1" required minlength="8"
-                       class="input-form"
-                       placeholder="••••••••"
-                       autocomplete="new-password">
-            </div>
-
-            <div mb-8>
-                <label block text-xs font-black text-slate-700 mb-2 ml-2 uppercase tracking-tighter>Confirm Password</label>
-                <input type="password" name="password2" required
-                       class="input-form"
-                       placeholder="••••••••"
-                       autocomplete="new-password">
-            </div>
-
-            <button type="submit"
-                    class="w-full btn-primary">
-                Create Account
+                {% if field.help_text %}
+                    <span class="help-text">{{ field.help_text|safe }}</span>
+                {% endif %}
+            {% endfor %}
+            <button type="submit" class="w-full mt-3" :class="isSaving === false ? 'btn-primary' : 'btn-disable'">
+                <span x-show="!isSaving">Create Account</span>
+                <span x-show="isSaving">Creating ...</span>
             </button>
         </form>
 

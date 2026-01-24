@@ -1,5 +1,4 @@
-from django.core.exceptions import ValidationError
-from django.db import IntegrityError,transaction
+from django.db import transaction
 from django.db.models import  Prefetch,Value,BooleanField,OuterRef,Exists,CharField
 from django.db.models.functions import Cast
 from django.contrib.contenttypes.models import ContentType
@@ -7,80 +6,48 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model,login,logout,authenticate,update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
-from django.views.generic import View,DetailView,DeleteView,UpdateView
+from django.views.generic import View,CreateView,DetailView,DeleteView,UpdateView
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
 
 from .models import Profile,Country
 from posts.models import Post, Comment, Like, Replay
-from .forms import ProfileForm
+from .forms import RegistrationForm,ProfileForm
 
 User = get_user_model()
 
-class RegisterView(View):
+class RegisterView(CreateView):
     template_name = 'profiles/register.html'
+    form_class = RegistrationForm
+    success_url = reverse_lazy('complate_profile')
 
-    def get(self,request):
+    def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('home')
-        return render(request,self.template_name)
+            redirect('home')
+        return super().dispatch(request, *args, **kwargs)
 
-    def post(self,request):
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        
-        # Basic validation
-        if not all([username, email, password1, password2]):
-            messages.error(request, 'All fields are required.')
-            return render(request, self.template_name)
+    def form_valid(self, form):
+        user=form.save()
+        login(self.request, user)
+        messages.success(self.request,f'Welcome {user.username}! Your Account has been created.')
+        return redirect(self.success_url)
 
-        if password1 != password2:
-            messages.error(request, 'Passwords do not match.')
-            return render(request, self.template_name)
-
-        if len(password1) < 8:
-            messages.error(request, 'Password must be at least 8 characters long.')
-            return render(request, self.template_name)
-        
-
-        # Create user
-        try:
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password1
-            )
-            user.save()
-            login(request, user)  # Auto-login after registration
-            messages.success(request, f'Welcome, {user.username}! Your account has been created.')
-            return redirect('complate_profile')
-        except IntegrityError:
-            messages.error(request, 'Username or email is already taken.')
-        except ValidationError as e:
-            messages.error(request, str(e))
-
-        return render(request, self.template_name)
-
-class ComplateProfileView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+class ComplateProfileView(LoginRequiredMixin,UpdateView):
     model = Profile
     form_class = ProfileForm
     template_name = 'profiles/complate_profile.html'
-    success_url = reverse_lazy('home')
-
-    def test_func(self):
-        profile = self.get_object()
-        return self.request.user == profile.user
-
-    def get_context_data(self, **kwargs):
-        context=super().get_context_data(**kwargs)
-        context['countries']=Country.objects.all()
-        return context
-
+    success_url = reverse_lazy('profile')
     def get_object(self):
         profile, created = Profile.objects.get_or_create(user=self.request.user)
         return profile
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data()
+        context['countries']=Country.objects.filter(is_active=True)
+        return context
+    def form_valid(self, form):
+        messages.success(self.request,'Your profile has been updated.')
+        return super().form_valid(form)
     
 class LoginView(View):
     template_name = 'profiles/login.html'
