@@ -62,71 +62,7 @@ class CustomLoginView(LoginView):
     def form_invalid(self, form):
         messages.error(self.request,'Invalid credentials')
         return super().form_invalid(form)
-    
-class ForgotPasswordView(View):
-    template_name = 'profiles/forgot_password.html'
 
-    def get(self, request):
-        if request.user.is_authenticated:
-            return redirect('home')
-        return render(request, self.template_name)
-
-    def post(self, request):
-        username=request.POST.get('username')
-        print(username)
-
-        if not username:
-            messages.error(request, 'Please provide your username.')
-            return render(request, self.template_name)
-        
-        user=User.objects.filter(username=username).first()
-        if not user:
-            messages.error(request, 'No account found with that username.')
-            return render(request, self.template_name)
-        
-        return redirect('reset_password', username=user.username)
-    
-class ResetPasswordView(View):
-    template_name = 'profiles/reset_password.html'
-
-    def get(self, request, username):
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            messages.error(request, 'Invalid or expired reset link.')
-            return redirect('login')
-            
-        return render(request, self.template_name, {'username': username})
-        
-    def post(self, request, username):
-        try:
-            user=User.objects.get(username=username)
-        except User.DoesNotExist:
-            messages.error(request, 'Invalid request.')
-            return redirect('login')
-            
-        password1=request.POST.get('password1')
-        password2=request.POST.get('password2')
-            
-        if not password1 or not password2:
-            messages.error(request, 'Please fill out all fields.')
-            return render(request, self.template_name, {'username': username})
-            
-        if password1 != password2:
-            messages.error(request, 'Passwords do not match.')
-            return render(request, self.template_name, {'username': username})
-            
-        if len(password1) < 8:
-            messages.error(request, 'Password must be at least 8 characters long.')
-            return render(request, self.template_name, {'username': username})
-            
-        # Update password
-        user.set_password(password1)
-        user.save()
-        update_session_auth_hash(request, user)  # Keep the user logged in if they are changing their own password
-        messages.success(request, 'Your password has been reset successfully.')
-        return redirect('login')
-            
 class ProfileView(LoginRequiredMixin,View):
     template_name = 'profiles/profile.html'
 

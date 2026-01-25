@@ -184,3 +184,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Redirects
 LOGOUT_REDIRECT_URL = 'login'
+
+# Email Config Backend
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
