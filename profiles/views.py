@@ -68,14 +68,15 @@ class ProfileView(LoginRequiredMixin,View):
 
     def get(self, request):
         profile, created = Profile.objects.get_or_create(user=request.user)
-        users_posts=Post.objects.filter(user=request.user,is_active=True).order_by('-created_at')
+        user_posts=Post.objects.filter(user=request.user,is_active=True).order_by('-created_at')
         pending_comments=Comment.objects.filter(post__user=request.user,is_approved=False).select_related('user','post')
         countries=Country.objects.filter(is_active=True).order_by('name')
         context={
             'profile': profile,
-            'user_posts':users_posts,
+            'user_posts':user_posts,
             'pending_comments':pending_comments,
             'countries':countries,
+            'posts_count': user_posts.count(),
         }
         return render(request, self.template_name,context)
     
@@ -83,11 +84,11 @@ class ProfileView(LoginRequiredMixin,View):
         user=request.user
         profile, created = Profile.objects.get_or_create(user=user)
         
-        email=request.POST.get('email')
-        phone_number=request.POST.get('phone_number')
+        email=request.POST.get('email','').strip()
+        phone_number=request.POST.get('phone_number','').strip()
         country_id=request.POST.get('country')
         avatar=request.FILES.get('avatar')
-        bio=request.POST.get('bio')
+        bio=request.POST.get('bio','').strip()
         
         # Update user and profile
         try:
@@ -99,22 +100,22 @@ class ProfileView(LoginRequiredMixin,View):
                     user.email = email
                     user.save()
                 
-                profile.phone_number=phone_number
-                if not profile.country and country_id:
-                    try:
-                        selected_country = Country.objects.get(id=country_id)
-                        profile.country = selected_country
-                    except (Country.DoesNotExist, ValueError):
-                        messages.error(self.request,'Country Not Found!')
+                profile.bio=bio
+
+                if phone_number:
+                    profile.phone_number=phone_number
+
+                if country_id and not profile.country:
+                    profile.country_id = country_id
+
                 if avatar:
                     profile.avatar=avatar
 
-                profile.bio=bio
                 profile.save()
-                
                 messages.success(request, 'Your profile has been updated successfully!')
         
         except Exception as e:
+            print(f"Error updating profile: {e}")
             messages.error(request, 'An error occurred. Please try again.')
             
         return redirect('profile')
