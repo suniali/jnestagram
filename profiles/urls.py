@@ -1,10 +1,8 @@
 from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
+from django.contrib.auth.views import LogoutView
 
 from .views import (CustomLoginView,RegisterView,
-                    LogoutView,ForgotPasswordView,
-                    ResetPasswordView,ProfileView,PublicProfileView,
+                    ForgotPasswordView,ResetPasswordView,ProfileView,PublicProfileView,
                     UserDeleteView,ComplateProfileView,approve_comment)
 
 urlpatterns = [

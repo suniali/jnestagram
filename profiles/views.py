@@ -8,7 +8,7 @@ from django.contrib import messages
 
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model,login,logout,authenticate,update_session_auth_hash
+from django.contrib.auth import get_user_model,login,logout,update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 
 from django.views.generic import View,CreateView,DetailView,DeleteView,UpdateView
@@ -62,13 +62,6 @@ class CustomLoginView(LoginView):
     def form_invalid(self, form):
         messages.error(self.request,'Invalid credentials')
         return super().form_invalid(form)
-
-    
-class LogoutView(View):
-    def get(self,request):
-        logout(request)
-        messages.success(request, 'You have been logged out successfully.')
-        return redirect('login')
     
 class ForgotPasswordView(View):
     template_name = 'profiles/forgot_password.html'
