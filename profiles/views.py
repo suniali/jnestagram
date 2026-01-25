@@ -127,73 +127,67 @@ class PublicProfileView(DetailView):
     slug_url_kwarg = 'username'
 
     def get_queryset(self):
-        queryset=Profile.objects.select_related('user','country')
-        posts_qs=Post.objects.filter(is_active=True).order_by('-created_at')
-        top_posts_qs=Post.objects.filter(is_active=True,likes_count__gt=0).order_by('-likes_count')[:5]
-        top_comments_qs=Comment.objects.filter(is_approved=True,likes_count__gt=0).order_by('-likes_count','-replays_count')[:5]
-        replays_qs=Replay.objects.select_related('user')
+        return Profile.objects.select_related('user','country')
+
+    def annotate_likes(self,queryset,model):
+        content_type=ContentType.objects.get_for_model(model)
+        user_likes=Like.objects.filter(
+            user=self.request.user,
+            content_type=content_type,
+            object_id=Cast(OuterRef('pk'),CharField())
+        )
+        return queryset.annotate(is_liked=Exists(user_likes))
+
+    def get_object(self, queryset=None):
+        profile=super().get_object(queryset)
+        user=profile.user
+
+        posts_qs = Post.objects.filter(user=user,is_active=True).order_by('-created_at')
+        top_posts_qs = Post.objects.filter(user=user,is_active=True, likes_count__gt=0).order_by('-likes_count')[:5]
+        top_comments_qs = Comment.objects.filter(user=user,is_approved=True, likes_count__gt=0).order_by('-likes_count',                                                                                       '-replays_count')[:5]
+        replays_qs = Replay.objects.select_related('user')
 
         if self.request.user.is_authenticated:
-            post_type=ContentType.objects.get_for_model(Post)
-            comment_type=ContentType.objects.get_for_model(Comment)
-            replay_type=ContentType.objects.get_for_model(Replay)
-            user_post_likes=Like.objects.filter(
-                user=self.request.user,
-                content_type=post_type,
-                object_id=Cast(OuterRef('pk'),CharField())
-            )
-            user_comment_likes=Like.objects.filter(
-                user=self.request.user,
-                content_type=comment_type,
-                object_id=Cast(OuterRef('pk'),CharField())
-            )
-            user_replay_likes=Like.objects.filter(
-                user=self.request.user,
-                content_type=replay_type,
-                object_id=Cast(OuterRef('pk'),CharField())
-            )
-            posts_qs=posts_qs.annotate(is_liked=Exists(user_post_likes))
-            top_comments_qs=top_comments_qs.annotate(is_liked=Exists(user_comment_likes))
-            replays_qs=replays_qs.annotate(is_liked=Exists(user_replay_likes))
+            posts_qs=self.annotate_likes(posts_qs,Post)
+            top_comments_qs=self.annotate_likes(top_comments_qs,Comment)
+            replays_qs=self.annotate_likes(replays_qs,Replay)
         else:
-            posts_qs=posts_qs.annotate(is_liked=Value(False,output_field=BooleanField()))
-            top_comments_qs=top_comments_qs.annotate(is_liked=Value(False,output_field=BooleanField()))
-            replays_qs=replays_qs.annotate(is_liked=Value(False,output_field=BooleanField()))
+            posts_qs = posts_qs.annotate(is_liked=Value(False, output_field=BooleanField()))
+            top_comments_qs = top_comments_qs.annotate(is_liked=Value(False, output_field=BooleanField()))
+            replays_qs = replays_qs.annotate(is_liked=Value(False, output_field=BooleanField()))
 
-        top_comments_qs=top_comments_qs.prefetch_related(
-                Prefetch('comment_replays', queryset=replays_qs, to_attr='replies'),
+        top_comments_qs = top_comments_qs.prefetch_related(
+            Prefetch('comment_replays', queryset=replays_qs, to_attr='replies'),
         )
 
-        queryset= queryset.prefetch_related(
-            Prefetch('user__user_posts',queryset=posts_qs,to_attr='all_posts'),
-            Prefetch('user__user_posts',queryset=top_posts_qs,to_attr='top_posts'),
-            Prefetch('user__user_comments',queryset=top_comments_qs,to_attr='top_comments'),
-        )
-        return queryset
+        user.all_posts=list(posts_qs)
+        user.top_posts=list(top_posts_qs)
+        user.top_comments=list(top_comments_qs)
+
+        return profile
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
+        user=self.object.user
 
-        obj=self.object
         if 'top-posts' in self.request.GET:
-            context['posts']=obj.user.top_posts
+            context['posts']=user.top_posts
         elif 'top-comments' in self.request.GET:
-            context['top_comments']=obj.user.top_comments
+            context['top_comments']=user.top_comments
         else:
-            context['posts']=obj.user.all_posts
+            context['posts']=user.all_posts
 
         return context
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.htmx:
-            if 'top-posts' in self.request.GET:
-                return render(self.request, 'partials/posts/posts_container.html', {'posts':context['posts']})
-            elif 'top-comments' in self.request.GET:
+            if 'top-comments' in self.request.GET:
                 return render(self.request, 'partials/posts/comments_container.html', {'display_comments':context['top_comments']})
-            else:
-                return render(self.request, 'partials/posts/posts_container.html', {'posts': context['posts']})
+
+            return render(self.request, 'partials/posts/posts_container.html', {'posts': context['posts']})
 
         return super().render_to_response(context, **response_kwargs)
+
 class UserDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = User
     template_name = 'layouts/generic_delete.html'
