@@ -27,7 +27,7 @@ BASE_URL = env('BASE_URL',default='')
 SECRET_KEY = env('SECRET_KEY')
 ENCRYPT_KEY = env('ENCRYPT_KEY')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['jnestagram.onrender.com','localhost', '127.0.0.1']
 
 INTERNAL_IPS = [
     '127.0.0.1',
