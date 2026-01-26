@@ -23,6 +23,10 @@ ENVIRONMENT=env('ENVIRONMENT',default='production')
 BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_URL = env('BASE_URL',default='')
 
+# Feature Toggles
+DEVELOPER=env('DEVELOPER',default='')
+STAGING=env('STAGING',default='False')
+
 # Security
 SECRET_KEY = env('SECRET_KEY')
 ENCRYPT_KEY = env('ENCRYPT_KEY')
@@ -56,6 +60,7 @@ INSTALLED_APPS = [
     'posts',
     'profiles',
     'inboxes',
+    'features'
 ]
 
 MIDDLEWARE = [
