@@ -13,6 +13,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 
 from .models import Post,Tag,Like,Comment,Replay
 from .form import PostForm, CommentForm,ReplayForm
+from features.views import feature_enabled
 
 
 class PostListView(ListView):
@@ -49,9 +50,13 @@ class PostListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['current_tag'] = self.request.GET.get('tag')
+        current_tag = self.request.GET.get('tag')
+        feature_herobutton=feature_enabled(1,'Jarvis')
 
-        return context
+        return {
+            'current_tag':current_tag,
+            'feature_herobutton':feature_herobutton,
+        }
 
 class PostDetailView(DetailView):
     model = Post
