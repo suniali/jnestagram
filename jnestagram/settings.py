@@ -186,4 +186,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGOUT_REDIRECT_URL = 'login'
 
 # Email Config Backend
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == False:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+    DEFAULT_FROM_EMAIL = 'Jnestagram'
+    ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
