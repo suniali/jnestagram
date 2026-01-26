@@ -8,11 +8,11 @@ from django.contrib import messages
 
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model,login,logout,update_session_auth_hash
+from django.contrib.auth import get_user_model,login,logout
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 
 from django.views.generic import View,CreateView,DetailView,DeleteView,UpdateView
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect,get_object_or_404,HttpResponseRedirect
 from django.urls import reverse_lazy
 
 from .models import Profile,Country
@@ -202,6 +202,18 @@ class UserDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         context['object_type']=f'User : {self.request.user.username}'
         context['cancel_url']=reverse_lazy('profile')
         return context
+
+    def form_valid(self, form):
+        success_url=self.get_success_url()
+        user=self.get_object()
+
+        user.is_active=False
+        user.save()
+
+        logout(self.request)
+
+        messages.success(self.request, 'Your account has been deleted.')
+        return HttpResponseRedirect(success_url)
 
 @login_required
 def approve_comment(request,pk):
