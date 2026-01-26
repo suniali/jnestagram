@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Activation Success{% endblock %}
+
+{% block layout %}
+    <div class="min-h-screen flex items-center justify-center bg-slate-50 px-4" dir="ltr">
+        <div class="app-card border-emerald-100 shadow-emerald-100">
+
+            <div class="relative w-24 h-24 mx-auto mb-10">
+                <div class="absolute inset-0 bg-emerald-100 rd-full animate-ping opacity-40"></div>
+
+                <div class="relative flex items-center justify-center bg-emerald-50 text-emerald-500 border border-emerald-100 w-24 h-24 rd-full shadow-sm shadow-emerald-100/50">
+                    <div class="i-ph-user-focus-duotone text-5xl"></div>
+                </div>
+
+                <div class="absolute bottom-1 right-1 bg-white rd-full p-0.5 shadow-sm">
+                    <div class="i-ph-check-circle-fill text-emerald-500 text-2xl"></div>
+                </div>
+            </div>
+
+            <h1 class="title-xl text-emerald-600">Account Verified!</h1>
+
+            <p class="desc-text px-2 mt-1 mb-8">
+                Great news! Your email has been confirmed. You now have full access to all features of our community.
+            </p>
+
+            <a href="{% url 'login' %}" class="btn-primary">
+                Let's Get Started <div class="i-ph-rocket-launch-duotone text-lg"></div>
+            </a>
+
+            <div class="mt-4 pt-6 border-t border-slate-100">
+                <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.3em]">
+                    Status: Fully Activated
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

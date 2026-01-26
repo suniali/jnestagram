@@ -6,12 +6,13 @@ from django.contrib.auth.views import (LogoutView,
                                        PasswordResetDoneView,
                                        PasswordResetCompleteView)
 
-from .views import (CustomLoginView,RegisterView,ProfileView,PublicProfileView,
+from .views import (CustomLoginView,RegisterView,ActivateView,ProfileView,PublicProfileView,
                     UserDeleteView,ComplateProfileView,approve_comment)
 
 urlpatterns = [
     path('login/', CustomLoginView.as_view() ,name='login'),
     path('register/', RegisterView.as_view() ,name='register'),
+    path('activate/<uidb64>/<token>/', ActivateView.as_view(), name='activate'),
     path('register/complate/',ComplateProfileView.as_view() ,name='complate_profile'),
     path('logout/', LogoutView.as_view() ,name='logout'),
     path('password-reset/', PasswordResetView.as_view(template_name='profiles/forgot_password.html',

@@ -15,27 +15,64 @@ from django.views.generic import View,CreateView,DetailView,DeleteView,UpdateVie
 from django.shortcuts import render,redirect,get_object_or_404,HttpResponseRedirect
 from django.urls import reverse_lazy
 
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.utils.encoding import force_bytes,force_str
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+
 from .models import Profile,Country
 from posts.models import Post, Comment, Like, Replay
 from .forms import RegistrationForm,ProfileForm
+from jnestagram.tokens import generate_token
 
 User = get_user_model()
 
 class RegisterView(CreateView):
     template_name = 'profiles/register.html'
     form_class = RegistrationForm
-    success_url = reverse_lazy('complate_profile')
-
+    success_url = reverse_lazy('login')
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            redirect('home')
+            return redirect('home')
         return super().dispatch(request, *args, **kwargs)
+
+    def send_verify_email(self,user):
+        try:
+            subject = "Activate your Account"
+            message = render_to_string('profiles/verify_email_msg.html', {
+                'user': user,
+                'domain': self.request.get_host(),
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': generate_token.make_token(user),
+            })
+
+            email = EmailMessage(subject, message, to=[user.email])
+            email.content_subtype = "html"
+            email.send()
+        except Exception as e:
+            print(f"Email error: {e}")
 
     def form_valid(self, form):
         user=form.save()
-        login(self.request, user)
-        messages.success(self.request,f'Welcome {user.username}! Your Account has been created.')
-        return redirect(self.success_url)
+        self.send_verify_email(user)
+        messages.info(self.request, "Account created! Please check your email to verify.")
+        return render(self.request,'profiles/verify_sent.html')
+
+class ActivateView(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and generate_token.check_token(user, token):
+            profile = Profile.objects.get(user=user)
+            profile.verified = True
+            profile.save()
+            return render(request, 'profiles/activation_success.html')
+        else:
+            return render(request, 'profiles/activation_invalid.html')
 
 class ComplateProfileView(LoginRequiredMixin,UpdateView):
     model = Profile
@@ -59,9 +96,17 @@ class CustomLoginView(LoginView):
     redirect_authenticated_user = True
     next_page = reverse_lazy('home')
 
+    def form_valid(self, form):
+        user=form.get_user()
+        if user.profile.verified:
+            return super().form_valid(form)
+        else:
+            messages.warning(self.request, 'Your account is not verified. Please check your email.')
+            return redirect('login')
     def form_invalid(self, form):
         messages.error(self.request,'Invalid credentials')
         return super().form_invalid(form)
+
 
 class ProfileView(LoginRequiredMixin,View):
     template_name = 'profiles/profile.html'

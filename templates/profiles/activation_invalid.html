@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Activation Invalid{% endblock %}
+
+{% block layout %}
+    <div class="min-h-screen flex items-center justify-center bg-slate-50 px-4" dir="ltr">
+        <div class="app-card border-amber-100 shadow-amber-100/50">
+
+            <div class="relative w-24 h-24 mx-auto mb-10">
+                <div class="absolute inset-0 bg-amber-100 rd-full animate-ping opacity-60"></div>
+
+                <div class="relative z-10 flex items-center justify-center bg-amber-50 text-amber-500 border border-amber-200/50 w-24 h-24 rd-full shadow-lg shadow-amber-900/5">
+                    <div class="i-ph-clock-counter-clockwise-duotone text-5xl"></div>
+                </div>
+
+                <div class="absolute -top-1 -right-1 z-20 flex items-center justify-center bg-white rd-full p-1.2 shadow-md">
+                    <div class="i-ph-warning-circle-fill text-amber-500 text-2xl"></div>
+                </div>
+            </div>
+
+            <h1 class="title-xl text-amber-700">Invalid Link</h1>
+
+            <p class="desc-text px-2 mt-1 mb-4">
+                The activation link is either <span class="text-amber-600 font-bold">expired</span>,
+                already used, or broken. Each link is valid for a limited time for your security.
+            </p>
+
+            <div class="bg-slate-50 rd-2xl p-6 border border-slate-100 mb-10 text-left">
+                <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">What happened?</h4>
+                <ul class="space-y-3 text-xs text-slate-500 font-medium list-none p-0 m-0">
+                    <li class="flex items-center gap-2">
+                        <div class="i-ph-check-circle text-emerald-500"></div> You might have already verified.
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <div class="i-ph-x-circle text-rose-400"></div> The link security token has expired.
+                    </li>
+                </ul>
+            </div>
+
+            <a href="{% url 'login' %}" class="btn-primary ">
+                Try to Login <div class="i-ph-arrow-right-bold text-xs"></div>
+            </a>
+
+        </div>
+    </div>
+{% endblock %}

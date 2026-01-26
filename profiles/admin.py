@@ -9,5 +9,5 @@ class CountryAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user','phone_number','country',)
+    list_display = ('user','phone_number','country','verified')
     search_fields = ('user','phone_number')

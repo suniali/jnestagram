@@ -25,6 +25,7 @@ class Profile(models.Model):
     country=models.ForeignKey(to=Country,related_name='country',on_delete=models.SET_NULL,null=True,blank=True)
     avatar=ResizedImageField(size=[600,600],quality=85,blank=True,upload_to='avatars/')
     bio=models.TextField(max_length=500,blank=True,null=True)
+    verified=models.BooleanField(default=False)
 
     class Meta:
         db_table = 'profiles'

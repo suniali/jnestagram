@@ -65,7 +65,7 @@ export default defineConfig({
     }
   },
   shortcuts: {
-    'app-card': 'bg-white rd-custom-lg shadow-2xl border border-slate-100 overflow-hidden',
+    'app-card': 'bg-white rd-[2.5rem] shadow-2xl shadow-slate-200/60 w-full max-w-md p-10 md:p-14 border border-slate-100 text-center',
     'btn-primary': 'p-4 bg-slate-900 text-white font-black text-sm uppercase tracking-[0.2em] rd-2xl transition-all duration-300 transform active:scale-95 shadow-xl shadow-primary/30 hover:(bg-primary shadow-xl shadow-primary/30) cursor-pointer border-none',
     'btn-normal': 'px-4 py-3 bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] rd-xl transition-all duration-300 transform active:scale-95 hover:(bg-primary shadow-lg shadow-primary/30) cursor-pointer border-none',
     'btn-secondary': 'py-4 px-8 text-center bg-slate-100 text-slate-500 font-black text-xs uppercase tracking-[0.2em] rd-2xl transition-all duration-300 hover:(bg-slate-200 text-slate-800) border-none',
