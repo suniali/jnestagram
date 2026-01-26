@@ -196,6 +196,5 @@ if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == False:
     EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
     DEFAULT_FROM_EMAIL = 'Jnestagram'
     ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
-    EMAIL_TIMEOUT = 10
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
