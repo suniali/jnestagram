@@ -51,7 +51,10 @@ class PostListView(ListView):
         context = super().get_context_data(**kwargs)
 
         current_tag = self.request.GET.get('tag')
-        feature_herobutton=feature_enabled(1,'Jarvis')
+        try:
+            feature_herobutton=feature_enabled(1,'Jarvis')
+        except:
+            feature_herobutton=False
 
         return {
             'current_tag':current_tag,
