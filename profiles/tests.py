@@ -1,6 +1,9 @@
+from http.client import responses
+
 from django.test import TestCase,Client
 
 from django.contrib.auth import get_user_model
+from django.contrib.messages import get_messages
 from django.urls import reverse
 
 from django.core import mail
@@ -120,6 +123,54 @@ class ActiveViewTest(TestCase):
         # Check database should not change
         self.profile.refresh_from_db()
         self.assertFalse(self.profile.verified)
+
+class ComplateProfileViewTest(TestCase):
+    def setUp(self):
+        self.user=User.objects.create(username='test',email='test@test.com',password='userpassword')
+        self.country=Country.objects.create(name='Iran',abbr='IR')
+        self.url=reverse('complate_profile')
+
+    def test_profile_created_after_user_created(self):
+        # check profile created by signal
+        self.assertTrue(Profile.objects.filter(user=self.user).exists())
+
+    def test_context_data_contains_countries(self):
+        self.client.force_login(self.user)
+
+        responses=self.client.get(self.url)
+
+        self.assertIn('countries',responses.context)
+        self.assertTrue(responses.context['countries'].filter(name='Iran').exists())
+
+    def test_login_required(self):
+        response=self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/login/',response.url)
+
+    def test_update_profile_success(self):
+        self.client.force_login(self.user)
+
+        form_data={
+            'bio':'I am Trader.',
+            'country':self.country.id,
+            'phone_number':'09121231231',
+        }
+
+        response=self.client.post(self.url,data=form_data)
+        # check redirect
+        self.assertRedirects(response,reverse('profile'))
+
+        # Check profile database for new datas
+        self.user.profile.refresh_from_db()
+        self.assertEqual(self.user.profile.bio,form_data['bio'])
+        self.assertEqual(self.user.profile.country,self.country)
+        self.assertEqual(str(self.user.profile.phone_number),'9121231231')
+
+
+        # Check Messages
+        messages=list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages),1)
+        self.assertEqual(str(messages[0]),'Your profile has been updated.')
 
 class ProfileViewTest(TestCase):
     def setUp(self):
