@@ -8,8 +8,9 @@ from django.core import mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 
-from profiles.models import Country
+from profiles.models import Country,Profile
 from posts.models import Post,Tag,Comment,Replay,Like
+from jnestagram.tokens import generate_token
 
 User = get_user_model()
 
@@ -72,6 +73,53 @@ class RegisterViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profiles/register.html')
 
+class ActiveViewTest(TestCase):
+    def setUp(self):
+        # Create unverified user
+        self.user=User.objects.create(username='test',email='test@test.com',password='userpassword')
+        self.profile=Profile.objects.get(user=self.user)
+        self.profile.verified=False
+        self.profile.save()
+
+        # Create token and uid for user
+        self.uid=urlsafe_base64_encode(force_bytes(self.user.pk))
+        self.token=generate_token.make_token(self.user)
+
+        # create url
+        self.url=reverse('activate',kwargs={'uidb64':self.uid,'token':self.token})
+
+    def test_activation_success(self):
+        response=self.client.get(self.url)
+
+        # Check render page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profiles/activation_success.html')
+
+        # Check verified on Database
+        self.profile.refresh_from_db()
+        self.assertTrue(self.profile.verified)
+
+    def test_activation_invalid_token(self):
+        invalid_url=reverse('activate',kwargs={'uidb64':self.uid,'token':'wrongtoken'})
+        response=self.client.get(invalid_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profiles/activation_invalid.html')
+
+        # Check database should not change
+        self.profile.refresh_from_db()
+        self.assertFalse(self.profile.verified)
+
+    def test_activation_invalid_uidb64(self):
+        invalid_url=reverse('activate',kwargs={'uidb64':'wronguidb64','token':self.token})
+        response=self.client.get(invalid_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profiles/activation_invalid.html')
+
+        # Check database should not change
+        self.profile.refresh_from_db()
+        self.assertFalse(self.profile.verified)
 
 class ProfileViewTest(TestCase):
     def setUp(self):
