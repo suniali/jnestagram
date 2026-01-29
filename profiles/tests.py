@@ -3,10 +3,75 @@ from django.test import TestCase,Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
+from django.core import mail
+
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+
 from profiles.models import Country
 from posts.models import Post,Tag,Comment,Replay,Like
 
 User = get_user_model()
+
+class RegisterViewTest(TestCase):
+    def setUp(self):
+        self.url=reverse('register')
+        self.user_data={
+            'username':'test',
+            'email':'test@test.com',
+            'password1':'testpassword',
+            'password2':'testpassword'
+        }
+
+    def test_register_page_get(self):
+        # request
+        response=self.client.get(self.url)
+        # check register page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profiles/register.html')
+
+    def test_register_success_logic(self):
+        # Send form data
+        response=self.client.post(self.url,self.user_data)
+        # Check database for new user
+        self.assertTrue(User.objects.filter(username=self.user_data['username']).exists())
+        user=User.objects.get(username=self.user_data['username'])
+        # Check verify page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profiles/verify_sent.html')
+        # Check If Email Sent
+        self.assertEqual(len(mail.outbox),1)
+        sent_mail=mail.outbox[0]
+        self.assertEqual(sent_mail.subject,'Activate your Account')
+        self.assertEqual(sent_mail.to,[self.user_data['email']])
+        # Check uid in mail body
+        uid=urlsafe_base64_encode(force_bytes(user.pk))
+        self.assertIn(uid,sent_mail.body)
+
+    def test_authenticate_user_redirect(self):
+        # Create and Login User
+        user=User.objects.create(
+            username=self.user_data['username'],
+            email=self.user_data['email'],
+            password=self.user_data['password1'])
+        user.profile.verified=True
+        self.client.force_login(user)
+
+        response=self.client.get(self.url)
+        # Check loggined user should be redirect
+        self.assertRedirects(response,reverse('home'))
+
+    def test_invalid_registeration(self):
+        bad_data=self.user_data.copy()
+        bad_data['password2']='wrongpasswordmatches'
+
+        response=self.client.post(self.url,bad_data)
+        # User should not exist
+        self.assertFalse(User.objects.filter(username=bad_data['username']).exists())
+        # Register page should be show
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profiles/register.html')
+
 
 class ProfileViewTest(TestCase):
     def setUp(self):
