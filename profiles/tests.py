@@ -410,3 +410,43 @@ class PublicProfileViewTest(TestCase):
 
         self.assertTemplateUsed(response,'partials/posts/comments_container.html')
         self.assertIn('display_comments',response.context)
+
+class UserDeleteViewTest(TestCase):
+    def setUp(self):
+        self.user=User.objects.create_user(username='victim', password='testpassword')
+        self.attaker=User.objects.create_user(username='attaker', password='testpassword')
+        self.url=reverse('delete_profile',kwargs={'pk':self.user.id})
+
+
+    def test_delete_context_data(self):
+        self.client.force_login(self.user)
+        response=self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,'layouts/generic_delete.html')
+        self.assertTrue(hasattr(response,'context'))
+        self.assertEqual(response.context['object_type'],f'User : {self.user.username}')
+        self.assertEqual(response.context['cancel_url'],reverse('profile'))
+
+    def test_only_owner_can_delete_account(self):
+        self.client.force_login(self.attaker)
+        response=self.client.post(self.url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_soft_delete_logic(self):
+        self.client.force_login(self.user)
+
+        response=self.client.post(self.url)
+
+        # Check redirect to home
+        self.assertRedirects(response,reverse('home'))
+
+        # Check soft delete on database
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.is_active)
+
+        # Check session
+        self.assertNotIn('_auth_user_id',self.client.session)
+        # Check messages
+        messages=list(get_messages(response.wsgi_request))
+        self.assertEqual(str(messages[0]),'Your account has been deleted.')
