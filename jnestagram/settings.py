@@ -31,7 +31,7 @@ STAGING=env('STAGING',default='False')
 SECRET_KEY = env('SECRET_KEY')
 ENCRYPT_KEY = env('ENCRYPT_KEY')
 
-ALLOWED_HOSTS = ['jnestagram.onrender.com','localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['jnestagram.onrender.com','jnestagram-staging.onrender.com','localhost', '127.0.0.1']
 
 INTERNAL_IPS = [
     '127.0.0.1',
