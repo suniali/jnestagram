@@ -450,3 +450,65 @@ class UserDeleteViewTest(TestCase):
         # Check messages
         messages=list(get_messages(response.wsgi_request))
         self.assertEqual(str(messages[0]),'Your account has been deleted.')
+
+class ApprovedCommentTest(TestCase):
+    def setUp(self):
+        # Owner
+        self.owner=User.objects.create_user(username='owner', password='testpassword')
+        # Stranger
+        self.stranger=User.objects.create_user(username='stranger', password='testpassword')
+
+        # Create a post for Owner
+        small_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x00\x00\x00\x21\xf9'
+            b'\x04\x01\x0a\x00\x01\x00\x2c\x00\x00\x00\x00\x01\x00\x01\x00'
+            b'\x00\x02\x02\x4c\x01\x00\x3b'
+        )
+        self.fake_image=SimpleUploadedFile('test_image.gif',small_gif,content_type='image/gif')
+        self.post=Post.objects.create(
+            user=self.owner,
+            title='Post 1',
+            text='Post Text',
+            image=self.fake_image
+        )
+
+        # UnApproved Comment for post
+        self.comment=Comment.objects.create(
+            user=self.stranger,
+            post=self.post,
+            text='Nice Post!',
+            is_approved=False
+        )
+
+        self.url=reverse('approve_comment',kwargs={'pk':self.comment.id})
+
+    def test_login_required_to_approve(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/login/',response.url)
+
+
+    def test_approve_comment_success(self):
+        self.client.force_login(self.owner)
+        response = self.client.get(self.url)
+
+        # Check redirect
+        self.assertRedirects(response,reverse('profile'))
+
+        # Check Database for comment has been approved
+        self.comment.refresh_from_db()
+        self.assertTrue(self.comment.is_approved)
+        # Check messages
+        messages=list(get_messages(response.wsgi_request))
+        self.assertEqual(str(messages[0]),'Comment has been approved and is now public.')
+
+    def test_stranger_can_not_approve_comment(self):
+        self.client.force_login(self.stranger)
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 404)
+
+        # Check database for comment should not be approve
+        self.comment.refresh_from_db()
+        self.assertFalse(self.comment.is_approved)
