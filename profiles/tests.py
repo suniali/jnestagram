@@ -172,6 +172,67 @@ class ComplateProfileViewTest(TestCase):
         self.assertEqual(len(messages),1)
         self.assertEqual(str(messages[0]),'Your profile has been updated.')
 
+class CustomLoginViewTest(TestCase):
+    def setUp(self):
+        self.url=reverse('login')
+        self.password='userpassword'
+
+        # Create Verified User
+        self.verified_user = User.objects.create_user(username='verified', password=self.password)
+        self.verified_user.profile.verified = True
+        self.verified_user.profile.save()
+
+        # ساخت کاربر وریفای نشده
+        self.unverified_user = User.objects.create_user(username='unverified', password=self.password)
+        self.unverified_user.profile.verified = False
+        self.unverified_user.profile.save()
+
+    def test_login_get_success(self):
+        response=self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profiles/login.html')
+
+
+    def test_login_seccess_verified_user(self):
+        response=self.client.post(self.url,data={
+            'username':self.verified_user.username,
+            'password':self.password
+        })
+        self.assertRedirects(response,reverse('home'))
+        # Check setiton
+        self.assertIn('_auth_user_id',self.client.session)
+
+    def test_login_fail_unverified_user(self):
+        response=self.client.post(self.url,data={
+            'username':self.unverified_user.username,
+            'password':self.password
+        })
+        # Check redirect
+        self.assertRedirects(response,self.url)
+
+        # Check warning message
+        messages=list(get_messages(response.wsgi_request))
+        self.assertTrue(any('Your account is not verified' in m.message for m in messages))
+
+        # Check sesstion
+        self.assertNotIn('_auth_user_id',self.client.session)
+
+    def test_login_invalid_credentials(self):
+        response=self.client.post(self.url,data={
+            'username':self.verified_user.username,
+            'password':'wrongpassword'
+        })
+
+        self.assertEqual(response.status_code, 200)
+        messages=list(get_messages(response.wsgi_request))
+        self.assertTrue(any('Invalid credentials' in m.message for m in messages))
+
+    def test_redirect_already_authenticated_user(self):
+        self.client.force_login(self.verified_user)
+        response=self.client.get(self.url)
+
+        self.assertRedirects(response,reverse('home'))
+
 class ProfileViewTest(TestCase):
     def setUp(self):
         username='test'
