@@ -105,12 +105,12 @@ WSGI_APPLICATION = 'jnestagram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': env('DB_ENGINE'),
-        'NAME': env('DB_NAME'),
-        'HOST': env('DB_HOST'),
-        'PORT': '',
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASS'),
+        'ENGINE': env('DB_ENGINE',default='django.db.backends.postgresql_psycopg2'),
+        'NAME': env('DB_NAME',default='jnestagram_db'),
+        'HOST': env('DB_HOST',default='localhost'),
+        'PORT': env('DB_PORT',default='5432'),
+        'USER': env('DB_USER',default='jarvis'),
+        'PASSWORD': env('DB_PASS',default='Jnestagram@12345'),
     }
 }
 
