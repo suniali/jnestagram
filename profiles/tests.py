@@ -1,12 +1,12 @@
-from http.client import responses
-
 from django.test import TestCase,Client
 
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
 from django.urls import reverse
 
 from django.core import mail
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
@@ -300,3 +300,113 @@ class ProfileViewTest(TestCase):
         response=self.client.get(self.url)
         self.assertEqual(response.status_code, 302)
         self.assertIn('/login/',response.url)
+
+class PublicProfileViewTest(TestCase):
+    def setUp(self):
+        # Create User
+        self.user=User.objects.create_user(username='test_user', password='testpassword')
+        self.profile=self.user.profile
+        self.profile.verified=True
+        self.profile.save()
+
+        # Create Post
+        small_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x00\x00\x00\x21\xf9'
+            b'\x04\x01\x0a\x00\x01\x00\x2c\x00\x00\x00\x00\x01\x00\x01\x00'
+            b'\x00\x02\x02\x4c\x01\x00\x3b'
+        )
+        self.fake_image = SimpleUploadedFile('test_image.gif', small_gif, content_type='image/gif')
+        self.post=Post.objects.create(user=self.user,title='Post Test',text='Text Test',image=self.fake_image)
+
+        # Create Visitor User
+        self.visitor=User.objects.create_user(username='visitor', password='testpassword')
+        self.visitor.profile.verified=True
+        self.visitor.profile.save()
+
+        self.url=reverse('public_profile',kwargs={'username':self.user.username})
+
+    def test_public_profile_basic_load(self):
+        response=self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profiles/public_profile.html')
+        self.assertContains(response,'test_user')
+        self.assertIn('posts',response.context)
+        self.assertEqual(len(response.context['posts']),1)
+
+    def test_annotate_likes_for_authenticate_user(self):
+        content_type=ContentType.objects.get_for_model(Post)
+        Like.objects.create(user=self.visitor,content_type=content_type,object_id=str(self.post.id))
+
+        self.client.force_login(self.visitor)
+        response=self.client.get(self.url)
+
+        post_in_context=response.context['posts'][0]
+        self.assertTrue(post_in_context.is_liked)
+
+    def test_htmx_posts_request(self):
+        response=self.client.get(self.url,HTTP_HX_REQUEST='true')
+
+        # Should render post container
+        self.assertTemplateUsed(response,'partials/posts/posts_container.html')
+        self.assertTemplateNotUsed(response,'profiles/profile.html')
+
+    def test_top_posts_query_param(self):
+        top_post=Post.objects.create(user=self.user,title='Top Post',text='Top Post',likes_count=10,image=self.fake_image)
+
+        response=self.client.get(self.url+'?top-posts')
+
+        posts=response.context['posts']
+        self.assertEqual(posts[0],top_post)
+        self.assertTrue(all(p.likes_count > 0 for p in posts))
+
+    def test_htmx_top_posts_request(self):
+        response=self.client.get(self.url+'?top-posts',HTTP_HX_REQUEST='true')
+
+        self.assertTemplateUsed(response,'partials/posts/posts_container.html')
+        self.assertTemplateNotUsed(response,'profiles/profile.html')
+        self.assertIn('posts',response.context)
+
+    def test_unauthenticated_user_is_like_is_false(self):
+        response=self.client.get(self.url)
+
+        post_in_context=response.context['posts'][0]
+        self.assertFalse(post_in_context.is_liked)
+
+    def test_top_comments_logic_and_prefetch(self):
+        top_post = Post.objects.create(
+            user=self.user,
+            title='Top Post',
+            text='Top Post',
+            likes_count=10,
+            image=self.fake_image
+        )
+        top_comment=Comment.objects.create(
+            user=self.user,
+            post=top_post,
+            text='Top Comment',
+            is_approved=True,
+            likes_count=5,
+        )
+
+        # Create unaccept comments(not approved,without likes)
+        Comment.objects.create(user=self.user,post=top_post,text="Hidden",is_approved=False,likes_count=10)
+        Comment.objects.create(user=self.user,post=top_post,text="No Likes",is_approved=True,likes_count=0)
+
+        # Create Replay for top comment
+        replay=Replay.objects.create(user=self.visitor,comment=top_comment,text='I am a replay')
+
+        response=self.client.get(self.url+'?top-comments')
+
+        self.assertIn('top_comments',response.context)
+        self.assertEqual(len(response.context['top_comments']),1)
+        self.assertEqual(response.context['top_comments'][0],top_comment)
+
+        comment_in_context=response.context['top_comments'][0]
+        self.assertTrue(hasattr(comment_in_context,'replies'))
+        self.assertEqual(comment_in_context.replies[0],replay)
+
+    def test_htmx_top_comments_request(self):
+        response=self.client.get(self.url+'?top-comments',HTTP_HX_REQUEST='true')
+
+        self.assertTemplateUsed(response,'partials/posts/comments_container.html')
+        self.assertIn('display_comments',response.context)
