@@ -3,21 +3,38 @@ name: Jnestagram Testing
 on:
   push:
     branches: ['master','staging','test_jarvis']
-  pull_request:
-    branches: ['master','staging']
 
 jobs:
-  test:
+  test-container:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: jnestagram_db
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     env:
       ENVIRONMENT : development
       SECRET_KEY : "test_key_for_github_actions"
       ENCRYPT_KEY : "3-7Q2CpT7m0tpVLB7biBgWT0YVCSsTaxdRbb7vN5HsI="
       DB_URL: ''
+      DB_ENGINE: django.db.backends.postgresql
+      DB_NAME: jnestagram_db
+      DB_USER: user
+      DB_PASS: password
+      DB_HOST: 0.0.0.0
+      DB_PORT: 5432
       DEBUG: "True"
-      DB_ENGINE: django.db.backends.sqlite3
-      DB_NAME: ":memory:"
 
     steps:
       - name: Checkout code
@@ -32,9 +49,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      - name: Wait for PostgreSQL
-        run: sleep 15
 
       - name: Run Tests
         run: |

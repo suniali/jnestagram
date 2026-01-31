@@ -31,7 +31,7 @@ STAGING=env('STAGING',default='False')
 SECRET_KEY = env('SECRET_KEY')
 ENCRYPT_KEY = env('ENCRYPT_KEY')
 
-ALLOWED_HOSTS = ['jnestagram.onrender.com','jnestagram-staging.onrender.com','localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['jnestagram.onrender.com','jnestagram-staging.onrender.com','localhost', '127.0.0.1','0.0.0.0']
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -105,12 +105,12 @@ WSGI_APPLICATION = 'jnestagram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': env('DB_ENGINE',default='django.db.backends.sqlite3'),
+        'ENGINE': env('DB_ENGINE',default='django.db.backends.postgresql_psycopg2'),
         'NAME': env('DB_NAME',default='jnestagram_db'),
-        'HOST': env('DB_HOST',default='127.0.0.1'),
+        'HOST': env('DB_HOST',default='localhost'),
         'PORT': env('DB_PORT',default='5432'),
         'USER': env('DB_USER',default='jarvis'),
-        'PASSWORD': env('DB_PASS',default='Jnestagram@12345'),
+        'PASSWORD': env('DB_PASS',default='postgres'),
     }
 }
 

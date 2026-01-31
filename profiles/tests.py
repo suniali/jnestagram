@@ -1,5 +1,8 @@
 from django.test import TestCase,Client
 
+from django.db.models import Exists,OuterRef,CharField
+from django.db.models.functions import Cast
+
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
@@ -334,13 +337,21 @@ class PublicProfileViewTest(TestCase):
         self.assertEqual(len(response.context['posts']),1)
 
     def test_annotate_likes_for_authenticate_user(self):
-        content_type=ContentType.objects.get_for_model(Post)
-        Like.objects.create(user=self.visitor,content_type=content_type,object_id=str(self.post.id))
+        Like.objects.create(
+            user=self.visitor,
+            content_object=self.post,
+        )
 
         self.client.force_login(self.visitor)
+        self.assertIn('_auth_user_id',self.client.session)
+
         response=self.client.get(self.url)
 
         post_in_context=response.context['posts'][0]
+        self.assertEqual(post_in_context.title, self.post.title)
+        self.assertEqual(post_in_context.likes_count,1)
+        self.assertTrue(hasattr(post_in_context,'is_liked'))
+
         self.assertTrue(post_in_context.is_liked)
 
     def test_htmx_posts_request(self):
