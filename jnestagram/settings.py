@@ -107,7 +107,7 @@ DATABASES = {
     'default': {
         'ENGINE': env('DB_ENGINE',default='django.db.backends.postgresql_psycopg2'),
         'NAME': env('DB_NAME',default='jnestagram_db'),
-        'HOST': env('DB_HOST',default='localhost'),
+        'HOST': env('DB_HOST',default='127.0.0.1'),
         'PORT': env('DB_PORT',default='5432'),
         'USER': env('DB_USER',default='jarvis'),
         'PASSWORD': env('DB_PASS',default='Jnestagram@12345'),
