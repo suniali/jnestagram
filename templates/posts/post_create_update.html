@@ -2,18 +2,18 @@
 {% load static %}
 
 {% block layout %}
-    <div class="min-h-screen flex items-center justify-center bg-slate-50/50 px-4 py-12">
-        <div class="bg-white rd-[2.5rem] shadow-sm border border-slate-100 w-full max-w-xl p-8 md:p-10 transition-all">
+<div class="min-h-screen flex items-center justify-center bg-slate-50/50 px-4 py-12">
+    <div class="bg-white rd-[2.5rem] shadow-sm border border-slate-100 w-full max-w-xl p-8 md:p-10 transition-all">
 
-            <div class="text-center mb-10">
-                <h2 class="text-5xl font-black text-slate-800 font-lobster mb-3">
-                    {% if object %} Update Post {% else %} Create Post {% endif %}
-                </h2>
-                <p class="text-slate-400 font-medium">Share your creative thoughts with the world.</p>
-            </div>
+        <div class="text-center mb-10">
+            <h2 class="text-5xl font-black text-slate-800 font-lobster mb-3">
+                {% if object %} Update Post {% else %} Create Post {% endif %}
+            </h2>
+            <p class="text-slate-400 font-medium">Share your creative thoughts with the world.</p>
+        </div>
 
-            <form method="POST" enctype="multipart/form-data" @submit="isSaving = true"
-                  x-data="{
+        <form method="POST" enctype="multipart/form-data" @submit="isSaving = true"
+              x-data="{
                     isSaving : false,
                     selectedTags: {{ selected_tag_ids|default:'[]' }},
                     imagePreview: '{% if object.image %}{{ object.image.url }}{% endif %}',
@@ -25,92 +25,92 @@
                         }
                     }
                   }">
-                {% csrf_token %}
+            {% csrf_token %}
 
-                <div class="mb-6">
-                    <label class="block text-sm font-bold text-slate-700 mb-2 ml-2">Title</label>
-                    <input type="text" name="title" value="{{ object.title }}"
-                           placeholder="Enter a catchy title" required maxlength="30"
-                           class="input-form">
-                </div>
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-slate-700 mb-2 ml-2">Title</label>
+                <input type="text" name="title" value="{{ object.title }}"
+                       placeholder="Enter a catchy title" required maxlength="30"
+                       class="input-form">
+            </div>
 
-                <div class="mb-6">
-                    <label class="block text-sm font-bold text-slate-700 mb-2 ml-2">Content</label>
-                    <textarea name="text" rows="4" placeholder="What's on your mind?"
-                              required maxlength="200"
-                              class="input-form resize-none">{{ object.text }}</textarea>
-                </div>
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-slate-700 mb-2 ml-2">Content</label>
+                <textarea name="text" rows="4" placeholder="What's on your mind?"
+                          required maxlength="200"
+                          class="input-form resize-none">{{ object.text }}</textarea>
+            </div>
 
-                <div class="mb-8">
-                    <label class="block text-sm font-bold text-slate-700 mb-2 ml-2">Feature Image</label>
-                    <div @click="$refs.fileInput.click()"
-                         class="relative cursor-pointer border-2 border-dashed border-slate-200 rd-[2rem] h-64 flex items-center justify-center bg-slate-50 hover:(bg-slate-100 border-primary/30) transition-all overflow-hidden group">
+            <div class="mb-8">
+                <label class="block text-sm font-bold text-slate-700 mb-2 ml-2">Feature Image</label>
+                <div @click="$refs.fileInput.click()"
+                     class="relative cursor-pointer border-2 border-dashed border-slate-200 rd-[2rem] h-64 flex items-center justify-center bg-slate-50 hover:(bg-slate-100 border-primary/30) transition-all overflow-hidden group">
 
-                        <template x-if="imagePreview">
-                            <img :src="imagePreview" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                        </template>
+                    <template x-if="imagePreview">
+                        <img :src="imagePreview" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </template>
 
-                        <template x-if="!imagePreview">
-                            <div class="text-center">
-                                <div i-carbon-image class="mx-auto h-12 w-12 text-slate-300 mb-2"></div>
-                                <p class="text-sm text-slate-400 font-bold">Click to upload photo</p>
-                            </div>
-                        </template>
+                    <template x-if="!imagePreview">
+                        <div class="text-center">
+                            <div i-carbon-image class="mx-auto h-12 w-12 text-slate-300 mb-2"></div>
+                            <p class="text-sm text-slate-400 font-bold">Click to upload photo</p>
+                        </div>
+                    </template>
 
-                        <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                            <div class="bg-white p-3 rd-full shadow-xl">
-                                <div i-carbon-cloud-upload class="w-6 h-6 text-primary"></div>
-                            </div>
+                    <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <div class="bg-white p-3 rd-full shadow-xl">
+                            <div i-carbon-cloud-upload class="w-6 h-6 text-primary"></div>
                         </div>
                     </div>
-                    <input type="file" name="image" x-ref="fileInput" class="hidden" accept="image/*"
-                           @change="const file = $event.target.files[0]; if (file) { imagePreview = URL.createObjectURL(file) }">
-
-                    {% if form.image.errors %}
-                        <p class="text-red-500 text-xs font-bold mt-3 flex items-center gap-1 ml-2">
-                             <div i-carbon-warning w-4 h-4></div> {{ form.image.errors.0 }}
-                        </p>
-                    {% endif %}
                 </div>
+                <input type="file" name="image" x-ref="fileInput" class="hidden" accept="image/*"
+                       @change="const file = $event.target.files[0]; if (file) { imagePreview = URL.createObjectURL(file) }">
 
-                <div class="mb-8">
-                    <label class="block text-sm font-bold text-slate-700 mb-3 ml-2">Select Tags</label>
-                    <div class="flex flex-wrap gap-2">
-                        {% for tag in tags %}
-                            <button type="button" @click="toggleTag({{ tag.id }})"
-                                    :class="selectedTags.includes({{ tag.id }})
+                {% if form.image.errors %}
+                <p class="text-red-500 text-xs font-bold mt-3 flex items-center gap-1 ml-2">
+                <div i-carbon-warning w-4 h-4></div> {{ form.image.errors.0 }}
+                </p>
+                {% endif %}
+            </div>
+
+            <div class="mb-8">
+                <label class="block text-sm font-bold text-slate-700 mb-3 ml-2">Select Tags</label>
+                <div class="flex flex-wrap gap-2">
+                    {% for tag in tags %}
+                    <button type="button" @click="toggleTag({{ tag.id }})"
+                            :class="selectedTags.includes({{ tag.id }})
                                             ? 'bg-primary text-white border-primary shadow-primary/20'
                                             : 'bg-white text-slate-400 border-slate-200 hover:border-primary/50'"
-                                    class="tag-btn">
-                                {{ tag.name }}
-                            </button>
-                        {% endfor %}
-                    </div>
-                    <input type="hidden" name="selected_tags" :value="selectedTags.join(',')">
+                            class="tag-btn">
+                        {{ tag.name }}
+                    </button>
+                    {% endfor %}
                 </div>
+                <input type="hidden" name="selected_tags" :value="selectedTags.join(',')">
+            </div>
 
-                <div class="flex items-center gap-3 bg-slate-50 p-4 rd-2xl border border-slate-100 mb-10">
-                    <input type="checkbox" name="is_public" id="is_public"
-                           {% if object.is_public %}checked{% endif %}
-                           class="w-5 h-5 text-primary border-slate-300 rd-lg focus:ring-primary">
-                    <label for="is_public" class="text-sm font-bold text-slate-600 cursor-pointer select-none">
-                        Make this post visible to everyone
-                    </label>
-                </div>
+            <div class="flex items-center gap-3 bg-slate-50 p-4 rd-2xl border border-slate-100 mb-10">
+                <input type="checkbox" name="is_public" id="is_public"
+                       {% if object.is_public %}checked{% endif %}
+                       class="w-5 h-5 text-primary border-slate-300 rd-lg focus:ring-primary">
+                <label for="is_public" class="text-sm font-bold text-slate-600 cursor-pointer select-none">
+                    Make this post visible to everyone
+                </label>
+            </div>
 
-                <button type="submit"
-                        class="w-full"
-                        :class="isSaving === true ? 'btn-disable' : 'btn-primary'">
-                    <span x-show="!isSaving">
-                        {% if object %}
+            <button type="submit" x-show="!isSaving" class="w-full btn-primary">
+                <span >
+                    {% if object %}
                             Update Post
                             {% else %}
                             Save Post
                         {% endif %}
-                    </span>
-                    <span  x-show="isSaving"> Saving ...</span>
-                </button>
-            </form>
-        </div>
+                </span>
+            </button>
+            <button type="submit" x-show="isSaving" class="w-full btn-disable" disabled>
+                <span x-show="isSaving">Singing In ...</span>
+            </button>
+        </form>
     </div>
+</div>
 {% endblock %}

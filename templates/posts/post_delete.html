@@ -1,22 +1,24 @@
 {%  extends 'base.html' %}
 
 {% block layout %}
-    <div class="md:flex items-center justify-center m-8">
-        <div class="w-full md:max-w-sm mr-6 md:[&>*>*>p]:text-4xl">
-          {% include 'partials/posts/post.html' %}
-        </div>
-        <div x-data="{ isSaving : false }">
-            <h1 class="post-title font-bold text-4xl">Delete Post</h1>
-            <p class="mb-6" mb-6>Are you sure you want to delete this post?</p>
-
-            <form method='POST' action="{% url 'delete_post' post.id %}" @submit="isSaving = true">
-                {% csrf_token %}
-                <button :class="isSaving === true ? 'btn-disable' :'btn-primary'" type="submit">
-                    <span  x-show="!isSaving">Confirm</span>
-                    <span x-show="isSaving">Deleting ...</span>
-                </button>
-                <a class="btn-secondary ml-3" href="{% url 'home' %}">Go Back</a>
-            </form>
-        </div>
+<div class="md:flex items-center justify-center m-8">
+    <div class="w-full md:max-w-sm mr-6 md:[&>*>*>p]:text-4xl">
+        {% include 'partials/posts/post.html' %}
     </div>
+    <div x-data="{ isSaving : false }">
+        <h1 class="post-title font-bold text-4xl">Delete Post</h1>
+        <p class="mb-6" mb-6>Are you sure you want to delete this post?</p>
+
+        <form method='POST' action="{% url 'delete_post' post.id %}" @submit="isSaving = true">
+            {% csrf_token %}
+            <button type="submit" x-show="!isSaving" class="btn-primary">
+                <span >Confirm</span>
+            </button>
+            <button type="submit" x-show="isSaving" class="btn-disable" disabled>
+                <span x-show="isSaving">Deleting ...</span>
+            </button>
+            <a class="btn-secondary ml-3" href="{% url 'home' %}">Go Back</a>
+        </form>
+    </div>
+</div>
 {% endblock %}

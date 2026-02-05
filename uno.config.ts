@@ -69,7 +69,7 @@ export default defineConfig({
     'btn-primary': 'p-4 bg-slate-900 text-white font-black text-sm uppercase tracking-[0.2em] rd-2xl transition-all duration-300 transform active:scale-95 shadow-xl shadow-primary/30 hover:(bg-primary shadow-xl shadow-primary/30) cursor-pointer border-none',
     'btn-normal': 'px-4 py-3 bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] rd-xl transition-all duration-300 transform active:scale-95 hover:(bg-primary shadow-lg shadow-primary/30) cursor-pointer border-none',
     'btn-secondary': 'py-4 px-8 text-center bg-slate-100 text-slate-500 font-black text-xs uppercase tracking-[0.2em] rd-2xl transition-all duration-300 hover:(bg-slate-200 text-slate-800) border-none',
-    'btn-disable': 'py-4 px-8 bg-slate-100 text-slate-500 font-black text-xs uppercase tracking-[0.2em] rd-2xl transition-all duration-300 border-none disabled',
+    'btn-disable': 'py-4 px-8 bg-slate-100 text-slate-500 font-black text-xs uppercase tracking-[0.2em] rd-2xl transition-all duration-300 border-none',
     'input-main': 'w-full bg-slate-100 border-none rd-2xl py-4 px-6 text-slate-700 font-medium focus:ring-2 focus:ring-primary focus:bg-white transition-all outline-none',
     'label-input':'text-sm font-semibold text-slate-600 px-2 my-1',
     'help-text':'text-xs text-slate-400 block px-2 my-2',
@@ -95,7 +95,7 @@ export default defineConfig({
     'btn-hero': 'inline-block bg-primary text-white px-8 py-3 rd-full font-bold transition-all duration-300 hover:(bg-white text-primary scale-105) shadow-lg',
     'hero-overlay': 'absolute inset-0 bg-slate-900/60 z--1',
     // sidebar
-    'sidebar-item': 'flex items-center p-2 rd-xl transition-all duration-200 hover:bg-slate-100 group',
+    'sidebar-item': 'flex items-center p-2 rd-xl transition-all duration-200 hover:bg-slate-100',
     'sidebar-active': 'bg-primary/10 text-primary border-r-4 border-primary rd-r-none',
     'sidebar-card': 'bg-white rd-2xl shadow-sm border border-slate-100 p-4 mb-4',
     //

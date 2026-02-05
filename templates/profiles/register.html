@@ -3,50 +3,54 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block layout %}
-    <div min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12>
+<div class="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12">
 
-        <div class="bg-white rd-[2.5rem] shadow-xl shadow-slate-200/50 w-full max-w-md p-8 md:p-12 border border-slate-100 transition-all"
-            x-data="{ isSaving : false }">
+    <div class="bg-white rd-[2.5rem] shadow-xl shadow-slate-200/50 w-full max-w-md p-8 md:p-12 border border-slate-100 transition-all"
+         x-data="{ isSaving : false }">
 
-        <div text-center mb-3>
-            <h1 text-5xl font-black text-slate-800 font-lobster mb-3>
+        <div class="text-center mb-3">
+            <h1 class="text-5xl font-black text-slate-800 font-lobster mb-3">
                 Create Account
             </h1>
-            <p text-slate-400 font-medium>Join us today — it's quick and easy</p>
+            <p class="text-slate-400 font-medium">Join us today — it's quick and easy</p>
         </div>
 
         <form method="post" @submit="isSaving = true">
             {% csrf_token %}
             {% for field in form %}
-                <div class="flex flex-col">
-                    <label class="label-input" for="{{ field.id_for_label }}"> {{ field.label }}</label>
-                </div>
+            <div class="flex flex-col">
+                <label class="label-input" for="{{ field.id_for_label }}"> {{ field.label }}</label>
+            </div>
 
-                {{ field }}
+            {{ field }}
 
-                {% if field.errors %}
-                    {% for error in field.errors %}
-                        <p class="error-text">⚠️ {{ error }}</p>
-                    {% endfor %}
-                {% endif %}
-
-                {% if field.help_text %}
-                    <span class="help-text">{{ field.help_text|safe }}</span>
-                {% endif %}
+            {% if field.errors %}
+            {% for error in field.errors %}
+            <p class="error-text">⚠️ {{ error }}</p>
             {% endfor %}
-            <button type="submit" class="w-full mt-3" :class="isSaving === false ? 'btn-primary' : 'btn-disable'">
-                <span x-show="!isSaving">Create Account</span>
+            {% endif %}
+
+            {% if field.help_text %}
+            <span class="help-text">{{ field.help_text|safe }}</span>
+            {% endif %}
+            {% endfor %}
+            <button type="submit" x-show="!isSaving" class="w-full mt-3 btn-primary">
+                <span >Create Account</span>
+            </button>
+            <button type="submit" x-show="isSaving" class="w-full mt-3 btn-disable" disabled>
                 <span x-show="isSaving">Creating ...</span>
             </button>
         </form>
 
-        <div mt-10 text-center>
-            <p text-slate-500 font-medium>
+        <div class="mt-10 text-center">
+            <p class="text-slate-500 font-medium">
                 Already have an account?
                 <a href="{% url 'login' %}"
-                   class="text-primary hover:text-primary-dark font-black ml-1 transition-colors">Sign In</a>
+                   class="text-primary hover:text-primary-dark font-black ml-1 transition-colors">
+                    Sign In
+                </a>
             </p>
         </div>
     </div>
-    </div>
+</div>
 {% endblock %}

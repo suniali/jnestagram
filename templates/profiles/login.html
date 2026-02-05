@@ -2,67 +2,70 @@
 {% load static %}
 
 {% block layout %}
-    <div min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12>
+<div min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12>
 
-        <div class="bg-white rd-[2.5rem] shadow-xl shadow-slate-200/50 w-full max-w-md p-8 md:p-12 border border-slate-100 transition-all"
-             x-data="{ isSaving : false }">
+    <div class="bg-white rd-[2.5rem] shadow-xl shadow-slate-200/50 w-full max-w-md p-8 md:p-12 border border-slate-100 transition-all"
+         x-data="{ isSaving : false }">
 
-            <div text-center mb-8>
-                <h1 text-5xl font-black text-slate-800 font-lobster mb-3>
-                    Welcome Back
-                </h1>
-                <p text-slate-400 font-medium>Sign in to continue to your account</p>
+        <div text-center mb-8>
+            <h1 text-5xl font-black text-slate-800 font-lobster mb-3>
+                Welcome Back
+            </h1>
+            <p text-slate-400 font-medium>Sign in to continue to your account</p>
+        </div>
+
+        <form method="post" @submit="isSaving = true">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="flex items-center gap-2 error-text mb-4">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <div class="text-xs font-bold leading-none">
+                    {{ message }}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <div mb-6>
+                <label class="label-input">Username</label>
+                <input type="text" name="username" required
+                       class="input-main mt-1"
+                       placeholder="Enter your username"
+                       autocomplete="username">
             </div>
 
-            <form method="post" @submit="isSaving = true">
-                {% csrf_token %}
-                <input type="hidden" name="next" value="{{ request.GET.next }}">
-
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="flex items-center gap-2 error-text mb-4">
-                            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                            </svg>
-                            <div class="text-xs font-bold leading-none">
-                                {{ message }}
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
-                <div mb-6>
-                    <label class="label-input">Username</label>
-                    <input type="text" name="username" required
-                           class="input-main mt-1"
-                           placeholder="Enter your username"
-                           autocomplete="username">
+            <div mb-8>
+                <div class="flex justify-between items-center mb-1">
+                    <label class="label-input">Password</label>
+                    <a href="{% url 'password_reset' %}" text-xs font-bold text-primary hover:underline>Forgot?</a>
                 </div>
-
-                <div mb-8>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="label-input">Password</label>
-                        <a href="{% url 'password_reset' %}" text-xs font-bold text-primary hover:underline>Forgot?</a>
-                    </div>
-                    <input type="password" name="password" required
-                           class="input-main"
-                           placeholder="••••••••"
-                           autocomplete="current-password">
-                </div>
-
-                <button type="submit" class="w-full" :class="isSaving === false ? 'btn-primary' : 'btn-disable'">
-                    <span x-show="!isSaving">Sign In</span>
-                    <span x-show="isSaving">Singing In ...</span>
-                </button>
-            </form>
-
-            <div mt-10 text-center>
-                <p text-slate-500 font-medium>
-                    Don't have an account?
-                    <a href="{% url 'register' %}"
-                       class="text-primary hover:text-primary-dark font-black ml-1 transition-colors">Sign Up</a>
-                </p>
+                <input type="password" name="password" required
+                       class="input-main"
+                       placeholder="••••••••"
+                       autocomplete="current-password">
             </div>
+
+
+            <button type="submit" x-show="!isSaving" class="w-full btn-primary">
+                <span >Sign In</span>
+            </button>
+            <button type="submit" x-show="isSaving" class="w-full btn-disable" disabled>
+                <span x-show="isSaving">Singing In ...</span>
+            </button>
+        </form>
+
+        <div mt-10 text-center>
+            <p text-slate-500 font-medium>
+                Don't have an account?
+                <a href="{% url 'register' %}"
+                   class="text-primary hover:text-primary-dark font-black ml-1 transition-colors">Sign Up</a>
+            </p>
         </div>
     </div>
+</div>
 {% endblock %}
