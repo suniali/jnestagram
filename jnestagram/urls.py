@@ -18,15 +18,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
+from django.views.generic import RedirectView
 
 from .views import NotFoundView,InternalServerErrorView
 
 urlpatterns = [
+    path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico')),
     path('admin/', include('admin_honeypot.urls')),
     path('jnestagram-boss/', admin.site.urls),
     path('',include('posts.urls')),
     path('',include('profiles.urls')),
     path('',include('inboxes.urls')),
+    path('_/',include('landingpages.urls')),
 ]
 
 handler404 = NotFoundView.as_view()
