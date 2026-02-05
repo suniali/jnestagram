@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     'posts',
     'profiles',
     'inboxes',
-    'features'
+    'features',
+    'landingpages',
 ]
 
 MIDDLEWARE = [
@@ -74,6 +75,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     "django_htmx.middleware.HtmxMiddleware",
+
+    "landingpages.middleware.landingpage_middleware",
 ]
 
 ROOT_URLCONF = 'jnestagram.urls'

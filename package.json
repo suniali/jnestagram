@@ -5,8 +5,8 @@
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.2.15",
-    "@unocss/cli": "^66.5.12",
+    "@unocss/cli": "^66.6.0",
     "@unocss/preset-uno": "^66.5.12",
-    "unocss": "^66.5.12"
+    "unocss": "^66.6.0"
   }
 }

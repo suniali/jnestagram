@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maintenance | Jnestagram</title>
+  <link rel="shortcut icon" type="image/png" href="https://img.icons8.com/small/64/000000/fire-heart.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/uno.css' %}">
+
+  <style>
+    @keyframes orbit {
+        from { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+        to { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
+    }
+    .orbit-dot { animation: orbit 4s linear infinite; }
+  </style>
+</head>
+
+<body class="bg-gray-800 text-slate-200 h-screen flex flex-col overflow-hidden font-sans">
+
+  <header class="w-full p-6 absolute top-0 left-0 z-20">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a class="flex items-center gap-2 no-underline text-white" href="{% url 'home' %}">
+        <img class="w-8 h-8" src="{% static 'images/fireheart_white.svg' %}" alt="Logo" />
+        <span class="text-2xl font-bold font-lobster">Jnestagram</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-grow flex items-center justify-center relative z-10 px-4">
+
+    <div class="absolute w-64 h-64 bg-purple-600/20 rounded-full blur-[100px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+
+    <div class="w-full max-w-lg p-10 md:p-14 text-center bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-2xl">
+      <div class="block">
+        {% block content %}
+          <div class="relative w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+             <div class="orbit-dot absolute w-3 h-3 bg-purple-400 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.8)]"></div>
+             <div class="text-5xl">🚀</div>
+          </div>
+          <h1 class="text-3xl font-bold mb-4">Under Maintenance</h1>
+          <p class="text-slate-400">We are currently updating our systems. Please check back later.</p>
+        {% endblock %}
+      </div>
+    </div>
+  </main>
+
+  <div class="fixed bottom-0 right-0 p-4 opacity-30 text-[10px] tracking-widest uppercase">
+    &copy; 2026 Jnestagram
+  </div>
+
+</body>
+</html>
