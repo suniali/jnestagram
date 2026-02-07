@@ -56,10 +56,11 @@ class PostListView(ListView):
         except:
             feature_herobutton=False
 
-        return {
-            'current_tag':current_tag,
-            'feature_herobutton':feature_herobutton,
-        }
+
+        context['current_tag']=current_tag
+        context['feature_herobutton']=feature_herobutton
+
+        return context
 
 class PostDetailView(DetailView):
     model = Post
