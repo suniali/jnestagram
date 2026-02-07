@@ -28,6 +28,7 @@ jobs:
       SECRET_KEY : "test_key_for_github_actions"
       ENCRYPT_KEY : "3-7Q2CpT7m0tpVLB7biBgWT0YVCSsTaxdRbb7vN5HsI="
       DB_URL: ''
+      RENDER_EXTERNAL_HOSTNAME: ''
       DB_ENGINE: django.db.backends.postgresql
       DB_NAME: jnestagram_db
       DB_USER: user
