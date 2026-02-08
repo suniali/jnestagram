@@ -18,11 +18,23 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView,TemplateView
 
 from .views import NotFoundView,InternalServerErrorView
 
+# Site Maps
+from django.contrib.sitemaps.views import sitemap
+from posts.sitemaps import *
+
+sitemaps = {
+    'static':StaticSitemap,
+    'category':CategorySitemap,
+    'postpages':PostPageSitemap,
+}
+
 urlpatterns = [
+    path('sitemap.xml/',sitemap,{'sitemaps':sitemaps},name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt/', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico')),
     path('admin/', include('admin_honeypot.urls')),
     path('jnestagram-boss/', admin.site.urls),

@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "admin_honeypot",
     'django_cleanup.apps.CleanupConfig',
     "django_htmx",
+    'django.contrib.sitemaps',
 
     'posts',
     'profiles',

@@ -23,6 +23,9 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return f'/category/{self.slug}/'
+
 
 class Like(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -67,6 +70,9 @@ class Post(models.Model):
         
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return f'/post/{self.id}/'
 
 
 class Comment(models.Model):
