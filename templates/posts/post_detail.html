@@ -1,6 +1,8 @@
 {% extends 'layouts/a.html' %}
 {% load static %}
 
+{% block title %}{{post.title}} | {% endblock%}
+
 {% block content %}
     {% include 'partials/posts/post.html' %}
 
@@ -14,7 +16,7 @@
                   hx-on::after-request="this.reset()">
                 {% csrf_token %}
 
-                <img w-8 h-8 rd-full object-cover ml-2
+                <img class="w-8 h-8 rd-full object-cover ml-2"
                      src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
 
                 <input type="text" name="text"
