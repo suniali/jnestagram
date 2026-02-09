@@ -2,6 +2,10 @@
 {% load static %}
 
 {% block title %}{{post.title}} | {% endblock%}
+{% block og-caption %}{{post.text}}{% endblock%}
+{% block og-description %}shared by {{post.user}}{% endblock%}
+{% block og-image %}{{post.image}}{% endblock%}
+{% block tw-image %}{{post.image}}{% endblock%}
 
 {% block content %}
     {% include 'partials/posts/post.html' %}
