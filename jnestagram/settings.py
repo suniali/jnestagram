@@ -22,6 +22,7 @@ ENVIRONMENT=env('ENVIRONMENT',default='production')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_URL = env('BASE_URL',default='')
+APPEND_SLASH = True
 
 # Feature Toggles
 DEVELOPER=env('DEVELOPER',default='')
