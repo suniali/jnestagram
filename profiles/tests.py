@@ -201,7 +201,7 @@ class CustomLoginViewTest(TestCase):
             'username':self.verified_user.username,
             'password':self.password
         })
-        self.assertRedirects(response,reverse('home'))
+        self.assertRedirects(response,reverse('complate_profile'))
         # Check setiton
         self.assertIn('_auth_user_id',self.client.session)
 
