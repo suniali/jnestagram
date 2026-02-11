@@ -4,7 +4,8 @@
     "build": "unocss \"templates/**/*.html\" -o static/css/uno.css --minify"
   },
   "devDependencies": {
-    "@iconify-json/carbon": "^1.2.15",
+    "@iconify-json/carbon": "^1.2.18",
+    "@iconify-json/ph": "^1.2.2",
     "@unocss/cli": "^66.6.0",
     "@unocss/preset-uno": "^66.5.12",
     "unocss": "^66.6.0"
