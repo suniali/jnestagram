@@ -4,16 +4,16 @@
 {% block title %}Login | {% endblock%}
 
 {% block layout %}
-<div min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12>
+<div class="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12class=">
 
     <div class="bg-white rd-[2.5rem] shadow-xl shadow-slate-200/50 w-full max-w-md p-8 md:p-12 border border-slate-100 transition-all"
          x-data="{ isSaving : false }">
 
-        <div text-center mb-8>
-            <h1 text-5xl font-black text-slate-800 font-lobster mb-3>
+        <div class="text-center mb-8">
+            <h1 class="text-5xl font-black text-slate-800 font-lobster mb-3">
                 Welcome Back
             </h1>
-            <p text-slate-400 font-medium>Sign in to continue to your account</p>
+            <p class="text-slate-400 font-medium">Sign in to continue to your account</p>
         </div>
 
         <form method="post" @submit="isSaving = true">
@@ -33,7 +33,7 @@
             {% endfor %}
             {% endif %}
 
-            <div mb-6>
+            <div class="mb-6">
                 <label class="label-input">Username</label>
                 <input type="text" name="username" required
                        class="input-main mt-1"
@@ -41,7 +41,7 @@
                        autocomplete="username">
             </div>
 
-            <div mb-8>
+            <div class="mb-8">
                 <div class="flex justify-between items-center mb-1">
                     <label class="label-input">Password</label>
                     <a href="{% url 'password_reset' %}" text-xs font-bold text-primary hover:underline>Forgot?</a>
@@ -61,8 +61,8 @@
             </button>
         </form>
 
-        <div mt-10 text-center>
-            <p text-slate-500 font-medium>
+        <div class="mt-10 text-center">
+            <p class="text-slate-500 font-medium">
                 Don't have an account?
                 <a href="{% url 'register' %}"
                    class="text-primary hover:text-primary-dark font-black ml-1 transition-colors">Sign Up</a>
