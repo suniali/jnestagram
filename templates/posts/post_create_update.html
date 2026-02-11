@@ -55,7 +55,7 @@ Create Post |
                      class="relative cursor-pointer border-2 border-dashed border-slate-200 rd-[2rem] h-64 flex items-center justify-center bg-slate-50 hover:(bg-slate-100 border-primary/30) transition-all overflow-hidden group">
 
                     <template x-if="imagePreview">
-                        <img :src="imagePreview" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="image-preview">
+                        <img :src="imagePreview" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" alt="image-preview">
                     </template>
 
                     <template x-if="!imagePreview">
