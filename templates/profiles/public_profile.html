@@ -14,7 +14,8 @@
                         <div class="flex-shrink-0">
                             {% if profile.avatar %}
                                 <img src="{{ profile.avatar.url }}"
-                                     class="w-32 h-32 rounded-3xl object-cover border-4 border-white shadow-2xl ring-1 ring-slate-200">
+                                     class="w-32 h-32 rounded-3xl object-cover border-4 border-white shadow-2xl ring-1 ring-slate-200"
+                                    alt="profile-{{profile.id}}-avatar">
                             {% else %}
                                 <div class="w-32 h-32 rounded-3xl bg-indigo-500 flex items-center justify-center text-white text-4xl font-bold border-4 border-white shadow-2xl">
                                     {{ request.user.username|slice:":1"|upper }}
@@ -43,7 +44,8 @@
                             "{{ profile.bio }}"
                         </div>
                         <div class="flex items-center justify-center mx-auto mt-2">
-                            <img class="object-cover h-6 mr-1 opacity-60" src="https://img.icons8.com/material-outlined/50/000000/marker.png">
+                            <img class="object-cover h-6 mr-1 opacity-60" src="https://img.icons8.com/material-outlined/50/000000/marker.png"
+                                alt="location-marker-icon">
                             {{ profile.country|default:'-' }}
                         </div>
                     </div>

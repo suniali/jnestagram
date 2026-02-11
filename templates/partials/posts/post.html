@@ -9,12 +9,14 @@
     </div>
     <figure class="post-img-container">
         <a href="{% url 'post_detail' post.id %}">
-            <img class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" src="{{ post.image.url }}">
+            <img class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" src="{{ post.image.url }}" loading="lazy"
+                alt="{{ post.description }}">
         </a>
     </figure>
     <div class="p-4 pb-2">
         <div class="flex items-center gap-1 mb-4" >
-            <img class="w-6 h-6 object-cover rounded-full -mt-1" src="{% if post.user.profile.avatar %} {{ post.user.profile.avatar.url }} {% else %} {% static 'images/avatar_default.svg' %} {% endif %}">
+            <img class="w-6 h-6 object-cover rounded-full -mt-1" src="{% if post.user.profile.avatar %} {{ post.user.profile.avatar.url }} {% else %} {% static 'images/avatar_default.svg' %} {% endif %}"
+                alt="profile-{{ post.user.profile.id }}-avatar-for-post">
             <span class="font-bold item-center justify-between">{{ post.user.profile.realname|capfirst }}</span><a class="text-gray-400 text-sm hover:underline cursor-pointer" href="{% url 'public_profile' post.user.username %}"> @{{ post.user.username }}</a>
         </div>
         <p class="text-5xl mb-10 px-4 post-text-main">{{ post.text|truncatechars:20 }}</p>

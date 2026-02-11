@@ -11,7 +11,7 @@ django-admin-honeypot-updated-2021 1.2.0<br>
 django-cleanup                     9.0.0<br>
 django-environ                     0.12.0<br>
 django-htmx                        1.27.0<br>
-django-resized                     1.0.3<br>
+django-imagekit                    6.0.0<br>
 django-storages                    1.14.6<br>
 boto3                              1.42.46<br>
 gunicorn                           25.0.3<br>

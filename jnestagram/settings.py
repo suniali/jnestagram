@@ -57,9 +57,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    "admin_honeypot",
+    'admin_honeypot',
     'django_cleanup.apps.CleanupConfig',
-    "django_htmx",
+    'django_htmx',
+    'imagekit',
     'django.contrib.sitemaps',
 
     'posts',

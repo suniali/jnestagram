@@ -7,6 +7,9 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
+
 class Tag(models.Model):
     name = models.CharField(max_length=20,db_index=True)
     slug = models.SlugField(max_length=20,unique=True)
@@ -47,7 +50,12 @@ class Post(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_posts')
     title = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='posts/%Y/%m/%d')
+    image = ProcessedImageField(
+        upload_to='posts/%Y/%m/%d',
+        processors=[ResizeToFill(1080, 566)],
+        format='WEBP',
+        options={'quality': 80}
+    )
     text = models.TextField()
     tag= models.ManyToManyField(Tag, related_name='tag_posts',blank=True)
     likes=GenericRelation(Like,related_query_name='posts')
