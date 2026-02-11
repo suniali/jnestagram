@@ -14,6 +14,12 @@ class CategorySitemap(Sitemap):
     def items(self):
         return Tag.objects.all()
 
+    def location(self, item):
+        return item.get_absolute_url().strip()
+
 class PostPageSitemap(Sitemap):
     def items(self):
         return Post.objects.all()[:100]
+
+    def location(self, item):
+        return item.get_absolute_url().strip()

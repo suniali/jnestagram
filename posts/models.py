@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 class Tag(models.Model):
     name = models.CharField(max_length=20,db_index=True)
@@ -24,7 +25,7 @@ class Tag(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return f'/category/{self.slug}/'
+        return reverse('home')+'?tag='+self.slug
 
 
 class Like(models.Model):
@@ -72,7 +73,7 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return f'/post/{self.id}/'
+        return reverse('post_detail', args=[str(self.id)])
 
 
 class Comment(models.Model):
