@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "dev": "unocss \"templates/*.html\" -o static/css/uno.css --watch",
-    "build": "unocss \"templates/*.html\" -o static/css/uno.css --minify"
+    "dev": "unocss \"templates/**/*.html\" -o static/css/uno.css --watch",
+    "build": "unocss \"templates/**/*.html\" -o static/css/uno.css --minify"
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.2.15",
