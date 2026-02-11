@@ -50,6 +50,6 @@ class ProfileForm(forms.ModelForm):
                 })
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
-        if Profile.objects.filter(phone_number=phone_number).exists():
+        if phone_number and Profile.objects.filter(phone_number=phone_number).exists():
             raise forms.ValidationError('Phone number already registered!')
         return phone_number

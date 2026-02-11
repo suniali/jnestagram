@@ -79,6 +79,7 @@ class ComplateProfileView(LoginRequiredMixin,UpdateView):
     form_class = ProfileForm
     template_name = 'profiles/complate_profile.html'
     success_url = reverse_lazy('profile')
+
     def get_object(self):
         profile, created = Profile.objects.get_or_create(user=self.request.user)
         return profile
@@ -94,15 +95,34 @@ class ComplateProfileView(LoginRequiredMixin,UpdateView):
 class CustomLoginView(LoginView):
     template_name = 'profiles/login.html'
     redirect_authenticated_user = True
-    next_page = reverse_lazy('home')
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         user=form.get_user()
-        if user.profile.verified:
-            return super().form_valid(form)
-        else:
+        profile=user.profile
+
+        if not profile.verified:
             messages.warning(self.request, 'Your account is not verified. Please check your email.')
             return redirect('login')
+
+        super().form_valid(form)
+
+        is_profile_empty=all([
+            not profile.phone_number,
+            not profile.country,
+            not profile.bio,
+            not profile.avatar,
+        ])
+
+        if is_profile_empty:
+            return redirect('complate_profile')
+
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        return self.success_url
+
+
     def form_invalid(self, form):
         messages.error(self.request,'Invalid credentials')
         return super().form_invalid(form)
