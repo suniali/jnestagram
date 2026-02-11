@@ -4,19 +4,19 @@ A web app for posting images, like instagram.
 
 #### Packages
 
-cryptography                       46.0.3<br>
+cryptography                       46.0.5<br>
 dj-database-url                    3.1.0<br>
-Django                             5.2.0<br>
+Django                             6.0.2<br>
 django-admin-honeypot-updated-2021 1.2.0<br>
 django-cleanup                     9.0.0<br>
 django-environ                     0.12.0<br>
 django-htmx                        1.27.0<br>
 django-resized                     1.0.3<br>
 django-storages                    1.14.6<br>
-s3transfer                         0.16.0<br>
-gunicorn                           23.0.0<br>
-pillow                             12.0.0<br>
-psycopg2                           2.9.11<br>
+boto3                              1.42.46<br>
+gunicorn                           25.0.3<br>
+pillow                             12.1.1<br>
+psycopg2-binary                    2.9.11<br>
 requests                           2.32.5<br>
 whitenoise                         6.11.0<br>
 
