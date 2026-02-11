@@ -1,7 +1,8 @@
 from django.db import models
 from django.conf import settings
 
-from django_resized import ResizedImageField
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 
 class Country(models.Model):
@@ -23,7 +24,13 @@ class Profile(models.Model):
     user=models.OneToOneField(settings.AUTH_USER_MODEL,related_name='profile',on_delete=models.CASCADE)
     phone_number=models.BigIntegerField(blank=True,null=True,unique=True,db_index=True)
     country=models.ForeignKey(to=Country,related_name='country',on_delete=models.SET_NULL,null=True,blank=True)
-    avatar=ResizedImageField(size=[600,600],quality=85,blank=True,upload_to='avatars/')
+    avatar=ProcessedImageField(
+        blank=True,
+        upload_to='avatars/',
+        processors=[ResizeToFill(150,150)],
+        format='WEBP',
+        options={'quality': 80},
+    )
     bio=models.TextField(max_length=500,blank=True,null=True)
     verified=models.BooleanField(default=False)
 

@@ -12,7 +12,8 @@
 
         <div class="relative flex-shrink-0">
             <img src="{% if conv.other_user.profile.avatar %}{{ conv.other_user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}"
-                 class="w-14 h-14 rounded-2xl object-cover shadow-sm border border-transparent group-hover:border-white/20 transition-all">
+                 class="w-14 h-14 rounded-2xl object-cover shadow-sm border border-transparent group-hover:border-white/20 transition-all"
+                alt="sender-profile-{{conv.other_user.profile.id}}-avatar">
 
             {% if conv.is_seen == False and conv.messages.last.sender != request.user %}
                 <span class="absolute -top-1 -right-1 flex h-3 w-3">

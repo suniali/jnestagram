@@ -7,7 +7,8 @@
            class="flex items-center gap-1 px-2 py-1 rounded-md hover:bg-rose-50 text-gray-500 hover:text-rose-600 transition-all group">
 
             <img class="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity -mt-1"
-                 src="{% if obj.is_liked %}{% static 'images/fireheart_red.svg' %}{% else %}{% static 'images/fireheart.svg' %}{% endif %}">
+                 src="{% if obj.is_liked %}{% static 'images/fireheart_red.svg' %}{% else %}{% static 'images/fireheart.svg' %}{% endif %}"
+                alt="like-comment-{{obj.id}}-button">
 
             <span class="font-medium text-[11px] {% if obj.is_liked %}text-rose-600{% else %}text-gray-700{% endif %}">
             {{ obj.likes_count }}
@@ -17,14 +18,14 @@
 {% else %}
     {% if request.user == obj.user %}
         <div class="flex items-center gap-1 px-2 py-1 rounded-md">
-            <img src="{% static 'images/fireheart.svg' %}" class="w-3.5 h-3.5 opacity-60 -mt-1">
+            <img src="{% static 'images/fireheart.svg' %}" class="w-3.5 h-3.5 opacity-60 -mt-1" alt="like-comment-{{obj.id}}-button">
             <span class="text-sm text-gray-400 mt-1" >{{ obj.likes_count }}</span>
         </div>
     {% else %}
         <a class="flex items-center gap-1 px-2 py-1 rounded-md hover:bg-rose-50 text-gray-500 hover:text-rose-600 transition-all group" href="{% url 'login' %}?next={{ request.path }}">
-            <img
-                    src="{% static 'images/fireheart.svg' %}"
-                    class="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity -mt-1 -mt-1">
+            <img src="{% static 'images/fireheart.svg' %}"
+                 class="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity -mt-1 -mt-1"
+                alt="like-comment-{{obj.id}}-button">
             <span class="font-medium text-[11px] text-gray-700 mt-1" >{{ obj.likes_count }}</span>
         </a>
     {% endif %}
