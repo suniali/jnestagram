@@ -30,7 +30,7 @@
                     <label for="avatar_input" class="cursor-pointer group block">
                         <div class="w-32 h-32 rounded-full border-4 border-white shadow-xl overflow-hidden bg-slate-100 flex items-center justify-center transition-transform group-hover:scale-105">
                             <template x-if="imageUrl && imageUrl !== 'null'">
-                                <img :src="imageUrl" class="w-full h-full object-cover">
+                                <img :src="imageUrl" class="w-full h-full object-cover" alt="avatar-image"/>
                             </template>
                             <template x-if="!imageUrl || imageUrl === 'null'">
                                 <div class="flex items-center justify-center w-full h-full bg-slate-200">

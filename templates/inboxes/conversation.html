@@ -3,7 +3,8 @@
         <div class="flex items-center gap-5">
             {% if conversation.other_user.profile.avatar %}
                 <img src="{{ conversation.other_user.profile.avatar.url }}"
-                     class="w-14 h-14 rounded-2xl object-cover shadow-sm">
+                     class="w-14 h-14 rounded-2xl object-cover shadow-sm"
+                    alt="conversation-other-user-profile-avatar">
             {% else %}
                 {% load inbox_tags %}
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white font-black text-lg shadow-lg">{{ conversation.other_user.username|short_username }}</div>

@@ -17,7 +17,8 @@
                 <li class="{% if current_tag == tag.slug %}sidebar-active{% endif %}">
                     <a href="{% url 'home' %}?tag={{ tag.slug }}" class="sidebar-item">
                         <img w-8 h-8 object-cover mr-3 rd-lg
-                             src="{% if tag and tag.icon %}{{ tag.icon.url }}{% else %} {% static 'images/icon_landscape.svg' %} {% endif %}">
+                             src="{% if tag and tag.icon %}{{ tag.icon.url }}{% else %} {% static 'images/icon_landscape.svg' %} {% endif %}"
+                            alt="category-{{tag.slug}}-icon">
                         <span font-bold text-sm class="group-hover:text-primary transition-colors">{{ tag.name }}</span>
                     </a>
                 </li>
@@ -27,7 +28,7 @@
 
     <section class="sidebar-card">
         <div flex items-center mb-4>
-            <img w-6 mr-2 src="{% static 'images/fireheart_black.svg' %}" />
+            <img w-6 mr-2 src="{% static 'images/fireheart_black.svg' %}"  alt="top-posts-logo"/>
             <h2 font-bold text-slate-800>Top Posts</h2>
         </div>
 
@@ -38,7 +39,8 @@
                     <a class="sidebar-item justify-between" href="{% url 'post_detail' top_post.id %}">
                         <div flex items-center truncate>
                             <img w-10 h-10 rd-lg object-cover mr-3 shrink-0
-                                 src="{% if top_post.image %}{{ top_post.image.url }}{% else %}{% static 'images/icon_landscape.svg' %}{% endif %}">
+                                 src="{% if top_post.image %}{{ top_post.image.url }}{% else %}{% static 'images/icon_landscape.svg' %}{% endif %}"
+                                alt="top-post-{{top_post.id}}-image"/>
                             <span text-sm mr-1 truncate>@{{ top_post.user.username }}</span>
                         </div>
 

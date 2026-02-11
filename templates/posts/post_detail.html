@@ -21,7 +21,8 @@
                 {% csrf_token %}
 
                 <img class="w-8 h-8 rd-full object-cover ml-2"
-                     src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}">
+                     src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}"
+                    alt="profile-{{profile.id}}-avatar">
 
                 <input type="text" name="text"
                        class="input-main"
