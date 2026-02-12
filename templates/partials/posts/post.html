@@ -32,7 +32,7 @@
         <div class="flex items-center justify-between text-sm px-2">
             <a id="comment-count-{{ post.pk }}" class="font-bold text-gray-500 hover:underline" href="{% url 'post_detail' post.id %}">
                 {% trans "Comments" %} {{ post.comments_count }}
-                <span class="font-light">| {{ post.created_at|timesince }}</span>
+                <span class="font-light">| {{ post.created_at|timesince }} {% trans "ago" %}</span>
             </a>
             <div class="flex items-center gap-4 [&>a:hover]:underline">
                 <div class="text-center">

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 19:10+0330\n"
+"POT-Creation-Date: 2026-02-12 20:32+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -484,6 +484,12 @@ msgstr ""
 msgid "Comments"
 msgstr ""
 
+#: templates/partials/posts/comment.html:15
+#: templates/partials/posts/post.html:35
+#: templates/partials/posts/replay.html:16 templates/profiles/profile.html:196
+msgid "ago"
+msgstr ""
+
 #: templates/partials/posts/comment.html:32
 msgid "Replies"
 msgstr ""
@@ -557,10 +563,6 @@ msgstr ""
 msgid "No Tags"
 msgstr ""
 
-#: templates/partials/posts/replay.html:16 templates/profiles/profile.html:196
-msgid "ago"
-msgstr ""
-
 #: templates/partials/sidebar.html:33 templates/profiles/public_profile.html:60
 msgid "Top Posts"
 msgstr ""
@@ -628,7 +630,7 @@ msgid "Content"
 msgstr ""
 
 #: templates/posts/post_create_update.html:48
-msgid "What"
+msgid "What\\"
 msgstr ""
 
 #: templates/posts/post_create_update.html:54
@@ -937,8 +939,12 @@ msgstr ""
 msgid "Thanks for using our site!"
 msgstr ""
 
-#: templates/profiles/profile.html:50
-msgid "{{ user.profile.bio|slice:'20' }}"
+#: templates/profiles/profile.html:52
+msgid "Close"
+msgstr ""
+
+#: templates/profiles/profile.html:52
+msgid "Edit Profile"
 msgstr ""
 
 #: templates/profiles/profile.html:67
@@ -973,12 +979,12 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-#: templates/profiles/profile.html:192
-msgid "{{ post.title }}"
-msgstr ""
-
 #: templates/profiles/profile.html:243
 msgid "You haven't posted anything yet."
+msgstr ""
+
+#: templates/profiles/profile.html:255
+msgid "on"
 msgstr ""
 
 #: templates/profiles/profile.html:264

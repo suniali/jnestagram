@@ -17,7 +17,7 @@
             {% for tag in tags %}
                 <li class="{% if current_tag == tag.slug %}sidebar-active{% endif %}">
                     <a href="{% url 'home' %}?tag={{ tag.slug }}" class="sidebar-item">
-                        <img class="w-8 h-8 object-cover mr-3 rd-lg"
+                        <img class="w-8 h-8 object-cover mr-3 ml-3 rd-lg"
                              src="{% if tag and tag.icon %}{{ tag.icon.url }}{% else %} {% static 'images/icon_landscape.svg' %} {% endif %}"
                             alt="category-{{tag.slug}}-icon">
                         <span class="font-bold text-sm group-hover:text-primary transition-colors">{{ tag.name }}</span>

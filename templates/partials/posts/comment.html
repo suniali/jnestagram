@@ -12,7 +12,7 @@
             <div class="flex flex-col">
                 <span class="font-bold text-gray-800 hover:text-violet-600 transition-colors">{{ comment.user.first_name }}</span>
                 <span class="text-xs text-gray-400 mb-1">@{{ comment.user.username }}</span>
-                <span class="text-xs text-gray-400">{{ comment.created_at|timesince }} ago</span>
+                <span class="text-xs text-gray-400">{{ comment.created_at|timesince }} {% trans "ago" %}</span>
             </div>
         </a>
     </div>

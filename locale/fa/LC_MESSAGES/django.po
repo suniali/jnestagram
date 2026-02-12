@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 19:10+0330\n"
-"PO-Revision-Date: 2026-02-12 19:45+0330\n"
+"POT-Creation-Date: 2026-02-12 20:40+0330\n"
+"PO-Revision-Date: 2026-02-12 20:30+0330\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: Persian\n"
 "Language: fa\n"
@@ -14,22 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-
-# Errors Or Messages
-msgid "success"
-msgstr "عملیات موفقیت آمیز"
-
-msgid "error"
-msgstr "ارور"
-
-msgid "warning"
-msgstr "هشدار"
-
-msgid "info"
-msgstr "اطلاعات"
-
-msgid "message"
-msgstr "پیغام"
 
 #: features/models.py:5 landingpages/models.py:5 posts/models.py:15
 msgid "Name"
@@ -476,6 +460,10 @@ msgstr "پیام خود را بنویسید..."
 msgid "Send Message"
 msgstr "ارسال پیام"
 
+#: templates/partials/inboxes/search_dialog.html:8
+msgid "New Message"
+msgstr "ارسال پیام"
+
 #: templates/partials/inboxes/search_dialog.html:19
 msgid "Search users..."
 msgstr "جستجوی کاربران..."
@@ -489,6 +477,7 @@ msgid "Try searching with a different name"
 msgstr "با نام دیگری جستجو کنید"
 
 #: templates/partials/message.html:45
+#, python-format
 msgid " %(message)s "
 msgstr " %(message)s "
 
@@ -496,6 +485,12 @@ msgstr " %(message)s "
 #: templates/partials/posts/post.html:34
 msgid "Comments"
 msgstr "نظرات"
+
+#: templates/partials/posts/comment.html:15
+#: templates/partials/posts/post.html:35
+#: templates/partials/posts/replay.html:16 templates/profiles/profile.html:196
+msgid "ago"
+msgstr "پیش"
 
 #: templates/partials/posts/comment.html:32
 msgid "Replies"
@@ -570,10 +565,6 @@ msgstr "برای شروع پست گذاشتن"
 msgid "No Tags"
 msgstr "بدون برچسب"
 
-#: templates/partials/posts/replay.html:16 templates/profiles/profile.html:196
-msgid "ago"
-msgstr "پیش"
-
 #: templates/partials/sidebar.html:33 templates/profiles/public_profile.html:60
 msgid "Top Posts"
 msgstr "برترین پست‌ها"
@@ -641,8 +632,8 @@ msgid "Content"
 msgstr "محتوا"
 
 #: templates/posts/post_create_update.html:48
-msgid "What"
-msgstr "چه چیزی؟"
+msgid "What is on your mind?"
+msgstr "چه چیزی توی ذهنته؟"
 
 #: templates/posts/post_create_update.html:54
 msgid "Feature Image"
@@ -954,9 +945,13 @@ msgstr "امنیت حساب • درخواست تایید شده"
 msgid "Thanks for using our site!"
 msgstr "ممنون که از سایت ما استفاده می‌کنید!"
 
-#: templates/profiles/profile.html:50
-msgid "{{ user.profile.bio|slice:'20' }}"
-msgstr "{{ user.profile.bio|slice:'20' }}"
+#: templates/profiles/profile.html:52
+msgid "Close"
+msgstr "بستن"
+
+#: templates/profiles/profile.html:52
+msgid "Edit Profile"
+msgstr "اصلاح پروفایل"
 
 #: templates/profiles/profile.html:67
 msgid "Joined On"
@@ -990,13 +985,13 @@ msgstr "پست‌های من"
 msgid "Pending"
 msgstr "در انتظار تایید"
 
-#: templates/profiles/profile.html:192
-msgid "{{ post.title }}"
-msgstr "{{ post.title }}"
-
 #: templates/profiles/profile.html:243
 msgid "You haven't posted anything yet."
 msgstr "هنوز هیچ پستی ارسال نکرده‌اید."
+
+#: templates/profiles/profile.html:255
+msgid "on"
+msgstr "روی"
 
 #: templates/profiles/profile.html:264
 msgid "Approve"
