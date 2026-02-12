@@ -24,64 +24,62 @@
             </a>
         </div>
     </div>
-    <div class="flex items-center gap-4">
-        <nav x-show="mobilenavOpen" x-cloak
-             md="!block relative mt-0 h-auto w-auto z-1"
-             class="bg-slate-900 h-screen w-screen absolute left-0 top-0 -mt-20 z--1"
-             x-transition:enter="duration-300 ease-out"
-             x-transition:enter-start="opacity-0 -translate-y-10"
-             x-transition:enter-end="opacity-100 translate-y-0">
+    <nav x-show="mobilenavOpen" x-cloak
+         md="!block relative mt-0 h-auto w-auto z-1"
+         class="bg-slate-900 h-screen w-screen absolute left-0 top-0 -mt-20 z--1"
+         x-transition:enter="duration-300 ease-out"
+         x-transition:enter-start="opacity-0 -translate-y-10"
+         x-transition:enter-end="opacity-100 translate-y-0">
 
-            <ul class="flex items-center flex-col md:flex-row gap-4 justify-center h-full">
-                {% if not user.is_authenticated %}
-                <li>
-                    <a href="{% url 'login' %}" class="flex items-center gap-2 hover:underline">
-                        <img class="w-6 h-6" src="https://img.icons8.com/small/64/ffffff/enter-2.png" alt="login-icon" />
-                        <span class="text-sm font-bold mt-1">{% trans "Login"%}</span>
-                    </a>
-                </li>
-                {% else %}
-                <li x-data="{ dropdownOpen: false }" class="relative">
-                    <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false"
-                       class="flex items-center gap-2 cursor-pointer select-none">
+        <ul class="flex items-center flex-col md:flex-row gap-4 justify-center h-full">
+            <li>{% include 'partials/switch_language.html' %}</li>
+            {% if not user.is_authenticated %}
+            <li>
+                <a href="{% url 'login' %}" class="flex items-center gap-2 hover:underline">
+                    <img class="w-6 h-6" src="https://img.icons8.com/small/64/ffffff/enter-2.png" alt="login-icon" />
+                    <span class="text-sm font-bold mt-1">{% trans "Login"%}</span>
+                </a>
+            </li>
+            {% else %}
+            <li x-data="{ dropdownOpen: false }" class="relative">
+                <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false"
+                   class="flex items-center gap-2 cursor-pointer select-none">
 
-                        <div class="relative w-8 h-8">
-                            {% if pending_comments_count|add:unread_messages_count > 0 %}
-                            <span class="badge-ping">
+                    <div class="relative w-8 h-8">
+                        {% if pending_comments_count|add:unread_messages_count > 0 %}
+                        <span class="badge-ping">
                                     <span class="animate-ping absolute h-full w-full rd-full bg-primary opacity-75"></span>
                                     <span class="relative h-4 w-4 rd-full bg-primary flex items-center justify-center">
                                         <span text="[10px]" class="font-bold text-white">{{ pending_comments_count|add:unread_messages_count }}</span>
                                     </span>
                                 </span>
-                            {% endif %}
-                            <img class="h-full w-full rd-full object-cover shadow-sm"
-                                 src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}https://img.icons8.com/small/96/ffffff/user-male-circle.png{% endif %}"
-                                 alt="{{ request.user.username }}-avatar"/>
-                        </div>
-
-                        <span class="text-sm font-bold font-lobster">{{ request.user.username }}</span>
-                        <img :class="dropdownOpen && 'rotate-180'" class="duration-300 w-4"
-                             src="https://img.icons8.com/small/32/777777/expand-arrow.png"
-                             alt="expand-arrow-icon" />
-                    </a>
-
-                    <div x-show="dropdownOpen" x-cloak class="dropdown-card"
-                         x-transition:enter="duration-200 ease-out"
-                         x-transition:enter-start="opacity-0 scale-95"
-                         x-transition:enter-end="opacity-100 scale-100">
-                        <ul class="flex flex-col gap-1">
-                            <li>{% include 'partials/buttons/create_post.html' %}</li>
-                            <li>{% include 'partials/buttons/my_profile.html' %}</li>
-                            <li>{% include 'partials/buttons/inbox.html' %}</li>
-                            <hr class="border-white/5 my-1">
-                            <li>{% include 'partials/buttons/logout.html' %}</li>
-                        </ul>
+                        {% endif %}
+                        <img class="h-full w-full rd-full object-cover shadow-sm"
+                             src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}https://img.icons8.com/small/96/ffffff/user-male-circle.png{% endif %}"
+                             alt="{{ request.user.username }}-avatar"/>
                     </div>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
 
-        {% include 'partials/switch_language.html' %}
-    </div>
+                    <span class="text-sm font-bold font-lobster">{{ request.user.username }}</span>
+                    <img :class="dropdownOpen && 'rotate-180'" class="duration-300 w-4"
+                         src="https://img.icons8.com/small/32/777777/expand-arrow.png"
+                         alt="expand-arrow-icon" />
+                </a>
+
+                <div x-show="dropdownOpen" x-cloak class="dropdown-card"
+                     x-transition:enter="duration-200 ease-out"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100">
+                    <ul class="flex flex-col gap-1">
+                        <li>{% include 'partials/buttons/create_post.html' %}</li>
+                        <li>{% include 'partials/buttons/my_profile.html' %}</li>
+                        <li>{% include 'partials/buttons/inbox.html' %}</li>
+                        <hr class="border-white/5 my-1">
+                        <li>{% include 'partials/buttons/logout.html' %}</li>
+                    </ul>
+                </div>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
 </header>
