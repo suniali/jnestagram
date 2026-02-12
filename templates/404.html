@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}404 - Page Not Found | {% endblock %}
+{% block title %}{% trans "404 - Page Not Found" %} | {% endblock %}
 
 {% block layout %}
-    <div class="min-h-[70vh] flex items-center justify-center p-6">
+<div class="min-h-[70vh] flex items-center justify-center p-6">
         <div class="max-w-2xl w-full text-center">
             <div class="relative">
                 <h1 class="text-[120px] md:text-[180px] font-black text-slate-100 select-none">404</h1>
@@ -16,18 +17,18 @@
                             </svg>
                         </div>
 
-                        <h2 class="text-3xl font-black text-slate-800 mb-4">Lost in Space?</h2>
+                        <h2 class="text-3xl font-black text-slate-800 mb-4">{% trans "Lost in Space?" %}</h2>
                         <p class="text-slate-500 mb-8 leading-relaxed">
-                            The page you are looking for doesn't exist or has been moved. <br>
-                            Don't worry, you can find your way back below.
+                            {% trans "The page you are looking for doesn't exist or has been moved." %} <br>
+                            {% trans "Don't worry, you can find your way back below." %}
                         </p>
 
                         <div class="flex flex-col md:flex-row gap-4 justify-center">
                             <a href="/" class="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold transition-all shadow-lg shadow-indigo-200">
-                                Back to Home
+                                {% trans "Back to Home" %}
                             </a>
                             <button onclick="history.back()" class="px-8 py-4 bg-slate-800 text-white hover:bg-slate-900 rounded-2xl font-bold transition-all">
-                                Go Back
+                                {% trans "Go Back" %}
                             </button>
                         </div>
                     </div>

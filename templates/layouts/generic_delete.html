@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block title %}Delete {{ object_type|slice:'30' }} | {% endblock%}
 
@@ -11,18 +12,18 @@
             </svg>
         </div>
 
-        <h2 class="font1 titleBlip text-2xl font-black text-slate-800 mb-2">Are you sure?</h2>
+        <h2 class="font1 titleBlip text-2xl font-black text-slate-800 mb-2">{% trans "Are you sure?" %}</h2>
         <p class="text-slate-500 mb-8 px-4">
-            Do you really want to delete this **<span class="text-sm text-rose-500"> {{ object_type|slice:'30' }} </span>** ? This action cannot be undone.
+            {% trans "Do you really want to delete this" %} **<span class="text-sm text-rose-500"> {{ object_type|slice:'30' }} </span>** {% trans "? This action cannot be undone." %}
         </p>
 
         <form method="post" class="flex gap-3">
             {% csrf_token %}
             <a href="{{ cancel_url }}" class="flex-1 px-4 py-3 rounded-2xl bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 transition-all">
-                Cancel
+                {% trans "Cancel" %}
             </a>
             <button type="submit" class="flex-1 px-4 py-3 rounded-2xl bg-rose-500 text-white font-bold hover:bg-rose-600 shadow-lg shadow-rose-200 transition-all">
-                Yes, Delete
+                {% trans "Yes, Delete" %}
             </button>
         </form>
     </div>

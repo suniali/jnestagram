@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <article class="post-card">
     <div class="flex items-center justify-between px-4 h-14">
@@ -25,12 +26,12 @@
                 <a href=""
                    class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">{{ tag.name }}</a>
             {% empty %}
-                <span class="text-gray-400">No Tags</span>
+                <span class="text-gray-400">{% trans "No Tags" %}</span>
             {% endfor %}
         </div>
         <div class="flex items-center justify-between text-sm px-2">
             <a id="comment-count-{{ post.pk }}" class="font-bold text-gray-500 hover:underline" href="{% url 'post_detail' post.id %}">
-                Comments {{ post.comments_count }}
+                {% trans "Comments" %} {{ post.comments_count }}
                 <span class="font-light">| {{ post.created_at|timesince }}</span>
             </a>
             <div class="flex items-center gap-4 [&>a:hover]:underline">
@@ -38,8 +39,8 @@
                     {% include 'partials/likes/post_like.html' with obj=post  %}
                 </div>
                 {% if user.is_authenticated and user == post.user %}
-                    <a href="{% url 'update_post' post.id %}?next={{ request.path }}">Edit</a>
-                    <a class="cursor-pointer select-none hover:underline" href="{% url 'delete_post' post.id %}?next={{ request.path }}">Delete</a>
+                    <a href="{% url 'update_post' post.id %}?next={{ request.path }}">{% trans "Edit" %}</a>
+                    <a class="cursor-pointer select-none hover:underline" href="{% url 'delete_post' post.id %}?next={{ request.path }}">{% trans "Delete" %}</a>
                 {% endif %}
             </div>
         </div>

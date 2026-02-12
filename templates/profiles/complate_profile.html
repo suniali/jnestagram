@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Complate Profile | {% endblock%}
+{% block title %}{% trans "Complate Profile" %} | {% endblock%}
 
 {% block layout %}
 <div class="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans">
@@ -18,8 +19,8 @@
                 }">
 
         <div class="p-8 text-center bg-slate-50/50 border-b border-slate-100">
-            <h1 class="text-2xl font-black text-slate-800">Complete Profile</h1>
-            <p class="text-sm text-slate-500 mt-1">This step is optional, you can skip it for now.</p>
+            <h1 class="text-2xl font-black text-slate-800">{% trans "Complete Profile" %}</h1>
+            <p class="text-sm text-slate-500 mt-1">{% trans "This step is optional, you can skip it for now." %}</p>
         </div>
 
         <form method="post" enctype="multipart/form-data" class="p-8 space-y-6 text-left" dir="ltr" @submit="isSaving = true">
@@ -48,26 +49,26 @@
                     </label>
                     <input type="file" name="avatar" id="avatar_input" class="hidden" accept="image/*" @change="fileChosen">
                 </div>
-                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-4">Profile Picture</span>
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-4">{% trans "Profile Picture" %}</span>
             </div>
 
             <div class="space-y-1">
-                <label class="block text-sm font-bold text-slate-700 px-2">About Me</label>
-                <textarea name="bio" rows="4" class="input-main h-32 resize-none" placeholder="Tell us about yourself...">{{ form.bio.value|default_if_none:'' }}</textarea>
+                <label class="block text-sm font-bold text-slate-700 px-2">{% trans "About Me" %}</label>
+                <textarea name="bio" rows="4" class="input-main h-32 resize-none" placeholder="{% translate 'Tell us about yourself...' %}">{{ form.bio.value|default_if_none:'' }}</textarea>
                 {% if form.bio.errors %}<p class="text-rose-500 text-xs px-2">{{ form.bio.errors.0 }}</p>{% endif %}
             </div>
 
             <div class="space-y-1">
-                <label class="block text-sm font-bold text-slate-700 px-2">Phone Number</label>
+                <label class="block text-sm font-bold text-slate-700 px-2">{% trans "Phone Number" %}</label>
                 <input type="text" name="phone_number" class="input-main" placeholder="+989*********" value="{{ form.phone_number.value|default_if_none:'' }}">
                 {% if form.phone_number.errors %}<p class="text-rose-500 text-xs px-2">{{ form.phone_number.errors.0 }}</p>{% endif %}
             </div>
 
             <div class="space-y-1">
-                <label class="block text-sm font-bold text-slate-700 px-2">Country</label>
+                <label class="block text-sm font-bold text-slate-700 px-2">{% trans "Country" %}</label>
                 <div class="relative">
                     <select name="country" class="input-main appearance-none cursor-pointer">
-                        <option value="">Select country</option>
+                        <option value="">{% trans "Select country" %}</option>
                         {% for country in countries %}
                         <option value="{{ country.id }}" {% if form.country.value == country.id %}selected{% endif %}>{{ country.name }}</option>
                         {% endfor %}
@@ -81,13 +82,13 @@
 
             <div class="grid grid-cols-2 gap-4 pt-4">
                 <button type="submit" x-show="!isSaving" class="btn-primary">
-                    <span >Save Profile</span>
+                    <span >{% trans "Save Profile" %}</span>
                 </button>
                 <button type="submit" x-show="isSaving" class="btn-disable" disabled>
-                    <span x-show="isSaving">Saving ...</span>
+                    <span x-show="isSaving">{% trans "Saving ..." %}</span>
                 </button>
                 <a href="{% url 'home' %}" class="btn-secondary">
-                    Skip
+                    {% trans "Skip" %}
                 </a>
             </div>
         </form>

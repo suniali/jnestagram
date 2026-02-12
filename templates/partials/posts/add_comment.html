@@ -1,3 +1,4 @@
+{% load i18n %}
 <div x-data="{ show: false }"
      x-init="setTimeout(() => show = true, 50)"
      x-show="show"
@@ -12,6 +13,6 @@
 </span>
 
 <a hx-swap-oob="true" id="comment-count-{{ post.pk }}" class="font-bold text-gray-500 hover:underline" href="{% if not user.is_authenticated %} {% url 'login' %} {% else %} {% url 'add_comment' post.id %} {% endif %}">
-    Comments {{ post.comments_count }}
+    {% trans "Comments" %} {{ post.comments_count }}
     <span class="font-light">| {{ post.created_at|timesince }}</span>
 </a>

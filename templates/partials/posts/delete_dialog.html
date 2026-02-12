@@ -1,3 +1,4 @@
+{% load i18n %}
 <template x-if="showConfirm">
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
         <div class="flex flex-col items-center justify-center bg-white p-6 rounded-3xl shadow-xl max-w-md w-full mx-4">
@@ -6,14 +7,14 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
             </div>
-            <h2 class="font1 titleBlip text-2xl font-black text-slate-800 mb-4">Are you sure?</h2>
+            <h2 class="font1 titleBlip text-2xl font-black text-slate-800 mb-4">{% trans "Are you sure?" %}</h2>
             <p class="text-slate-500 mb-8 px-4">
-                Do you really want to delete this **<span class="text-sm text-rose-500"> {{ object_text }} </span>** ? This action cannot be undone.
+                {% trans "Do you really want to delete this" %} **<span class="text-sm text-rose-500"> {{ object_text }} </span>** ? {% trans "This action cannot be undone." %}
             </p>
             <form class="flex w-full justify-end gap-3" method="POST" action="{% url 'delete_post' object_id %}?next={{ request.path }}">
                 {% csrf_token %}
-                <button @click="showConfirm = false" class="px-4 py-3 rounded-2xl bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 transition-all">Cancel</button>
-                <button type="submit" class=" px-4 py-3 rounded-2xl bg-rose-500 text-white font-bold hover:bg-rose-600 shadow-lg shadow-rose-200 transition-all">Yes, Delete it</button>
+                <button @click="showConfirm = false" class="px-4 py-3 rounded-2xl bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 transition-all">{% trans "Cancel" %}</button>
+                <button type="submit" class=" px-4 py-3 rounded-2xl bg-rose-500 text-white font-bold hover:bg-rose-600 shadow-lg shadow-rose-200 transition-all">{% trans "Yes, Delete it" %}</button>
             </form>
         </div>
     </div>

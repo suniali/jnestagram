@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Activation Invalid | {% endblock %}
+{% block title %}{% trans "Activation Invalid" %} | {% endblock %}
 
 {% block layout %}
-    <div class="min-h-screen flex items-center justify-center bg-slate-50 px-4" dir="ltr">
+<div class="min-h-screen flex items-center justify-center bg-slate-50 px-4" dir="ltr">
         <div class="app-card border-amber-100 shadow-amber-100/50">
 
             <div class="relative w-24 h-24 mx-auto mb-10">
@@ -19,27 +20,27 @@
                 </div>
             </div>
 
-            <h1 class="title-xl text-amber-700">Invalid Link</h1>
+            <h1 class="title-xl text-amber-700">{% trans "Invalid Link" %}</h1>
 
             <p class="desc-text px-2 mt-1 mb-4">
-                The activation link is either <span class="text-amber-600 font-bold">expired</span>,
-                already used, or broken. Each link is valid for a limited time for your security.
+                {% trans "The activation link is either" %} <span class="text-amber-600 font-bold">{% trans "expired" %}</span>,
+                {% trans "already used, or broken. Each link is valid for a limited time for your security." %}
             </p>
 
             <div class="bg-slate-50 rd-2xl p-6 border border-slate-100 mb-10 text-left">
-                <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">What happened?</h4>
+                <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">{% trans "What happened?" %}</h4>
                 <ul class="space-y-3 text-xs text-slate-500 font-medium list-none p-0 m-0">
                     <li class="flex items-center gap-2">
-                        <div class="i-ph-check-circle text-emerald-500"></div> You might have already verified.
+                        <div class="i-ph-check-circle text-emerald-500"></div> {% trans "You might have already verified." %}
                     </li>
                     <li class="flex items-center gap-2">
-                        <div class="i-ph-x-circle text-rose-400"></div> The link security token has expired.
+                        <div class="i-ph-x-circle text-rose-400"></div> {% trans "The link security token has expired." %}
                     </li>
                 </ul>
             </div>
 
-            <a href="{% url 'login' %}" class="btn-primary ">
-                Try to Login <div class="i-ph-arrow-right-bold text-xs"></div>
+            <a href="{% url 'login' %}" class="btn-primary block">
+                {% trans "Try to Login" %} <div class="i-ph-arrow-right-bold text-xs"></div>
             </a>
 
         </div>

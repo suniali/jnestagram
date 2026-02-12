@@ -1,9 +1,10 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>500 - Server Error | System Meltdown</title>
+    <title>{% trans "500 - Server Error | Jnestagram" %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
@@ -32,21 +33,21 @@
                         </div>
                     </div>
 
-                    <h2 class="text-3xl font-extrabold text-slate-800 mb-4 tracking-tight">Houston, We Have a Problem!</h2>
+                    <h2 class="text-3xl font-extrabold text-slate-800 mb-4 tracking-tight">{% trans "Houston, We Have a Problem!" %}</h2>
                     <p class="text-slate-500 mb-10 leading-relaxed max-w-sm mx-auto font-medium">
-                        Our servers are having a bit of a meltdown.
-                        It's not you, it's definitely us. Our team has been notified.
+                        {% trans "Our servers are having a bit of a meltdown." %}
+                        {% trans "It's not you, it's definitely us. Our team has been notified." %}
                     </p>
 
                     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <a href="/" class="w-full sm:w-auto px-10 py-4 bg-slate-900 text-white rounded-2xl font-bold transition-all hover:bg-black hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-xl shadow-slate-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                            Take Me Home
+                            {% trans "Take Me Home" %}
                         </a>
 
                         <button onclick="location.reload()" class="w-full sm:w-auto px-10 py-4 bg-white border-2 border-slate-100 text-slate-600 hover:bg-slate-50 hover:border-slate-200 rounded-2xl font-bold transition-all active:scale-95 flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                            Try Refreshing
+                            {% trans "Try Refreshing" %}
                         </button>
                     </div>
                 </div>
@@ -58,7 +59,7 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
                 </span>
-            <span class="text-[10px] font-black text-rose-700 uppercase tracking-[0.2em] italic">Code: 500 | Internal Server Error</span>
+            <span class="text-[10px] font-black text-rose-700 uppercase tracking-[0.2em] italic">{% trans "Code: 500 | Internal Server Error" %}</span>
         </div>
     </div>
 </div>

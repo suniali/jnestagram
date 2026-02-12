@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html>
 <body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
@@ -16,19 +17,19 @@
                 <tr>
                     <td style="padding: 0 40px 40px 40px; text-align: center;">
                         <p style="color: #64748b; font-size: 15px; line-height: 1.6;">
-                            Hi <strong>{{ user.username }}</strong>,<br>
-                            You're almost there! Just click the button below to verify your email and unlock all features.
+                            {% trans "Hi" %} <strong>{{ user.username }}</strong>,<br>
+                            {% trans "You're almost there! Just click the button below to verify your email and unlock all features." %}
                         </p>
 
                         <div style="margin-top: 30px;">
                             <a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}"
                                style="background-color: #10b981; color: #ffffff; padding: 16px 32px; border-radius: 14px; text-decoration: none; font-weight: 800; font-size: 13px; text-transform: uppercase; display: inline-block; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4);">
-                                Verify My Account
+                                {% trans "Verify My Account" %}
                             </a>
                         </div>
 
                         <p style="margin-top: 30px; color: #94a3b8; font-size: 11px;">
-                            If the button doesn't work, copy this link:<br>
+                            {% trans "If the button doesn't work, copy this link:" %}<br>
                             <span style="color: #6366f1;">http://{{ domain }}{% url 'activate' uidb64=uid token=token %}</span>
                         </p>
                     </td>
@@ -36,7 +37,7 @@
                 <tr>
                     <td style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #f1f5f9;">
                             <span style="color: #cbd5e1; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px;">
-                                Securing your journey
+                                {% trans "Securing your journey" %}
                             </span>
                     </td>
                 </tr>

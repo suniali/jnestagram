@@ -1,14 +1,15 @@
 {% extends 'layouts/a.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}{{post.title}} | {% endblock%}
 {% block og-caption %}{{post.text}}{% endblock%}
-{% block og-description %}shared by {{post.user}}{% endblock%}
+{% block og-description %}{% trans "shared by" %} {{post.user}}{% endblock%}
 {% block og-image %}{{post.image}}{% endblock%}
 {% block tw-image %}{{post.image}}{% endblock%}
 
 {% block content %}
-    {% include 'partials/posts/post.html' %}
+{% include 'partials/posts/post.html' %}
 
     {% if request.user.is_authenticated %}
         <div class="sidebar-card !p-2 mb-8">
@@ -26,11 +27,11 @@
 
                 <input type="text" name="text"
                        class="input-main"
-                       placeholder="Write a comment..." maxlength="150">
+                       placeholder="{% translate 'Write a comment...' %}" maxlength="150">
 
                 <button type="submit"
                         class="btn-normal">
-                    Post
+                    {% trans "Post" %}
                 </button>
             </form>
         </div>
@@ -44,10 +45,10 @@
              _="on htmx:afterOnLoad take .tab-selected for event.target">
 
             <a class="tab-btn tab-selected" hx-get="{% url 'post_detail' post.id %}">
-                Newest
+                {% trans "Newest" %}
             </a>
             <a class="tab-btn" hx-get="{% url 'post_detail' post.id %}?top">
-                Top Rated
+                {% trans "Top Rated" %}
             </a>
         </div>
 

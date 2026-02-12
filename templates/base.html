@@ -40,7 +40,7 @@
     <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/uno.css' %}">
 </head>
-<body class="bg-slate-50  min-h-screen" >
+<body class="bg-slate-50  min-h-screen" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
 <div style="display: none;">{% csrf_token %}</div>
 {% include 'partials/message.html' %}
 

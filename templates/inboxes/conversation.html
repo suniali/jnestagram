@@ -1,3 +1,4 @@
+{% load i18n %}
 <main id='chats-container' class="flex-1 flex flex-col bg-white relative">
     <header class="h-24 px-10 flex justify-between items-center border-b border-slate-50 shrink-0">
         <div class="flex items-center gap-5">
@@ -13,7 +14,7 @@
                 <h2 class="text-lg font-black text-slate-900 leading-none">{{ conversation.other_user.username|capfirst }}</h2>
                 <div class="flex items-center gap-1.5 mt-1.5">
                     <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest">In Chat</span>
+                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest">{% trans "In Chat" %}</span>
                 </div>
             </div>
         </div>
@@ -50,9 +51,7 @@
     <footer class="p-8 bg-white/80 backdrop-blur-xl border-t border-slate-50 shrink-0">
         <form hx-target="#chats-container"
              hx-swap="outerHTML scroll:#chats-container:bottom transition:true"
-             _="on htmx:afterRequest
-                      this.reset()
-              "
+             _="on htmx:afterRequest this.reset()"
              class="flex items-center gap-4 bg-slate-100 p-1.5 rounded-[2.2rem] border-2 border-transparent focus-within:border-violet-100 focus-within:bg-white transition-all duration-500 shadow-inner">
             {% csrf_token %}
             <button type="button" class="w-12 h-12 flex items-center justify-center !rounded-full !bg-slate-50 !text-slate-400 transition-all">
@@ -60,7 +59,7 @@
                     <path d="M12 4v16m8-8H4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
-            <textarea placeholder="Start typing your message..." rows="1" name="message"
+            <textarea placeholder="{% translate 'Start typing your message...' %}" rows="1" name="message"
                     class="flex-1 max-h-32 min-h-[40px] p-3 bg-transparent border-none focus:ring-0 text-sm font-bold text-slate-700 placeholder:text-slate-300 scrollbar-hide resize-none"></textarea>
 
             <button class="w-14 h-14 flex items-center justify-center rounded-[1.8rem] bg-violet-600 text-white hover:bg-violet-700 shadow-lg shadow-violet-600/30 transition-all active:scale-90 hover:rotate-3 transform"

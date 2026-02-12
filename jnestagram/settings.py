@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from environ import Env
+from django.utils.translation import gettext_lazy as _
 
 import dj_database_url
 
@@ -47,6 +48,17 @@ if ENVIRONMENT == 'development':
 else:
     DEBUG = False
 
+# Translation
+LANGUAGE_CODE = 'en'
+LANGUAGES = [
+    ('en', _('English')),
+    ('fa', _('Persian')),
+]
+USE_I18N = True
+LOCALE_PATHS = [
+    BASE_DIR / 'locale/',
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -74,6 +86,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -98,6 +111,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'django.template.context_processors.i18n',
 
                 'posts.context_processors.pending_comments_count',
                 'inboxes.context_processors.inbox_messages_count'

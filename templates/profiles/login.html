@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Login | {% endblock%}
+{% block title %}{% trans "Login" %} | {% endblock%}
 
 {% block layout %}
 <div class="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12class=">
@@ -11,9 +12,9 @@
 
         <div class="text-center mb-8">
             <h1 class="text-5xl font-black text-slate-800 font-lobster mb-3">
-                Welcome Back
+                {% trans "Welcome Back" %}
             </h1>
-            <p class="text-slate-400 font-medium">Sign in to continue to your account</p>
+            <p class="text-slate-400 font-medium">{% trans "Sign in to continue to your account" %}</p>
         </div>
 
         <form method="post" @submit="isSaving = true">
@@ -34,17 +35,17 @@
             {% endif %}
 
             <div class="mb-6">
-                <label class="label-input">Username</label>
+                <label class="label-input">{% trans "Username" %}</label>
                 <input type="text" name="username" required
                        class="input-main mt-1"
-                       placeholder="Enter your username"
+                       placeholder="{% translate 'Enter your username'%}"
                        autocomplete="username">
             </div>
 
             <div class="mb-8">
                 <div class="flex justify-between items-center mb-1">
-                    <label class="label-input">Password</label>
-                    <a href="{% url 'password_reset' %}" text-xs font-bold text-primary hover:underline>Forgot?</a>
+                    <label class="label-input">{% trans "Password" %}</label>
+                    <a href="{% url 'password_reset' %}" text-xs font-bold text-primary hover:underline>{% trans "Forgot?" %}</a>
                 </div>
                 <input type="password" name="password" required
                        class="input-main"
@@ -54,18 +55,18 @@
 
 
             <button type="submit" x-show="!isSaving" class="w-full btn-primary">
-                <span >Sign In</span>
+                <span >{% trans "Sign In" %}</span>
             </button>
             <button type="submit" x-show="isSaving" class="w-full btn-disable" disabled>
-                <span x-show="isSaving">Singing In ...</span>
+                <span x-show="isSaving">{% trans "Singing In ..." %}</span>
             </button>
         </form>
 
         <div class="mt-10 text-center">
             <p class="text-slate-500 font-medium">
-                Don't have an account?
+                {% trans "Don't have an account?" %}
                 <a href="{% url 'register' %}"
-                   class="text-primary hover:text-primary-dark font-black ml-1 transition-colors">Sign Up</a>
+                   class="text-primary hover:text-primary-dark font-black ml-1 transition-colors">{% trans "Sign Up" %}</a>
             </p>
         </div>
     </div>

@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <a href="{% url 'post_detail' comment.post.id %}" class="mt-2">
     <img class="w-20 h-20 object-cover rounded-xl hover:scale-95 max-w-none" src="{{ comment.post.image.url }}"
         alt="post-{{ comment.post.id}}-image-for-comment }}">
@@ -28,7 +29,7 @@
                         <path d="M24 22h-24l12-20z"/>
                     </svg>
                 </div>
-                <span>Replies</span>
+                <span>{% trans "Replies" %}</span>
                 <span id="replay-count-{{ comment.id }}" class="badge-primary">{{ comment.replies|length }}</span>
             </a>
 
@@ -40,13 +41,13 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                         </svg>
-                        <span class="font-medium">Edit</span>
+                        <span class="font-medium">{% trans "Edit" %}</span>
                     </a>
                     <a href="{% url 'delete_comment' comment.id %}?next={{ request.path }}" class="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600 transition-all">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
-                        <span class="font-medium text-xs">Delete</span>
+                        <span class="font-medium text-xs">{% trans "Delete" %}</span>
                     </a>
                 {% endif %}
             </div>
@@ -62,13 +63,13 @@
                     {% csrf_token %}
                     <button type="submit"
                             class="btn-normal">
-                        Reply
+                        {% trans "Reply" %}
                     </button>
 
                     <div class="flex-1">
                         <input type="text" name="text"
                                class="input-main"
-                               placeholder="Write a reply..." required>
+                               placeholder="{% translate 'Write a reply...' %}" required>
                     </div>
 
                 </form>
@@ -77,7 +78,7 @@
                 {% for replay in comment.replies %}
                     {% include 'partials/posts/replay.html' %}
                 {% empty %}
-                    <p class="text-xs text-gray-400 pl-2">No replies yet.</p>
+                    <p class="text-xs text-gray-400 pl-2">{% trans "No replies yet." %}</p>
                 {% endfor %}
             </div>
         </div>

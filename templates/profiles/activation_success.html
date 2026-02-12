@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Activation Success | {% endblock %}
+{% block title %}{% trans "Activation Success" %} | {% endblock %}
 
 {% block layout %}
-    <div class="min-h-screen flex items-center justify-center bg-slate-50 px-4" dir="ltr">
+<div class="min-h-screen flex items-center justify-center bg-slate-50 px-4" dir="ltr">
         <div class="app-card border-emerald-100 shadow-emerald-100">
 
             <div class="relative w-24 h-24 mx-auto mb-10">
@@ -19,19 +20,19 @@
                 </div>
             </div>
 
-            <h1 class="title-xl text-emerald-600">Account Verified!</h1>
+            <h1 class="title-xl text-emerald-600">{% trans "Account Verified!" %}</h1>
 
             <p class="desc-text px-2 mt-1 mb-8">
-                Great news! Your email has been confirmed. You now have full access to all features of our community.
+                {% trans "Great news! Your email has been confirmed. You now have full access to all features of our community." %}
             </p>
 
-            <a href="{% url 'login' %}" class="btn-primary">
-                Let's Get Started <div class="i-ph-rocket-launch-duotone text-lg"></div>
+            <a href="{% url 'login' %}" class="block btn-primary">
+                {% trans "Let's Get Started" %} <div class="i-ph-rocket-launch-duotone text-lg"></div>
             </a>
 
             <div class="mt-4 pt-6 border-t border-slate-100">
                 <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.3em]">
-                    Status: Fully Activated
+                    {% trans "Status: Fully Activated" %}
                 </p>
             </div>
         </div>

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Sign Up | {% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Sign Up" %} | {% endblock %}
 
 {% block layout %}
 <div class="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12">
@@ -10,9 +12,9 @@
 
         <div class="text-center mb-3">
             <h1 class="text-5xl font-black text-slate-800 font-lobster mb-3">
-                Create Account
+                {% trans "Create Account" %}
             </h1>
-            <p class="text-slate-400 font-medium">Join us today — it's quick and easy</p>
+            <p class="text-slate-400 font-medium">{% trans "Join us today — it's quick and easy" %}</p>
         </div>
 
         <form method="post" @submit="isSaving = true">
@@ -31,23 +33,23 @@
             {% endif %}
 
             {% if field.help_text %}
-            <span class="help-text">{{ field.help_text|safe }}</span>
+            <span class="help-text">"{{ field.help_text|safe }}</span>
             {% endif %}
             {% endfor %}
             <button type="submit" x-show="!isSaving" class="w-full mt-3 btn-primary">
-                <span >Create Account</span>
+                <span >{% trans "Create Account" %}</span>
             </button>
             <button type="submit" x-show="isSaving" class="w-full mt-3 btn-disable" disabled>
-                <span x-show="isSaving">Creating ...</span>
+                <span x-show="isSaving">{% trans "Creating" %} ...</span>
             </button>
         </form>
 
         <div class="mt-10 text-center">
             <p class="text-slate-500 font-medium">
-                Already have an account?
+                {% trans "Already have an account?" %}
                 <a href="{% url 'login' %}"
                    class="text-primary hover:text-primary-dark font-black ml-1 transition-colors">
-                    Sign In
+                    {% trans "Sign In" %}
                 </a>
             </p>
         </div>

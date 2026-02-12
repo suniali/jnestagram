@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <a href="{% url 'profile' %}"
    class="flex items-center gap-2 px-3 py-2 text-white hover:text-violet-600  rounded-lg transition-all duration-200 group relative">
 
@@ -17,7 +19,7 @@
         {% endif %}
     </div>
 
-    <span class="hidden md:block font-medium text-sm">My Profile</span>
+    <span class="hidden md:block font-medium text-sm">{% translate "My Profile" %}</span>
 
     {% if pending_comments_count > 0 %}
         <span class="bg-violet-100 text-violet-600 px-1.5 py-0.5 rounded-md text-[10px] font-bold">

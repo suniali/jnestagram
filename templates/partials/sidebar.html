@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <aside x-show="mobileSidebarOpen"
        x-cloak
@@ -8,18 +9,18 @@
        x-transition:enter-end="opacity-100 translate-y-0">
 
     <section class="sidebar-card">
-        <h2 font-bold mb-4 text-slate-800 flex items-center gap-2>
-            <div w-1 h-5 bg-primary rd-full></div>
-            Categories
+        <h2 class="font-bold mb-4 text-slate-800 flex items-center gap-2">
+            <div class="w-1 h-5 bg-primary rd-full"></div>
+            {% trans "Categories" %}
         </h2>
-        <ul flex flex-col gap-1>
+        <ul class="flex flex-col gap-1">
             {% for tag in tags %}
                 <li class="{% if current_tag == tag.slug %}sidebar-active{% endif %}">
                     <a href="{% url 'home' %}?tag={{ tag.slug }}" class="sidebar-item">
-                        <img w-8 h-8 object-cover mr-3 rd-lg
+                        <img class="w-8 h-8 object-cover mr-3 rd-lg"
                              src="{% if tag and tag.icon %}{{ tag.icon.url }}{% else %} {% static 'images/icon_landscape.svg' %} {% endif %}"
                             alt="category-{{tag.slug}}-icon">
-                        <span font-bold text-sm class="group-hover:text-primary transition-colors">{{ tag.name }}</span>
+                        <span class="font-bold text-sm group-hover:text-primary transition-colors">{{ tag.name }}</span>
                     </a>
                 </li>
             {% endfor %}
@@ -27,31 +28,31 @@
     </section>
 
     <section class="sidebar-card">
-        <div flex items-center mb-4>
-            <img w-6 mr-2 src="{% static 'images/fireheart_black.svg' %}"  alt="top-posts-logo"/>
-            <h2 font-bold text-slate-800>Top Posts</h2>
+        <div class="flex items-center mb-4">
+            <img class="w-6 mr-2" src="{% static 'images/fireheart_black.svg' %}"  alt="top-posts-logo"/>
+            <h2 class="font-bold text-slate-800">{% trans "Top Posts" %}</h2>
         </div>
 
         {% load sidebar %}
-        <ul flex flex-col gap-2>
+        <ul class="flex flex-col gap-2">
             {% for top_post in top_posts %}
                 <li class="rd-xl transition-all {% if top_post|is_liked_by:user %} bg-primary/5 {% endif %}">
                     <a class="sidebar-item justify-between" href="{% url 'post_detail' top_post.id %}">
-                        <div flex items-center truncate>
-                            <img w-10 h-10 rd-lg object-cover mr-3 shrink-0
+                        <div class="flex items-center truncate">
+                            <img class="w-10 h-10 rd-lg object-cover mr-3 shrink-0"
                                  src="{% if top_post.image %}{{ top_post.image.url }}{% else %}{% static 'images/icon_landscape.svg' %}{% endif %}"
                                 alt="top-post-{{top_post.id}}-image"/>
-                            <span text-sm mr-1 truncate>@{{ top_post.user.username }}</span>
+                            <span class="text-sm mr-1 truncate">@{{ top_post.user.username }}</span>
                         </div>
 
-                        <span text="xs slate-400" shrink-0 font-medium>
+                        <span class="text-xs text-slate-400 shrink-0 font-medium">
                             {{ top_post.likes_count }}
-                            <span i-carbon-favorite inline-block align-middle ml-0.5></span>
+                            <span class="i-carbon-favorite inline-block align-middle ml-0.5"></span>
                         </span>
                     </a>
                 </li>
             {% empty %}
-                <li p-4 text-center text-slate-400 text-sm italic>No top posts yet.</li>
+                <li class="p-4 text-center text-slate-400 text-sm italic">{% trans "No top posts yet." %}</li>
             {% endfor %}
         </ul>
     </section>

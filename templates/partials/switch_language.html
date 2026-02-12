@@ -1,0 +1,35 @@
+{% load i18n %}
+{% get_current_language as CURRENT_LANG %}
+{% get_available_languages as LANGUAGES %}
+
+<div x-data="{ open: false }" class="relative inline-block" dir="ltr">
+    <button @click="open = !open"
+            class="w-10 h-10 flex items-center justify-center rd-full border border-slate-200 bg-white hover:border-primary/50 hover:text-primary transition-all duration-300 shadow-sm shadow-slate-200/50">
+        <span class="text-xs font-black uppercase tracking-tighter">
+            {{ CURRENT_LANG }}
+        </span>
+    </button>
+
+    <div x-show="open"
+         @click.outside="open = false"
+         x-transition:enter="transition ease-out duration-150"
+         x-transition:enter-start="opacity-0 scale-90 -translate-y-2"
+         x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+         class="absolute right-0 mt-2 w-16 bg-white rd-2xl shadow-2xl border border-slate-100 p-1 z-[100] flex flex-col gap-1">
+
+        {% for lang_code, lang_name in LANGUAGES %}
+            {% if lang_code != CURRENT_LANG %}
+                <form action="{% url 'set_language' %}" method="post" class="m-0">
+                    {% csrf_token %}
+                    <input name="language" type="hidden" value="{{ lang_code }}">
+                    <input name="next" type="hidden" value="{{ request.path }}">
+
+                    <button type="submit"
+                            class="w-full h-12 flex items-center justify-center rd-xl text-xs font-bold text-slate-500 hover:bg-primary/5 hover:text-primary transition-all uppercase">
+                        {{ lang_code }}
+                    </button>
+                </form>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

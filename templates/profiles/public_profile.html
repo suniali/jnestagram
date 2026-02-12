@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}{{profile.user.username}} 's Profile | {% endblock %}
+{% block title %}{{profile.user.username}} {% trans "'s Profile" %} | {% endblock %}
 
 {% block layout %}
-    <div id="profile" class="flex flex-col items-center my-8 mx-4">
+<div id="profile" class="flex flex-col items-center my-8 mx-4">
 
         <div class="w-full lg:w-[54rem]">
             <div class="profile-card">
@@ -55,9 +56,9 @@
         <div>
             <div id="tabs" class="flex justify-center my-4 gap-2" hx-target="#tab-contents" hx-swap="innerHTML transition:true"
                  _="on htmx:afterOnLoad take .tab-selected for event.target">
-                <a class="tab-btn tab-selected" hx-get="{% url 'public_profile' profile.user.username %}"> Latest </a>
-                <a class="tab-btn" hx-get="{% url 'public_profile' profile.user.username %}?top-posts">Top Posts</a>
-                <a class="tab-btn" hx-get="{% url 'public_profile' profile.user.username %}?top-comments">Top Comments</a>
+                <a class="tab-btn tab-selected" hx-get="{% url 'public_profile' profile.user.username %}"> {% trans "Latest" %} </a>
+                <a class="tab-btn" hx-get="{% url 'public_profile' profile.user.username %}?top-posts">{% trans "Top Posts" %}</a>
+                <a class="tab-btn" hx-get="{% url 'public_profile' profile.user.username %}?top-comments">{% trans "Top Comments" %}</a>
             </div>
 
             <div id="tab-contents" class="w-full transition-all duration-300 mt-8">
