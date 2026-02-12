@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="fixed top-5 right-5 z-[100] flex flex-col gap-4 w-full max-w-[350px]">
     {% if messages %}
         {% for message in messages %}
@@ -37,11 +38,11 @@
                 </div>
 
                 <div class="flex-1 pt-0.5">
-                    <p class="text-xs font-black uppercase tracking-wider opacity-50 mb-0.5">
+                    <p class="text-xs font-black tracking-wider opacity-50 mb-0.5">
                         {{ message.tags|default:"Message" }}
                     </p>
                     <p class="text-sm font-semibold text-slate-700 leading-relaxed">
-                        {{ message }}
+                        {% blocktrans %} {{ message }} {% endblocktrans %}
                     </p>
                 </div>
 

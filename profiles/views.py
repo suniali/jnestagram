@@ -15,6 +15,7 @@ from django.views.generic import View,CreateView,DetailView,DeleteView,UpdateVie
 from django.shortcuts import render,redirect,get_object_or_404,HttpResponseRedirect
 from django.urls import reverse_lazy
 
+from django.utils.translation import gettext_lazy as _
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes,force_str
 from django.template.loader import render_to_string
@@ -55,7 +56,7 @@ class RegisterView(CreateView):
     def form_valid(self, form):
         user=form.save()
         self.send_verify_email(user)
-        messages.info(self.request, "Account created! Please check your email to verify.")
+        messages.info(self.request, _("Account created! Please check your email to verify."))
         return render(self.request,'profiles/verify_sent.html')
 
 class ActivateView(View):
@@ -89,7 +90,7 @@ class ComplateProfileView(LoginRequiredMixin,UpdateView):
         context['countries']=Country.objects.filter(is_active=True)
         return context
     def form_valid(self, form):
-        messages.success(self.request,'Your profile has been updated.')
+        messages.success(self.request,_('Your profile has been updated.'))
         return super().form_valid(form)
     
 class CustomLoginView(LoginView):
@@ -102,7 +103,7 @@ class CustomLoginView(LoginView):
         profile=user.profile
 
         if not profile.verified:
-            messages.warning(self.request, 'Your account is not verified. Please check your email.')
+            messages.warning(self.request, _('Your account is not verified. Please check your email.'))
             return redirect('login')
 
         super().form_valid(form)
@@ -124,7 +125,7 @@ class CustomLoginView(LoginView):
 
 
     def form_invalid(self, form):
-        messages.error(self.request,'Invalid credentials')
+        messages.error(self.request,_('Invalid credentials'))
         return super().form_invalid(form)
 
 
@@ -160,7 +161,7 @@ class ProfileView(LoginRequiredMixin,View):
             with transaction.atomic():
                 if email and email != user.email:
                     if User.objects.filter(email=email).exclude(id=user.id).exists():
-                        messages.error(request, 'This email is already in use.')
+                        messages.error(request, _('This email is already in use.'))
                         return redirect('profile')
                     user.email = email
                     user.save()
@@ -177,11 +178,11 @@ class ProfileView(LoginRequiredMixin,View):
                     profile.avatar=avatar
 
                 profile.save()
-                messages.success(request, 'Your profile has been updated successfully!')
+                messages.success(request, _('Your profile has been updated successfully!'))
         
         except Exception as e:
             print(f"Error updating profile: {e}")
-            messages.error(request, 'An error occurred. Please try again.')
+            messages.error(request, _('An error occurred. Please try again.'))
             
         return redirect('profile')
 
@@ -277,7 +278,7 @@ class UserDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
 
         logout(self.request)
 
-        messages.success(self.request, 'Your account has been deleted.')
+        messages.success(self.request, _('Your account has been deleted.'))
         return HttpResponseRedirect(success_url)
 
 @login_required
@@ -285,5 +286,5 @@ def approve_comment(request,pk):
     comment=get_object_or_404(Comment,pk=pk,post__user=request.user)
     comment.is_approved=True
     comment.save()
-    messages.success(request, 'Comment has been approved and is now public.')
+    messages.success(request, _('Comment has been approved and is now public.'))
     return redirect('profile')

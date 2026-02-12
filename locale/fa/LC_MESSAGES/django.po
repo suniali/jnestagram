@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 13:59+0330\n"
-"PO-Revision-Date: 2026-02-12 14:15+0330\n"
+"POT-Creation-Date: 2026-02-12 19:10+0330\n"
+"PO-Revision-Date: 2026-02-12 19:45+0330\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: Persian\n"
 "Language: fa\n"
@@ -14,6 +14,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# Errors Or Messages
+msgid "success"
+msgstr "عملیات موفقیت آمیز"
+
+msgid "error"
+msgstr "ارور"
+
+msgid "warning"
+msgstr "هشدار"
+
+msgid "info"
+msgstr "اطلاعات"
+
+msgid "message"
+msgstr "پیغام"
 
 #: features/models.py:5 landingpages/models.py:5 posts/models.py:15
 msgid "Name"
@@ -68,12 +84,12 @@ msgid "Text"
 msgstr "متن"
 
 #: jnestagram/settings.py:54
-msgid "English"
-msgstr "انگلیسی"
-
-#: jnestagram/settings.py:55
 msgid "Persian"
 msgstr "فارسی"
+
+#: jnestagram/settings.py:55
+msgid "English"
+msgstr "انگلیسی"
 
 #: landingpages/models.py:6 posts/models.py:66 profiles/models.py:12
 msgid "Is Active"
@@ -153,6 +169,54 @@ msgstr "تایید شده"
 msgid "Comment"
 msgstr "نظر"
 
+#: posts/views.py:168
+msgid "Post created, but some tags were invalid."
+msgstr "پست ایجاد شد، اما برخی برچسب‌ها نامعتبر بودند."
+
+#: posts/views.py:170
+msgid "Post successfully created"
+msgstr "پست با موفقیت ایجاد شد"
+
+#: posts/views.py:220
+msgid "There was an error processing tags."
+msgstr "خطایی در پردازش برچسب‌ها رخ داد."
+
+#: posts/views.py:224
+msgid "You have successfully updated your post."
+msgstr "پست شما با موفقیت بروزرسانی شد."
+
+#: posts/views.py:250
+msgid "Post successfully deleted."
+msgstr "پست با موفقیت حذف شد."
+
+#: posts/views.py:267 posts/views.py:304
+msgid "Your comment has been published."
+msgstr "نظر شما منتشر شد."
+
+#: posts/views.py:270
+msgid "Your comment is awaiting approval."
+msgstr "نظر شما در انتظار تایید است."
+
+#: posts/views.py:302
+msgid "Your edit has been submitted and is awaiting re-approval."
+msgstr "ویرایش شما ثبت شد و در انتظار تایید مجدد است."
+
+#: posts/views.py:328
+msgid "Comment deleted successfully."
+msgstr "نظر با موفقیت حذف شد."
+
+#: posts/views.py:348
+msgid "Your replay has been published."
+msgstr "پاسخ شما منتشر شد."
+
+#: posts/views.py:355
+msgid "Error submitting your replay."
+msgstr "خطا در ثبت پاسخ شما."
+
+#: posts/views.py:373
+msgid "Replay deleted successfully."
+msgstr "پاسخ با موفقیت حذف شد."
+
 #: profiles/models.py:10
 msgid "Country Name"
 msgstr "نام کشور"
@@ -182,6 +246,42 @@ msgstr "درباره من"
 #: profiles/models.py:37
 msgid "Verified"
 msgstr "تایید شده"
+
+#: profiles/views.py:59
+msgid "Account created! Please check your email to verify."
+msgstr "حساب کاربری ساخته شد! لطفاً ایمیل خود را جهت تایید بررسی کنید."
+
+#: profiles/views.py:93
+msgid "Your profile has been updated."
+msgstr "پروفایل شما بروزرسانی شد."
+
+#: profiles/views.py:106
+msgid "Your account is not verified. Please check your email."
+msgstr "حساب شما تایید نشده است. لطفاً ایمیل خود را چک کنید."
+
+#: profiles/views.py:128
+msgid "Invalid credentials"
+msgstr "اطلاعات ورود نامعتبر"
+
+#: profiles/views.py:164
+msgid "This email is already in use."
+msgstr "این ایمیل قبلاً استفاده شده است."
+
+#: profiles/views.py:181
+msgid "Your profile has been updated successfully!"
+msgstr "پروفایل شما با موفقیت بروزرسانی شد!"
+
+#: profiles/views.py:185
+msgid "An error occurred. Please try again."
+msgstr "خطایی رخ داد. لطفاً دوباره تلاش کنید."
+
+#: profiles/views.py:281
+msgid "Your account has been deleted."
+msgstr "حساب کاربری شما حذف شد."
+
+#: profiles/views.py:289
+msgid "Comment has been approved and is now public."
+msgstr "نظر تایید شد و اکنون عمومی است."
 
 #: templates/404.html:4
 msgid "404 - Page Not Found"
@@ -348,11 +448,7 @@ msgstr "خروج"
 msgid "My Profile"
 msgstr "پروفایل من"
 
-#: templates/partials/header.html:16 templates/posts/home.html:4
-msgid "Home"
-msgstr "خانه"
-
-#: templates/partials/header.html:40 templates/profiles/login.html:5
+#: templates/partials/header.html:36 templates/profiles/login.html:5
 msgid "Login"
 msgstr "ورود"
 
@@ -391,6 +487,10 @@ msgstr "کاربری یافت نشد"
 #: templates/partials/inboxes/users_list.html:45
 msgid "Try searching with a different name"
 msgstr "با نام دیگری جستجو کنید"
+
+#: templates/partials/message.html:45
+msgid " %(message)s "
+msgstr " %(message)s "
 
 #: templates/partials/posts/add_comment.html:16
 #: templates/partials/posts/post.html:34
@@ -509,6 +609,10 @@ msgstr "نظر شما پس از ویرایش، تا تایید مجدد توسط
 #: templates/posts/comment_update.html:28
 msgid "Updating ..."
 msgstr "در حال بروزرسانی..."
+
+#: templates/posts/home.html:4
+msgid "Home"
+msgstr "خانه"
 
 #: templates/posts/home.html:22 templates/posts/home.html:29
 msgid "Previous"

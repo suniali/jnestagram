@@ -1,5 +1,5 @@
 
-from django.shortcuts import get_object_or_404,redirect,render
+from django.shortcuts import get_object_or_404,render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView,DetailView,View
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
@@ -10,6 +10,7 @@ from django.db.models.functions import Cast
 from django.http import HttpResponseRedirect,HttpResponse
 from django.urls import reverse,reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.translation import gettext_lazy as _
 
 from .models import Post,Tag,Like,Comment,Replay
 from .form import PostForm, CommentForm,ReplayForm
@@ -164,9 +165,9 @@ class PostCreateView(LoginRequiredMixin,CreateView):
                 tags=[int(tid) for tid in tag_ids_str.split(',') if tid.strip().isdigit()]
                 self.object.tag.set(tags)
             except ValueError:
-                messages.warning(self.request, "Post created, but some tags were invalid.")
+                messages.warning(self.request, _("Post created, but some tags were invalid."))
 
-        messages.success(self.request, "Post successfully created")
+        messages.success(self.request, _("Post successfully created"))
 
         return HttpResponseRedirect(self.get_success_url())
 
@@ -216,11 +217,11 @@ class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
                 tags=[int(tid) for tid in tags_id_str.split(',') if tid.strip().isdigit()]
                 self.object.tag.set(tags)
             except (ValueError,TypeError):
-                messages.error(self.request, 'There was an error processing tags.')
+                messages.error(self.request, _('There was an error processing tags.'))
         else:
             self.object.tag.clear()
 
-        messages.success(self.request, 'You have successfully updated your post.')
+        messages.success(self.request, _('You have successfully updated your post.'))
 
         return HttpResponseRedirect(self.get_success_url())
 
@@ -246,7 +247,7 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         return post.user==self.request.user
 
     def delete(self, request, *args, **kwargs):
-        messages.success(self.request, "Post successfully deleted.")
+        messages.success(self.request, _("Post successfully deleted."))
         return super().delete(request, *args, **kwargs)
 
 
@@ -263,10 +264,10 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
 
         if self.request.user.is_staff or  self.request.user.is_superuser or self.request.user == post.user:
             form.instance.is_approved=True
-            msg='Your comment has been published.'
+            msg=_('Your comment has been published.')
         else:
             form.instance.is_approved=False
-            msg='Your comment is awaiting approval.'
+            msg=_('Your comment is awaiting approval.')
 
         self.object=form.save()
 
@@ -298,9 +299,9 @@ class CommentUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         comment=self.get_object()
         if self.request.user != comment.post.user:
             form.instance.is_approved=False
-            messages.info(self.request, "Your edit has been submitted and is awaiting re-approval.")
+            messages.info(self.request, _("Your edit has been submitted and is awaiting re-approval."))
         else:
-            messages.success(self.request, "Your comment has been published.")
+            messages.success(self.request, _("Your comment has been published."))
 
         return super().form_valid(form)
 
@@ -324,7 +325,7 @@ class CommentDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         return context
 
     def get_success_url(self):
-        messages.warning(self.request, "Comment deleted successfully.")
+        messages.warning(self.request, _("Comment deleted successfully."))
 
         post_id=self.object.post.id
         return reverse('post_detail',kwargs={'pk':post_id})
@@ -344,14 +345,14 @@ class ReplayCreateView(LoginRequiredMixin,CreateView):
             replay=Replay.objects.select_related('user','comment','comment__user').get(pk=self.object.id)
             count=Replay.objects.filter(comment=comment).count()
 
-            messages.success(self.request, 'Your replay has been published.')
+            messages.success(self.request, _('Your replay has been published.'))
             return render(self.request,"partials/posts/add_replay.html",{
                 'replay':replay,
                 'comment':comment,
                 'count':count
             })
 
-        messages.error(self.request, 'Error submitting your replay.')
+        messages.error(self.request, _('Error submitting your replay.'))
         return super().form_valid(form)
 
 class ReplayDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
@@ -369,7 +370,7 @@ class ReplayDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         context['cancel_url']=reverse_lazy('post_detail',kwargs={'pk':replay.comment.post.pk})
         return context
     def get_success_url(self):
-        messages.warning(self.request, "Replay deleted successfully.")
+        messages.warning(self.request, _("Replay deleted successfully."))
         post_id=self.get_object().comment.post.pk
 
         next_url=self.request.GET.get('next')

@@ -49,10 +49,10 @@ else:
     DEBUG = False
 
 # Translation
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'fa'
 LANGUAGES = [
-    ('en', _('English')),
     ('fa', _('Persian')),
+    ('en', _('English')),
 ]
 USE_I18N = True
 LOCALE_PATHS = [

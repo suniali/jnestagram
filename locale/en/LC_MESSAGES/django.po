@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 13:59+0330\n"
+"POT-Creation-Date: 2026-02-12 19:10+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,11 +70,11 @@ msgid "Text"
 msgstr ""
 
 #: jnestagram/settings.py:54
-msgid "English"
+msgid "Persian"
 msgstr ""
 
 #: jnestagram/settings.py:55
-msgid "Persian"
+msgid "English"
 msgstr ""
 
 #: landingpages/models.py:6 posts/models.py:66 profiles/models.py:12
@@ -155,6 +155,54 @@ msgstr ""
 msgid "Comment"
 msgstr ""
 
+#: posts/views.py:168
+msgid "Post created, but some tags were invalid."
+msgstr ""
+
+#: posts/views.py:170
+msgid "Post successfully created"
+msgstr ""
+
+#: posts/views.py:220
+msgid "There was an error processing tags."
+msgstr ""
+
+#: posts/views.py:224
+msgid "You have successfully updated your post."
+msgstr ""
+
+#: posts/views.py:250
+msgid "Post successfully deleted."
+msgstr ""
+
+#: posts/views.py:267 posts/views.py:304
+msgid "Your comment has been published."
+msgstr ""
+
+#: posts/views.py:270
+msgid "Your comment is awaiting approval."
+msgstr ""
+
+#: posts/views.py:302
+msgid "Your edit has been submitted and is awaiting re-approval."
+msgstr ""
+
+#: posts/views.py:328
+msgid "Comment deleted successfully."
+msgstr ""
+
+#: posts/views.py:348
+msgid "Your replay has been published."
+msgstr ""
+
+#: posts/views.py:355
+msgid "Error submitting your replay."
+msgstr ""
+
+#: posts/views.py:373
+msgid "Replay deleted successfully."
+msgstr ""
+
 #: profiles/models.py:10
 msgid "Country Name"
 msgstr ""
@@ -183,6 +231,42 @@ msgstr ""
 
 #: profiles/models.py:37
 msgid "Verified"
+msgstr ""
+
+#: profiles/views.py:59
+msgid "Account created! Please check your email to verify."
+msgstr ""
+
+#: profiles/views.py:93
+msgid "Your profile has been updated."
+msgstr ""
+
+#: profiles/views.py:106
+msgid "Your account is not verified. Please check your email."
+msgstr ""
+
+#: profiles/views.py:128
+msgid "Invalid credentials"
+msgstr ""
+
+#: profiles/views.py:164
+msgid "This email is already in use."
+msgstr ""
+
+#: profiles/views.py:181
+msgid "Your profile has been updated successfully!"
+msgstr ""
+
+#: profiles/views.py:185
+msgid "An error occurred. Please try again."
+msgstr ""
+
+#: profiles/views.py:281
+msgid "Your account has been deleted."
+msgstr ""
+
+#: profiles/views.py:289
+msgid "Comment has been approved and is now public."
 msgstr ""
 
 #: templates/404.html:4
@@ -350,11 +434,7 @@ msgstr ""
 msgid "My Profile"
 msgstr ""
 
-#: templates/partials/header.html:16 templates/posts/home.html:4
-msgid "Home"
-msgstr ""
-
-#: templates/partials/header.html:40 templates/profiles/login.html:5
+#: templates/partials/header.html:36 templates/profiles/login.html:5
 msgid "Login"
 msgstr ""
 
@@ -392,6 +472,11 @@ msgstr ""
 
 #: templates/partials/inboxes/users_list.html:45
 msgid "Try searching with a different name"
+msgstr ""
+
+#: templates/partials/message.html:45
+#, python-format
+msgid " %(message)s "
 msgstr ""
 
 #: templates/partials/posts/add_comment.html:16
@@ -510,6 +595,10 @@ msgstr ""
 
 #: templates/posts/comment_update.html:28
 msgid "Updating ..."
+msgstr ""
+
+#: templates/posts/home.html:4
+msgid "Home"
 msgstr ""
 
 #: templates/posts/home.html:22 templates/posts/home.html:29
