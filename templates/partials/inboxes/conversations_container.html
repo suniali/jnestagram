@@ -1,37 +1,31 @@
 {% load static %}
 
-{% for conv in conversations %}
-    <div hx-get="{% url 'inbox' %}?pk={{ conv.id }}"
-         hx-target="#chats-container"
-         hx-swap="outerHTML transition:true"
-         hx-push-url="true"
-         id="conversation-item-{{ conv.id }}"
+<a href="{% url 'chats' conv.id %}" id="conversation-item-{{ conv.id }}"
 
-         class="chat-item flex items-center gap-4 p-5 rounded-[1.8rem] cursor-pointer transform hover:scale-[1.02] transition-all duration-300 group mb-2
+     class="chat-item flex items-center gap-4 p-5 rounded-[1.8rem] cursor-pointer transform hover:scale-[1.02] transition-all duration-300 group mb-2
                 {% if conversation and conversation.id == conv.id %} bg-violet-600 text-white shadow-xl shadow-violet-600/30 hover:bg-violet-700 {% else %} bg-white text-slate-800 hover:bg-slate-50 {% endif %}">
 
-        <div class="relative flex-shrink-0">
-            <img src="{% if conv.other_user.profile.avatar %}{{ conv.other_user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}"
-                 class="w-14 h-14 rounded-2xl object-cover shadow-sm border border-transparent group-hover:border-white/20 transition-all"
-                alt="sender-profile-{{conv.other_user.profile.id}}-avatar">
+    <div class="relative flex-shrink-0">
+        <img src="{% if conv.other_user.profile.avatar %}{{ conv.other_user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}"
+             class="w-14 h-14 rounded-2xl object-cover shadow-sm border border-transparent group-hover:border-white/20 transition-all"
+             alt="sender-profile-{{conv.other_user.profile.id}}-avatar">
 
-            {% if conv.is_seen == False and conv.messages.last.sender != request.user %}
-                <span class="absolute -top-1 -right-1 flex h-3 w-3">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-violet-500 border border-white"></span>
-                </span>
-            {% endif %}
-        </div>
-
-        <div class="flex-1 min-w-0">
-            <div class="flex justify-between items-center mb-1">
-                <h3 class="font-bold truncate transition-colors">{{ conv.other_user.username|capfirst }}</h3>
-                <span class="text-[10px] font-black opacity-70">{{ conv.lastmessage_created }}</span>
-            </div>
-            {% load inbox_tags %}
-            <p class="text-xs truncate font-medium opacity-60">
-                {{ conv.messages.last.text|decrypt|default:"No messages yet"|truncatechars:30 }}
-            </p>
-        </div>
+        {% if conv.is_seen == False and conv.messages.last.sender != request.user %}
+            <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-violet-500 border border-white"></span>
+            </span>
+        {% endif %}
     </div>
-{% endfor %}
+
+    <div class="flex-1 min-w-0">
+        <div class="flex justify-between items-center mb-1">
+            <h3 class="font-bold truncate transition-colors">{{ conv.other_user.username|capfirst }}</h3>
+            <span class="text-[10px] font-black opacity-70">{{ conv.lastmessage_created }}</span>
+        </div>
+        {% load inbox_tags %}
+        <p class="text-xs truncate font-medium opacity-60">
+            {{ conv.messages.last.text|decrypt|default:"No messages yet"|truncatechars:30 }}
+        </p>
+    </div>
+</a>

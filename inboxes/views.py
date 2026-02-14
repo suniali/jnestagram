@@ -24,31 +24,6 @@ class ConversationListView(LoginRequiredMixin, ListView):
             participants=self.request.user
         ).prefetch_related('participants').order_by('-lastmessage_created')
 
-    def get(self, request, *args, **kwargs):
-        if self.request.htmx:
-            conversation_id = self.request.GET.get('pk')
-            if conversation_id:
-                conversation = get_object_or_404(Conversation, pk=conversation_id, participants=request.user)
-                conversation.other_user = conversation.participants.exclude(id=request.user.id).first()
-                if conversation.is_seen == False and conversation.messages.last().sender != request.user:
-                    conversation.is_seen = True
-                    conversation.save()
-
-                inbox_messages=Message.objects.filter(conversation=conversation).select_related('sender').order_by('created_at')
-
-
-                conversations = Conversation.objects.filter(participants=request.user).prefetch_related(
-                    'participants').order_by('-lastmessage_created')
-                for conv in conversations:
-                    conv.other_user = conv.participants.exclude(id=request.user.id).first()
-
-                return render(self.request, 'inboxes/conversation.html', {
-                    'conversations': conversations,
-                    'conversation': conversation,
-                    'inbox_messages': inbox_messages,
-                })
-
-        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -77,6 +52,35 @@ class ConversationListView(LoginRequiredMixin, ListView):
         context['conversations'] = conversations
         return context
 
+class ChatsListView(LoginRequiredMixin, ListView):
+    model = Message
+    template_name = 'inboxes/chats.html'
+
+    def get_queryset(self):
+        return Message.objects.filter(
+            conversation=self.kwargs['pk']
+        ).select_related('sender').order_by('created_at')
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        request=self.request
+        conversation_id = self.kwargs.get('pk')
+
+        if conversation_id:
+            conversation = get_object_or_404(Conversation, pk=conversation_id, participants=request.user)
+            conversation.other_user = conversation.participants.exclude(id=request.user.id).first()
+
+
+            if not conversation.is_seen and conversation.messages.exists():
+                last_msg = conversation.messages.last()
+                if last_msg.sender != request.user:
+                    conversation.is_seen = True
+                    conversation.save()
+
+            context['conversation'] = conversation
+            context['chats'] = self.get_queryset()
+
+        return context
 
 class SearchUsersView(LoginRequiredMixin, ListView):
     model = User
@@ -134,18 +138,15 @@ class NewMessageView(LoginRequiredMixin, View):
 
                 conversation.lastmessage_created = timezone.now()
                 conversation.is_seen=False
-
-                conversations = Conversation.objects.filter(participants=request.user).prefetch_related(
-                    'participants').order_by('-lastmessage_created')
-                for conv in conversations:
-                    conv.other_user = conv.participants.exclude(id=request.user.id).first()
-
                 conversation.save()
 
                 inbox_messages = conversation.messages.all().order_by('created_at')
                 context={
-                    'inbox_messages': inbox_messages,
+                    'chats': inbox_messages,
                     'conversation': conversation,
-                    'conversations':conversations
                 }
-                return redirect(f'/inbox/?pk={conversation.pk}',context)
+
+                if self.request.htmx:
+                    return render(request, 'inboxes/message_list.html', context)
+
+                return redirect(f'/chats/{conversation.pk}/',context)
