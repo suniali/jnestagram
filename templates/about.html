@@ -1,0 +1,87 @@
+{% extends 'layouts/a.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 py-8 px-4 font-sans">
+    <div class="max-w-4xl mx-auto">
+
+        <div class="text-center my-12">
+            <h1 class="text-4xl md:text-5xl font-800 text-slate-900 mb-4">
+                {% trans "About the Project" %}
+            </h1>
+            <div class="h-1 w-24 bg-violet-600 mx-auto rd-full"></div>
+            <p class="mt-6 text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+                {% trans "Jnestagram is a modern social media platform built with Django, focused on performance and clean user experience." %}
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center md:mt-10">
+
+            <div class="relative group mx-4">
+                <div class="absolute -inset-1 bg-gradient-to-r from-violet-600 to-indigo-600 rd-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+
+                <div class="relative bg-white p-8 rd-2xl shadow-xl">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="relative">
+                            <img class="w-24 h-24 rd-full shadow-md object-cover b-2 b-violet-100"
+                                 src="https://img.icons8.com/small/192/7c3aed/user-male-circle.png"
+                                 alt="Developer Avatar">
+                        </div>
+
+                        <h2 class="mt-4 text-2xl font-700 text-slate-800">{% trans "Ali" %}</h2>
+                        <p class="text-violet-600 font-500">{% trans "Backend Developer" %}</p>
+
+                        <div class="flex gap-4 mt-6 justify-center">
+                            <a href="https://github.com/suniali/jnestagram" target="_blank"
+                               class="w-12 h-12 bg-slate-900 text-white rd-full hover:scale-110 transition-transform shadow-lg flex items-center justify-center">
+                                <div class="i-mdi-github text-2xl">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                                </div>
+                            </a>
+
+                            <a href="https://jobinja.ir/user/CR-7448144" target="_blank"
+                               class="w-12 h-12 bg-blue-600 p-4 text-white rd-full hover:scale-110 transition-transform shadow-lg flex items-center justify-center">
+                                <span class="font-700 text-xs">{% trans "Jobinja" %}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6 px-4 md:px-0 md:mx-2 mt-6">
+                <h3 class="text-3xl font-700 text-slate-800">
+                    {% trans "Crafting with Passion" %}
+                </h3>
+                <p class="text-slate-600 leading-relaxed text-justify">
+                    {% trans "I am a developer dedicated to building scalable and user-friendly web applications. This project is a demonstration of using Django's power alongside modern frontend tools like Unocss and Alpine.js and HTMX." %}
+                </p>
+
+                <div class="space-y-4">
+                    <h4 class="text-lg font-600 text-slate-800 flex items-center gap-2">
+                        <span class="w-8 h-8 bg-violet-100 text-violet-600 rd-lg flex items-center justify-center">🚀</span>
+                        {% trans "Technical Stack" %}
+                    </h4>
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        <span class="px-3 py-1 bg-white b-1 b-slate-200 rd-full text-slate-700 shadow-sm hover:b-violet-400 transition-colors">Django</span>
+                        <span class="px-3 py-1 bg-white b-1 b-slate-200 rd-full text-slate-700 shadow-sm hover:b-violet-400 transition-colors">PostgreSQL</span>
+                        <span class="px-3 py-1 bg-white b-1 b-slate-200 rd-full text-slate-700 shadow-sm hover:b-violet-400 transition-colors">UnoCSS</span>
+                        <span class="px-3 py-1 bg-white b-1 b-slate-200 rd-full text-slate-700 shadow-sm hover:b-violet-400 transition-colors">Alpine.js</span>
+                        <span class="px-3 py-1 bg-white b-1 b-slate-200 rd-full text-slate-700 shadow-sm hover:b-violet-400 transition-colors">HTMX</span>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <a href="{% url 'home' %}" class="inline-flex items-center text-violet-600 font-700 hover:gap-3 transition-all">
+                        {% trans "Back to Feed" %}
+                        <div class="i-mdi-arrow-right ml-2 text-xl">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

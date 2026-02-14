@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import TemplateView
 
 from .views import (PostListView, LikeView, PostCreateView, PostUpdateView,
                     PostDeleteView, CommentCreateView, CommentUpdateView,
@@ -16,4 +17,5 @@ urlpatterns = [
     path('comment/<pk>/delete/', CommentDeleteView.as_view(), name='delete_comment'),
     path('comment/<pk>/replay/', ReplayCreateView.as_view(), name='replay'),
     path('replay/<pk>/delete',ReplayDeleteView.as_view(), name='delete_replay'),
+    path('about/',TemplateView.as_view(template_name='about.html'),name='about'),
 ]
