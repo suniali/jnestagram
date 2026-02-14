@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 20:40+0330\n"
+"POT-Creation-Date: 2026-02-14 23:27+0330\n"
 "PO-Revision-Date: 2026-02-12 20:30+0330\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: Persian\n"
@@ -319,28 +319,86 @@ msgstr "تلاش مجدد (رفرش)"
 msgid "Code: 500 | Internal Server Error"
 msgstr "کد: ۵۰۰ | خطای داخلی سرور"
 
-#: templates/inboxes/conversation.html:17
+#: templates/about.html:11
+msgid "About the Project"
+msgstr "درباره پروژه"
+
+#: templates/about.html:15
+msgid ""
+"Jnestagram is a modern social media platform built with Django, focused on "
+"performance and clean user experience."
+msgstr ""
+"جینستاگرام یک پلتفرم رسانه اجتماعی مدرن است که با جنگو ساخته شده و بر روی "
+"کارایی و تجربه کاربری تمیز تمرکز دارد."
+
+#: templates/about.html:32
+msgid "Ali"
+msgstr "علی"
+
+#: templates/about.html:33
+msgid "Backend Developer"
+msgstr "برنامه‌نویس بک‌اند"
+
+#: templates/about.html:45
+msgid "Jobinja"
+msgstr "جاب‌اینجا"
+
+#: templates/about.html:54
+msgid "Crafting with Passion"
+msgstr "ساخته شده با عشق"
+
+#: templates/about.html:57
+msgid ""
+"I am a developer dedicated to building scalable and user-friendly web "
+"applications. This project is a demonstration of using Django's power "
+"alongside modern frontend tools like Unocss and Alpine.js and HTMX."
+msgstr ""
+"من یک توسعه‌دهنده هستم که وقت خود را وقف ساخت برنامه‌های وب مقیاس‌پذیر و "
+"کاربرپسند می‌کنم. این پروژه نمایشی از قدرت جنگو در کنار ابزارهای مدرن "
+"فرانت‌اِند مانند Unocss، Alpine.js و HTMX است."
+
+#: templates/about.html:63
+msgid "Technical Stack"
+msgstr "تکنولوژی‌های استفاده شده"
+
+#: templates/about.html:76
+msgid "Back to Feed"
+msgstr "بازگشت به خانه"
+
+#: templates/inboxes/chats.html:20
 msgid "In Chat"
 msgstr "در حال گفتگو"
 
-#: templates/inboxes/conversation.html:62
+#: templates/inboxes/chats.html:54
 msgid "Start typing your message..."
 msgstr "شروع به نوشتن پیام..."
 
-#: templates/inboxes/inbox.html:13
+#: templates/inboxes/inbox.html:5
+msgid "Inbox"
+msgstr "صندوق ورودی"
+
+#: templates/inboxes/inbox.html:12
 msgid "Chats"
 msgstr "گفتگوها"
 
-#: templates/inboxes/inbox.html:51
-msgid "Select Your Chat"
-msgstr "یک گفتگو را انتخاب کنید"
+#: templates/inboxes/inbox.html:30
+msgid "Search for people..."
+msgstr "جستجوی کاربران..."
+
+#: templates/inboxes/income_message.html:17
+#: templates/inboxes/outcome_message.html:13
+#: templates/partials/posts/comment.html:15
+#: templates/partials/posts/post.html:35
+#: templates/partials/posts/replay.html:16 templates/profiles/profile.html:196
+msgid "ago"
+msgstr "پیش"
 
 #: templates/landingpages/base.html:8
 msgid "Maintenance"
 msgstr "در حال تعمیر"
 
 #: templates/landingpages/base.html:29
-#: templates/landingpages/maintenance.html:16 templates/partials/header.html:11
+#: templates/landingpages/maintenance.html:16 templates/partials/header.html:10
 msgid "Jnestagram"
 msgstr "جینستاگرام"
 
@@ -369,12 +427,12 @@ msgid "to give you a smoother experience. We'll be back online shortly."
 msgstr "تا تجربه بهتری به شما ارائه دهیم. به زودی آنلاین می‌شویم."
 
 #: templates/landingpages/maintenance.html:22
-msgid "Twitter"
-msgstr "توییتر"
+msgid "Github"
+msgstr "گیت‌هاب"
 
 #: templates/landingpages/maintenance.html:25
-msgid "Discord"
-msgstr "دیسکورد"
+msgid "About Us"
+msgstr "درباره من"
 
 #: templates/landingpages/maintenance.html:34
 msgid "Systems are stable"
@@ -423,6 +481,10 @@ msgstr "ارسال پست جدید"
 msgid "Messages"
 msgstr "پیام‌ها"
 
+#: templates/partials/buttons/login.html:15 templates/profiles/login.html:5
+msgid "Login"
+msgstr "ورود"
+
 #: templates/partials/buttons/logout.html:15
 msgid "Log out"
 msgstr "خروج"
@@ -431,10 +493,6 @@ msgstr "خروج"
 #: templates/profiles/profile.html:5
 msgid "My Profile"
 msgstr "پروفایل من"
-
-#: templates/partials/header.html:36 templates/profiles/login.html:5
-msgid "Login"
-msgstr "ورود"
 
 #: templates/partials/hero.html:13
 msgid "Share your favorite Photos from Flickr and add a great caption"
@@ -485,12 +543,6 @@ msgstr " %(message)s "
 #: templates/partials/posts/post.html:34
 msgid "Comments"
 msgstr "نظرات"
-
-#: templates/partials/posts/comment.html:15
-#: templates/partials/posts/post.html:35
-#: templates/partials/posts/replay.html:16 templates/profiles/profile.html:196
-msgid "ago"
-msgstr "پیش"
 
 #: templates/partials/posts/comment.html:32
 msgid "Replies"
@@ -1098,3 +1150,16 @@ msgstr "لطفاً روی لینک کلیک کنید تا حساب شما فعا
 #: templates/profiles/verify_sent.html:36
 msgid "Didn't receive it? Check your spam folder."
 msgstr "دریافت نکردید؟ پوشه اسپم را چک کنید."
+
+#~| msgid "About Me"
+#~ msgid "About UsAbout Us"
+#~ msgstr "درباره ما"
+
+#~ msgid "Twitter"
+#~ msgstr "توییتر"
+
+#~ msgid "Discord"
+#~ msgstr "دیسکورد"
+
+#~ msgid "Select Your Chat"
+#~ msgstr "یک گفتگو را انتخاب کنید"
