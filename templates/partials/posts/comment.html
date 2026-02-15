@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        <div x-show="repliesOpen" x-cloak x-transition.opacity class="basis-full mt-4 pl-4 border-l-2 border-gray-100 space-y-4">
+        <div x-show="repliesOpen" x-cloak x-transition.opacity class="basis-full mt-4 border-l-2 border-gray-100 space-y-4">
             {% if request.user.is_authenticated %}
                 <form class="comment-input-container"
                       hx-post="{% url 'replay' comment.id %}"

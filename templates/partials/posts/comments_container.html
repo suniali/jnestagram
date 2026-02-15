@@ -1,5 +1,5 @@
 {% for comment in display_comments %}
-    <div class="w-full md:w-[36rem] lg:w-[50rem] mx-auto flex gap-2" x-data="{ show: false }"
+    <div class="w-full md:w-[40rem] mx-auto flex gap-2" x-data="{ show: false }"
          x-init="setTimeout(() => show = true, {{ forloop.counter0 }} * 50)"
          x-show="show"
          x-transition:enter="transition ease-out duration-500"
