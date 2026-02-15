@@ -39,7 +39,8 @@
 
     {% include 'inboxes/message_list.html' %}
 
-    <footer class="p-8 bg-white/80 backdrop-blur-xl border-t border-slate-50 shrink-0">
+
+    <footer class="p-4 bg-white/80 backdrop-blur-xl border-t border-slate-50 shrink-0">
         <form  hx-post="{% url 'inbox_newmessage' conversation.other_user.id %}"
                hx-target="#message-list"
                hx-swap="innerHTML scroll:#message-list:bottom transition:true"
