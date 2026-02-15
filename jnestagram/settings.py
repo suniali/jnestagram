@@ -36,7 +36,10 @@ ENCRYPT_KEY = env('ENCRYPT_KEY')
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',env('RENDER_EXTERNAL_HOSTNAME'),
                  'jnestagram.onrender.com','jnestagram-staging.onrender.com']
 
-CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
+CSRF_TRUSTED_ORIGINS = [
+    'https://jnestagram.onrender.com',
+    'https://jnestagram-staging.onrender.com',
+]
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -47,6 +50,11 @@ if ENVIRONMENT == 'development':
     DEBUG = True
 else:
     DEBUG = False
+
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Translation
 LANGUAGE_CODE = 'fa'
