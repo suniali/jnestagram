@@ -67,7 +67,7 @@ export default defineConfig({
     'app-card': 'bg-white rd-[2.5rem] shadow-2xl shadow-slate-200/60 w-full max-w-md p-10 md:p-14 border border-slate-100 text-center',
     'btn-primary': 'p-4 bg-slate-900 text-white font-black text-sm uppercase tracking-[0.2em] rd-2xl transition-all duration-300 transform active:scale-95 shadow-xl shadow-primary/30 hover:(bg-primary shadow-xl shadow-primary/30) cursor-pointer border-none',
     'btn-normal': 'px-4 py-3 bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] rd-xl transition-all duration-300 transform active:scale-95 hover:(bg-primary shadow-lg shadow-primary/30) cursor-pointer border-none',
-    'btn-secondary': 'py-4 px-8 text-center bg-slate-100 text-slate-500 font-black text-xs uppercase tracking-[0.2em] rd-2xl transition-all duration-300 hover:(bg-slate-200 text-slate-800) border-none',
+    'btn-secondary': 'py-4 px-8 text-center bg-slate-100 text-slate-500 font-black text-xs uppercase tracking-[0.2em] rd-2xl transition-all duration-300 hover:(bg-slate-200 text-slate-800) cursor-pointer border-none',
     'btn-disable': 'py-4 px-8 bg-slate-100 text-slate-500 font-black text-xs uppercase tracking-[0.2em] rd-2xl transition-all duration-300 border-none',
     'input-main': 'w-full bg-slate-100 border-none rd-2xl py-4 px-6 text-slate-700 font-medium focus:ring-2 focus:ring-primary focus:bg-white transition-all outline-none',
     'label-input':'text-sm font-semibold text-slate-600 px-2 my-1',

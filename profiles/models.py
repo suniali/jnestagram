@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from django.templatetags.static import static
 
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
@@ -50,7 +51,13 @@ class Profile(models.Model):
             return f'{self.user.first_name} {self.user.last_name}'
         else:
             return self.user.username
-    
+
+    @property
+    def avatar_url(self):
+        if self.avatar and hasattr(self.avatar, 'url'):
+            return self.avatar.url
+
+        return static('images/avatar_default.svg')
 
 # TODO: Add Device Model Too
 # class Device(models.Model):
