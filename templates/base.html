@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-6VK68TVG20"></script>
@@ -39,8 +39,13 @@
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
     <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/uno.css' %}">
+    <style>
+        :root {
+            direction: {% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %};
+        }
+    </style>
 </head>
-<body class="bg-slate-50  min-h-screen" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
+<body class="bg-slate-50  min-h-screen">
 <div style="display: none;">{% csrf_token %}</div>
 {% include 'partials/message.html' %}
 
