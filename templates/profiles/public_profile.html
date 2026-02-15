@@ -61,7 +61,7 @@
                 <a class="tab-btn" hx-get="{% url 'public_profile' profile.user.username %}?top-comments">{% trans "Top Comments" %}</a>
             </div>
 
-            <div id="tab-contents" class="w-full transition-all duration-300 mt-8">
+            <div id="tab-contents" class="w-screen transition-all duration-300 mt-8 px-4">
                 {% if posts %}
                     {% include 'partials/posts/posts_container.html' %}
                 {% elif display_comments %}
