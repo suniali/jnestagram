@@ -33,7 +33,7 @@
                         </span>
                         {% endif %}
                         <img class="h-full w-full rd-full object-cover shadow-sm"
-                             src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}https://img.icons8.com/small/96/ffffff/user-male-circle.png{% endif %}"
+                             src="{{ request.user.profile.avatar_url }}"
                              alt="{{ request.user.username }}-avatar"/>
                     </div>
 

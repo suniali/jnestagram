@@ -1,4 +1,3 @@
-{% load static %}
 {% load i18n %}
 
 <article class="post-card">
@@ -16,7 +15,7 @@
     </figure>
     <div class="p-4 pb-2">
         <div class="flex items-center gap-1 mb-4" >
-            <img class="w-6 h-6 object-cover rounded-full -mt-1" src="{% if post.user.profile.avatar %} {{ post.user.profile.avatar.url }} {% else %} {% static 'images/avatar_default.svg' %} {% endif %}"
+            <img class="w-6 h-6 object-cover rounded-full -mt-1" src="{{ post.user.profile.avatar_url }}"
                 alt="profile-{{ post.user.profile.id }}-avatar-for-post">
             <span class="font-bold item-center justify-between">{{ post.user.profile.realname|capfirst }}</span><a class="text-gray-400 text-sm hover:underline cursor-pointer" href="{% url 'public_profile' post.user.username %}"> @{{ post.user.username }}</a>
         </div>
