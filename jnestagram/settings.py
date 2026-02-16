@@ -88,6 +88,7 @@ INSTALLED_APPS = [
     'inboxes',
     'features',
     'landingpages',
+    'rtchats',
 ]
 
 MIDDLEWARE = [
@@ -123,7 +124,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
 
                 'posts.context_processors.pending_comments_count',
-                'inboxes.context_processors.inbox_messages_count'
+                'inboxes.context_processors.inbox_messages_count',
             ],
         },
     },
