@@ -4,11 +4,13 @@ import {
   presetAttributify,
   presetIcons
 } from 'unocss'
+import { presetAnimations } from 'unocss-preset-animations'
 
 export default defineConfig({
   presets: [
     presetUno(),
     presetAttributify(),
+    presetAnimations(),
     presetIcons({
       scale: 1.2,
       extraProperties: {

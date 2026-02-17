@@ -10,7 +10,7 @@ class ChatMessageCreateForm(forms.ModelForm):
         widgets={
             'text':forms.TextInput(attrs={
                 'placeholder':_('Add message ...'),
-                'class':'flex-1 b-none outline-none py-2 px-2 text-sm font-600 text-slate-700 placeholder-slate-300 bg-transparent',
+                'class':'flex-1 rd-full border-none outline-none py-2 px-2 text-sm font-600 text-slate-700 placeholder-slate-300 bg-transparent',
                 'maxlength':300,
                 'autofocus':True,
             }),

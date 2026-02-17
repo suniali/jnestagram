@@ -40,8 +40,8 @@
         </div>
     </header>
 
-    <main class="flex-1 overflow-y-auto px-4 py-8 md:px-0 custom-scrollbar bg-slate-50/50" >
-        <div class="max-w-3xl mx-auto space-y-8">
+    <main id="chat-messages-parent"  class="flex-1 overflow-y-auto px-4 py-8 md:px-0 custom-scrollbar bg-slate-50/50" >
+        <div id="chat-messages" class="max-w-3xl mx-auto space-y-8">
             <div class="flex justify-center">
                 <div class="bg-white px-4 py-1.5 rd-full shadow-sm b-1 b-slate-100 flex items-center gap-2">
                     <span class="text-[10px] font-900 text-indigo-500 uppercase">System</span>
@@ -49,42 +49,18 @@
                 </div>
             </div>
             {% for message in chat_messages reversed %}
-                {% if message.author == request.user %}
-                    <div class="flex gap-4 flex-row-reverse group">
-                        <div class="w-10 h-10 rd-2xl bg-indigo-600 flex-center text-white font-900 shadow-lg shadow-indigo-200 mt-1 shrink-0">
-                            {% trans "ME" %}
-                        </div>
-                        <div class="space-y-1 text-right">
-                            <div class="flex items-center gap-2 justify-end mr-1">
-                                <span class="text-[9px] text-slate-300 font-700">{{message.created_at|timesince}} {% trans "ago" %}</span>
-                                <span class="text-xs font-900 text-indigo-600">{% trans "You" %}</span>
-                            </div>
-                            <div class="bg-indigo-600 p-5 rd-3xl rd-tr-none shadow-xl shadow-indigo-100 text-white text-sm leading-relaxed text-left">
-                                {{  message }}
-                            </div>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="flex gap-4 group">
-                        <img src="{{ message.author.profile.avatar_url }}" class="w-10 h-10 rd-2xl object-cover shadow-md mt-1 shrink-0">
-                        <div class="space-y-1">
-                            <div class="flex items-center gap-2 ml-1">
-                                <span class="text-xs font-900 text-slate-800">{{ message.author.profile.realname }}</span>
-                                <span class="text-[9px] text-slate-300 font-700">{{message.created_at|timesince}} {% trans "ago" %}</span>
-                            </div>
-                            <div class="bg-white p-5 rd-3xl rd-tl-none shadow-[0_10px_25px_-5px_rgba(0,0,0,0.04)] b-1 b-slate-100 text-slate-600 text-sm leading-relaxed">
-                                {{ message }}
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
+                {% include 'rtchats/chat_message.html' %}
             {% endfor %}
         </div>
     </main>
 
     <footer class="p-6 md:p-10 shrink-0">
         <div class="max-w-3xl mx-auto">
-            <form method="POST" class="bg-white p-2.5 rd-[1.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] b-1 b-slate-100 flex items-center gap-2 focus-within:ring-4 focus-within:ring-indigo-50 transition-all duration-500">
+            <form  class="bg-white p-2.5 rd-[1.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] b-1 b-slate-100 flex items-center gap-2 focus-within:ring-4 focus-within:ring-indigo-50 transition-all duration-500"
+                hx-post="{% url 'chat_room' %}"
+                hx-target="#chat-messages"
+                hx-swap="beforeend scroll:#chat-messages-parent:bottom"
+                hx-on::after-request="this.reset();">
                 {% csrf_token %}
                 <button type="button" class="w-11 h-11 rd-xl flex-center text-slate-400 hover:bg-slate-50 hover:text-indigo-600 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
