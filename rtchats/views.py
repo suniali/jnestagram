@@ -39,7 +39,7 @@ class ChatRoomView(LoginRequiredMixin,View):
                 'message':chat_message,
                 'user':request.user
             }
-            return render(request,'rtchats/chat_message.html',context)
+            return render(request,'rtchats/new_chat_message.html',context)
 
         context=self.prepare_context()
         context["form"]=form

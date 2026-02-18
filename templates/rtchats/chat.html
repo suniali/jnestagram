@@ -1,6 +1,7 @@
 {% load i18n %}
+
 <div class="chat-message">
-    {% if message.author == request.user %}
+    {% if message.author == user %}
         <div class="flex gap-4 flex-row-reverse group">
             <div class="w-10 h-10 rd-2xl bg-indigo-600 flex-center text-white font-900 shadow-lg shadow-indigo-200 mt-1 shrink-0">
                 {% trans "ME" %}
