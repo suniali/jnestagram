@@ -135,10 +135,19 @@ TEMPLATES = [
 
 ASGI_APPLICATION = "jnestagram.asgi.application"
 
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     }
+# }
+
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [f"rediss://default:{env('REDIS_TOKEN')}@clean-lacewing-15180.upstash.io:6379"],
+        },
+    },
 }
 
 # Database
