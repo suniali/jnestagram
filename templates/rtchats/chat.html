@@ -1,34 +1,79 @@
 {% load i18n %}
 
-<div class="chat-message">
+<div class="chat-message" x-data="{ decrypted: false }" x-init="setTimeout(() => decrypted = true, 1500)">
     {% if message.author == user %}
-        <div class="flex gap-4 flex-row-reverse group">
-            <div class="w-10 h-10 rd-2xl bg-indigo-600 flex-center text-white font-900 shadow-lg shadow-indigo-200 mt-1 shrink-0">
-                {% trans "ME" %}
+    <div class="flex gap-4 flex-row-reverse group">
+        <div class="w-10 h-10 rd-2xl bg-indigo-600 flex-center text-white font-900 shadow-lg shadow-indigo-200 mt-1 shrink-0">
+            {% trans "ME" %}
+        </div>
+        <div :class="decrypted ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-400'"
+             class="p-5 rd-3xl shadow-xl transition-all duration-500 relative overflow-hidden
+                        rd-tr-none
+                        text-sm leading-relaxed text-left"
+             :style="!decrypted ? 'background: linear-gradient(to right, #4f46e5 0%, #f1f5f9 0%);' : ''"
+             x-init="if(!decrypted) {
+                     let p = 0;
+                     let interval = setInterval(() => {
+                         p += 10;
+                         $el.style.background = `linear-gradient(to right, #818cf8 ${p}%, #f1f5f9 ${p}%)`;
+                         if(p >= 100) clearInterval(interval);
+                     }, 50);
+                 }">
+            <div class="flex items-center gap-4 justify-end mr-1 mb-2">
+                <span class="text-[9px] text-slate-300 font-700">{{message.created_at|timesince}} {% trans "ago" %}</span>
             </div>
-            <div class="space-y-1 text-right">
-                <div class="flex items-center gap-2 justify-end mr-1">
-                    <span class="text-[9px] text-slate-300 font-700">{{message.created_at|timesince}} {% trans "ago" %}</span>
-                    <span class="text-xs font-900 text-indigo-600">{% trans "You" %}</span>
+            <template x-if="!decrypted">
+                <div class="flex items-center justify-between">
+                    <span class="italic text-xs text-white font-bold">{% trans "Eecrypting..." %}</span>
+                    <span class="text-[10px] opacity-50">{{ message.text|truncatechars:10 }}</span>
                 </div>
-                <div class="bg-indigo-600 p-5 rd-3xl rd-tr-none shadow-xl shadow-indigo-100 text-white text-sm leading-relaxed text-left">
-                    {{  message }}
-                </div>
+            </template>
+
+            <div x-show="decrypted"
+                 x-transition:enter="transition ease-out duration-400"
+                 x-transition:enter-start="opacity-0 scale-95"
+                 x-transition:enter-end="opacity-100 scale-100">
+                {% load chat_tags %}
+                {{ message.text|decrypt_chat_message }}
             </div>
         </div>
+    </div>
     {% else %}
-        <div class="flex gap-4 group">
-            <img src="{{ message.author.profile.avatar_url }}" class="w-10 h-10 rd-2xl object-cover shadow-md mt-1 shrink-0">
-            <div class="space-y-1">
-                <div class="flex items-center gap-2 ml-1">
-                    <span class="text-xs font-900 text-slate-800">{{ message.author.profile.realname }}</span>
-                    <span class="text-[9px] text-slate-300 font-700">{{message.created_at|timesince}} {% trans "ago" %}</span>
+    <div class="flex gap-4 group" >
+        <img src="{{ message.author.profile.avatar_url }}" class="w-10 h-10 rd-2xl object-cover shadow-md mt-1 shrink-0">
+        <div :class="decrypted ? 'bg-white text-slate-600' : 'bg-slate-100 text-slate-400'"
+             class="p-5 rd-3xl shadow-xl transition-all duration-500 relative overflow-hidden
+                rd-tl-none
+                text-sm leading-relaxed text-left"
+             :style="!decrypted ? 'background: linear-gradient(to right, #4f46e5 0%, #f1f5f9 0%);' : ''"
+             x-init="if(!decrypted) {
+             let p = 0;
+             let interval = setInterval(() => {
+                 p += 10;
+                 $el.style.background = `linear-gradient(to right, #818cf8 ${p}%, #f1f5f9 ${p}%)`;
+                 if(p >= 100) clearInterval(interval);
+             }, 50);
+        }">
+            <div class="flex items-center gap-4 ml-1 mb-2">
+                <span class="text-xs font-900 text-slate-800">{{ message.author.profile.realname }}</span>
+                <span class="text-[9px] text-slate-300 font-700">{{message.created_at|timesince}} {% trans "ago" %}</span>
+            </div>
+            <template x-if="!decrypted">
+                <div class="flex items-center justify-between">
+                    <span class="italic text-xs text-white font-bold">{% trans "Decrypting..." %}</span>
+                    <span class="text-[10px] opacity-50">{{ message.text|truncatechars:10 }}</span>
                 </div>
-                <div class="bg-white p-5 rd-3xl rd-tl-none shadow-[0_10px_25px_-5px_rgba(0,0,0,0.04)] b-1 b-slate-100 text-slate-600 text-sm leading-relaxed">
-                    {{ message }}
-                </div>
+            </template>
+
+            <div x-show="decrypted"
+                 x-transition:enter="transition ease-out duration-400"
+                 x-transition:enter-start="opacity-0 scale-95"
+                 x-transition:enter-end="opacity-100 scale-100">
+                {% load chat_tags %}
+                {{ message.text|decrypt_chat_message }}
             </div>
         </div>
+    </div>
     {% endif %}
 </div>
 
@@ -40,4 +85,5 @@
     .chat-message{
         animation: fadeInUp 0.6s ease;
     }
+
 </style>

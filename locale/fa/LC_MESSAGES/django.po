@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 23:27+0330\n"
+"POT-Creation-Date: 2026-02-19 20:48+0330\n"
 "PO-Revision-Date: 2026-02-12 20:30+0330\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: Persian\n"
@@ -33,7 +33,7 @@ msgstr "محیط نهایی فعال"
 
 #: features/models.py:9 inboxes/models.py:26 posts/models.py:19
 #: posts/models.py:42 posts/models.py:68 posts/models.py:98 posts/models.py:122
-#: profiles/models.py:13
+#: profiles/models.py:14
 msgid "Created At"
 msgstr "تاریخ ایجاد"
 
@@ -67,15 +67,15 @@ msgstr "گفتگو"
 msgid "Text"
 msgstr "متن"
 
-#: jnestagram/settings.py:54
+#: jnestagram/settings.py:62
 msgid "Persian"
 msgstr "فارسی"
 
-#: jnestagram/settings.py:55
+#: jnestagram/settings.py:63
 msgid "English"
 msgstr "انگلیسی"
 
-#: landingpages/models.py:6 posts/models.py:66 profiles/models.py:12
+#: landingpages/models.py:6 posts/models.py:66 profiles/models.py:13
 msgid "Is Active"
 msgstr "فعال است"
 
@@ -92,12 +92,12 @@ msgid "Order"
 msgstr "ترتیب"
 
 #: posts/models.py:20 posts/models.py:69 posts/models.py:99 posts/models.py:123
-#: profiles/models.py:14
+#: profiles/models.py:15
 msgid "Updated At"
 msgstr "آخرین بروزرسانی"
 
 #: posts/models.py:36 posts/models.py:52 posts/models.py:92 posts/models.py:117
-#: profiles/models.py:25
+#: profiles/models.py:26
 msgid "User"
 msgstr "کاربر"
 
@@ -153,81 +153,81 @@ msgstr "تایید شده"
 msgid "Comment"
 msgstr "نظر"
 
-#: posts/views.py:168
+#: posts/views.py:171
 msgid "Post created, but some tags were invalid."
 msgstr "پست ایجاد شد، اما برخی برچسب‌ها نامعتبر بودند."
 
-#: posts/views.py:170
+#: posts/views.py:173
 msgid "Post successfully created"
 msgstr "پست با موفقیت ایجاد شد"
 
-#: posts/views.py:220
+#: posts/views.py:223
 msgid "There was an error processing tags."
 msgstr "خطایی در پردازش برچسب‌ها رخ داد."
 
-#: posts/views.py:224
+#: posts/views.py:227
 msgid "You have successfully updated your post."
 msgstr "پست شما با موفقیت بروزرسانی شد."
 
-#: posts/views.py:250
+#: posts/views.py:253
 msgid "Post successfully deleted."
 msgstr "پست با موفقیت حذف شد."
 
-#: posts/views.py:267 posts/views.py:304
+#: posts/views.py:270 posts/views.py:307
 msgid "Your comment has been published."
 msgstr "نظر شما منتشر شد."
 
-#: posts/views.py:270
+#: posts/views.py:273
 msgid "Your comment is awaiting approval."
 msgstr "نظر شما در انتظار تایید است."
 
-#: posts/views.py:302
+#: posts/views.py:305
 msgid "Your edit has been submitted and is awaiting re-approval."
 msgstr "ویرایش شما ثبت شد و در انتظار تایید مجدد است."
 
-#: posts/views.py:328
+#: posts/views.py:331
 msgid "Comment deleted successfully."
 msgstr "نظر با موفقیت حذف شد."
 
-#: posts/views.py:348
+#: posts/views.py:351
 msgid "Your replay has been published."
 msgstr "پاسخ شما منتشر شد."
 
-#: posts/views.py:355
+#: posts/views.py:358
 msgid "Error submitting your replay."
 msgstr "خطا در ثبت پاسخ شما."
 
-#: posts/views.py:373
+#: posts/views.py:376
 msgid "Replay deleted successfully."
 msgstr "پاسخ با موفقیت حذف شد."
 
-#: profiles/models.py:10
+#: profiles/models.py:11
 msgid "Country Name"
 msgstr "نام کشور"
 
-#: profiles/models.py:11
+#: profiles/models.py:12
 msgid "Country Abbreviation"
-msgstr "اختصار کشور"
+msgstr "اختصار نام کشور"
 
-#: profiles/models.py:26 templates/profiles/complate_profile.html:62
-#: templates/profiles/profile.html:73
+#: profiles/models.py:27 templates/profiles/complate_profile.html:62
+#: templates/profiles/profile.html:102
 msgid "Phone Number"
 msgstr "شماره تلفن"
 
-#: profiles/models.py:27 templates/profiles/complate_profile.html:68
-#: templates/profiles/profile.html:81
+#: profiles/models.py:28 templates/profiles/complate_profile.html:68
+#: templates/profiles/profile.html:106
 msgid "Country"
 msgstr "کشور"
 
-#: profiles/models.py:34
+#: profiles/models.py:35
 msgid "Avatar"
 msgstr "آواتار"
 
-#: profiles/models.py:36 templates/profiles/profile.html:127
+#: profiles/models.py:37 templates/profiles/profile.html:152
 msgid "Bio"
 msgstr "درباره من"
 
-#: profiles/models.py:37
+#: profiles/models.py:38
 msgid "Verified"
 msgstr "تایید شده"
 
@@ -266,6 +266,10 @@ msgstr "حساب کاربری شما حذف شد."
 #: profiles/views.py:289
 msgid "Comment has been approved and is now public."
 msgstr "نظر تایید شد و اکنون عمومی است."
+
+#: rtchats/forms.py:12
+msgid "Add message ..."
+msgstr "پیام خود را بنویسید ..."
 
 #: templates/404.html:4
 msgid "404 - Page Not Found"
@@ -369,7 +373,7 @@ msgstr "بازگشت به خانه"
 msgid "In Chat"
 msgstr "در حال گفتگو"
 
-#: templates/inboxes/chats.html:54
+#: templates/inboxes/chats.html:55
 msgid "Start typing your message..."
 msgstr "شروع به نوشتن پیام..."
 
@@ -377,7 +381,7 @@ msgstr "شروع به نوشتن پیام..."
 msgid "Inbox"
 msgstr "صندوق ورودی"
 
-#: templates/inboxes/inbox.html:12
+#: templates/inboxes/inbox.html:12 templates/rtchats/chat_room.html:5
 msgid "Chats"
 msgstr "گفتگوها"
 
@@ -387,9 +391,10 @@ msgstr "جستجوی کاربران..."
 
 #: templates/inboxes/income_message.html:17
 #: templates/inboxes/outcome_message.html:13
-#: templates/partials/posts/comment.html:15
-#: templates/partials/posts/post.html:35
-#: templates/partials/posts/replay.html:16 templates/profiles/profile.html:196
+#: templates/partials/posts/comment.html:14
+#: templates/partials/posts/post.html:34
+#: templates/partials/posts/replay.html:15 templates/profiles/profile.html:220
+#: templates/rtchats/chat.html:23 templates/rtchats/chat.html:59
 msgid "ago"
 msgstr "پیش"
 
@@ -471,6 +476,10 @@ msgstr "لغو"
 msgid "Yes, Delete"
 msgstr "بله، حذف شود"
 
+#: templates/partials/buttons/chats.html:19
+msgid "Chat Room"
+msgstr "چت روم"
+
 #: templates/partials/buttons/create_post.html:14
 #: templates/posts/post_create_update.html:9
 #: templates/posts/post_create_update.html:19
@@ -540,34 +549,34 @@ msgid " %(message)s "
 msgstr " %(message)s "
 
 #: templates/partials/posts/add_comment.html:16
-#: templates/partials/posts/post.html:34
+#: templates/partials/posts/post.html:33
 msgid "Comments"
 msgstr "نظرات"
 
-#: templates/partials/posts/comment.html:32
+#: templates/partials/posts/comment.html:31
 msgid "Replies"
 msgstr "پاسخ‌ها"
 
-#: templates/partials/posts/comment.html:44
-#: templates/partials/posts/post.html:42
+#: templates/partials/posts/comment.html:43
+#: templates/partials/posts/post.html:41
 msgid "Edit"
 msgstr "ویرایش"
 
-#: templates/partials/posts/comment.html:50
-#: templates/partials/posts/post.html:43
-#: templates/partials/posts/replay.html:32
+#: templates/partials/posts/comment.html:49
+#: templates/partials/posts/post.html:42
+#: templates/partials/posts/replay.html:31
 msgid "Delete"
 msgstr "حذف"
 
-#: templates/partials/posts/comment.html:66
+#: templates/partials/posts/comment.html:65
 msgid "Reply"
 msgstr "پاسخ"
 
-#: templates/partials/posts/comment.html:72
+#: templates/partials/posts/comment.html:71
 msgid "Write a reply..."
 msgstr "پاسخی بنویسید..."
 
-#: templates/partials/posts/comment.html:81
+#: templates/partials/posts/comment.html:80
 msgid "No replies yet."
 msgstr "هنوز پاسخی داده نشده."
 
@@ -587,7 +596,7 @@ msgstr "هنوز نظری ثبت نشده"
 msgid ""
 "Be the first to share your thoughts! Start the conversation by leaving a "
 "comment below."
-msgstr "اولین کسی باشید که نظر خود را به اشتراک می‌گذارد!"
+msgstr "اولین کسی باشید که نظر خود را به اشتراک می‌گذارد! با گذاشتن یک نظر گفتگو را شروع کنید."
 
 #: templates/partials/posts/no_highlights.html:3
 msgid "No highlights yet."
@@ -613,7 +622,7 @@ msgstr "ثبت‌نام"
 msgid "to start posting"
 msgstr "برای شروع پست گذاشتن"
 
-#: templates/partials/posts/post.html:29
+#: templates/partials/posts/post.html:28
 msgid "No Tags"
 msgstr "بدون برچسب"
 
@@ -709,7 +718,7 @@ msgstr "ذخیره پست"
 
 #: templates/posts/post_create_update.html:120
 #: templates/profiles/complate_profile.html:88
-#: templates/profiles/profile.html:142
+#: templates/profiles/profile.html:167
 msgid "Saving ..."
 msgstr "در حال ذخیره..."
 
@@ -856,7 +865,7 @@ msgid "Enter your email to reset your password"
 msgstr "ایمیل خود را برای بازیابی رمز عبور وارد کنید"
 
 #: templates/profiles/forgot_password.html:27
-#: templates/profiles/profile.html:77
+#: templates/profiles/profile.html:78
 msgid "Email"
 msgstr "ایمیل"
 
@@ -889,7 +898,7 @@ msgstr "خوش آمدید"
 msgid "Sign in to continue to your account"
 msgstr "برای ادامه وارد حساب خود شوید"
 
-#: templates/profiles/login.html:38 templates/profiles/profile.html:63
+#: templates/profiles/login.html:38 templates/profiles/profile.html:67
 msgid "Username"
 msgstr "نام کاربری"
 
@@ -1005,55 +1014,59 @@ msgstr "بستن"
 msgid "Edit Profile"
 msgstr "اصلاح پروفایل"
 
-#: templates/profiles/profile.html:67
+#: templates/profiles/profile.html:71
 msgid "Joined On"
 msgstr "عضویت از"
 
 #: templates/profiles/profile.html:98
+msgid "Verify your email to secure your account."
+msgstr "برای امنیت حساب خود، ایمیلتان را تایید کنید."
+
+#: templates/profiles/profile.html:123
 msgid "Select your country"
 msgstr "کشور خود را انتخاب کنید"
 
-#: templates/profiles/profile.html:122
+#: templates/profiles/profile.html:147
 msgid "Country is locked based on your profile settings."
 msgstr "بر اساس تنظیمات پروفایل، کشور قفل شده است."
 
-#: templates/profiles/profile.html:129
+#: templates/profiles/profile.html:154
 msgid "Describe your self..."
 msgstr "درباره خودتان بنویسید..."
 
-#: templates/profiles/profile.html:135
+#: templates/profiles/profile.html:160
 msgid "Delete Profile"
 msgstr "حذف پروفایل"
 
-#: templates/profiles/profile.html:139
+#: templates/profiles/profile.html:164
 msgid "Save Updates"
 msgstr "ذخیره تغییرات"
 
-#: templates/profiles/profile.html:160
+#: templates/profiles/profile.html:185
 msgid "My Posts"
 msgstr "پست‌های من"
 
-#: templates/profiles/profile.html:172 templates/profiles/profile.html:258
+#: templates/profiles/profile.html:197 templates/profiles/profile.html:281
 msgid "Pending"
 msgstr "در انتظار تایید"
 
-#: templates/profiles/profile.html:243
+#: templates/profiles/profile.html:266
 msgid "You haven't posted anything yet."
 msgstr "هنوز هیچ پستی ارسال نکرده‌اید."
 
-#: templates/profiles/profile.html:255
+#: templates/profiles/profile.html:278
 msgid "on"
 msgstr "روی"
 
-#: templates/profiles/profile.html:264
+#: templates/profiles/profile.html:287
 msgid "Approve"
 msgstr "تایید"
 
-#: templates/profiles/profile.html:268
+#: templates/profiles/profile.html:291
 msgid "Reject"
 msgstr "رد کردن"
 
-#: templates/profiles/profile.html:274
+#: templates/profiles/profile.html:297
 msgid "No pending comments."
 msgstr "نظری در انتظار تایید وجود ندارد."
 
@@ -1150,6 +1163,22 @@ msgstr "لطفاً روی لینک کلیک کنید تا حساب شما فعا
 #: templates/profiles/verify_sent.html:36
 msgid "Didn't receive it? Check your spam folder."
 msgstr "دریافت نکردید؟ پوشه اسپم را چک کنید."
+
+#: templates/rtchats/chat.html:7
+msgid "ME"
+msgstr "من"
+
+#: templates/rtchats/chat.html:27
+msgid "Eecrypting..."
+msgstr "در حال رمزگذاری..."
+
+#: templates/rtchats/chat.html:63
+msgid "Decrypting..."
+msgstr "در حال رمزگشایی..."
+
+#: templates/rtchats/online_count.html:16
+msgid "Online"
+msgstr "آنلاین"
 
 #~| msgid "About Me"
 #~ msgid "About UsAbout Us"
