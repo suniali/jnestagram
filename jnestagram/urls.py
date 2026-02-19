@@ -43,6 +43,7 @@ urlpatterns = [
     path('',include('profiles.urls')),
     path('',include('inboxes.urls')),
     path('_/',include('landingpages.urls')),
+    path('',include('rtchats.urls')),
 ]
 
 handler404 = NotFoundView.as_view()

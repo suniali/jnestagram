@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Chats" %} | {% endblock %}
+
+{% block layout %}
+<div class="h-screen bg-[#f3f4f6] flex flex-col font-sans overflow-hidden">
+
+    {% include 'rtchats/chats_header.html' %}
+
+    <main id="chat-messages-parent"  class="flex-1 overflow-y-auto px-4 py-8 md:px-0 custom-scrollbar bg-slate-50/50" >
+        <div id="chat-messages" class="max-w-3xl mx-auto space-y-8">
+            <div class="flex justify-center">
+                <div class="bg-white px-4 py-1.5 rd-full shadow-sm b-1 b-slate-100 flex items-center gap-2">
+                    <span class="text-[10px] font-900 text-indigo-500 uppercase">System</span>
+                    <span class="text-[10px] text-slate-400 font-600">John Doe joined the room</span>
+                </div>
+            </div>
+            {% for message in chat_messages reversed %}
+                {% include 'rtchats/chat.html' %}
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer class="px-6 py-2 shrink-0">
+        <div class="max-w-3xl mx-auto">
+            <form  class="bg-white p-2.5 rd-[1.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] b-1 b-slate-100 flex items-center gap-2 focus-within:ring-4 focus-within:ring-indigo-50 transition-all duration-500"
+                   hx-ext="ws"
+                   ws-connect="/ws/chats/jnestagram"
+                   ws-send
+                   hx-on::ws-after-send="this.reset();"
+                   hx-on::ws-after-message="const container = document.getElementById('chat-messages-parent'); container.scrollTo({top: container.scrollHeight, behaivor: 'smooth'});">
+                {% csrf_token %}
+                <button type="button" class="w-11 h-11 rd-xl flex-center text-slate-400 hover:bg-slate-50 hover:text-indigo-600 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path d="M12 4v16m8-8H4" />
+                    </svg>
+                </button>
+                {{ form.text }}
+                <button type="submit" class="bg-indigo-600 text-white h-11 px-6 rd-xl font-900 text-xs uppercase tracking-widest shadow-lg shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-0.5 active:scale-95 transition-all">
+                    Send
+                </button>
+            </form>
+        </div>
+    </footer>
+</div>
+
+<style>
+    /* Custom Scrollbar for a cleaner look */
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 20px; }
+    .flex-center { display: flex; align-items: center; justify-content: center; }
+</style>
+{% endblock %}

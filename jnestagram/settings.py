@@ -70,6 +70,7 @@ LOCALE_PATHS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -88,6 +89,7 @@ INSTALLED_APPS = [
     'inboxes',
     'features',
     'landingpages',
+    'rtchats',
 ]
 
 MIDDLEWARE = [
@@ -123,14 +125,30 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
 
                 'posts.context_processors.pending_comments_count',
-                'inboxes.context_processors.inbox_messages_count'
+                'inboxes.context_processors.inbox_messages_count',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'jnestagram.wsgi.application'
+# WSGI_APPLICATION = 'jnestagram.wsgi.application'
 
+ASGI_APPLICATION = "jnestagram.asgi.application"
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     }
+# }
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [f"rediss://default:{env('REDIS_TOKEN')}@clean-lacewing-15180.upstash.io:6379"],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

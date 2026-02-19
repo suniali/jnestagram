@@ -54,12 +54,15 @@ class PostListView(ListView):
         current_tag = self.request.GET.get('tag')
         try:
             feature_herobutton=feature_enabled(1,'Jarvis')
+            feature_chatapp = feature_enabled(2, 'Jarvis')
         except:
             feature_herobutton=False
+            feature_chatapp=False
 
 
         context['current_tag']=current_tag
         context['feature_herobutton']=feature_herobutton
+        context['feature_chatapp'] = feature_chatapp
 
         return context
 

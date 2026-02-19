@@ -1,0 +1,28 @@
+{% load i18n %}
+<div id="online-count" hx-swap-oob="outerHTML" class="flex items-center gap-2 bg-slate-50 b-1 b-slate-100 px-3 py-1 rd-full w-fit shadow-sm">
+    <span class="relative flex h-2 w-2">
+        {% if online_count > 0 %}
+            <span class="animate-ping absolute inline-flex h-full w-full rd-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rd-full h-2 w-2 bg-emerald-500"></span>
+        {% else %}
+            <span class="relative inline-flex rd-full h-2 w-2 bg-slate-300"></span>
+        {% endif %}
+    </span>
+
+    <p class="text-[10px] {% if online_count > 0 %}text-slate-600{% else %}text-slate-400{% endif %} font-600 uppercase tracking-widest flex items-center gap-1">
+        <span class="text-slate-900 font-800 text-xs inline-block fade_in_scale">
+            {{ online_count }}
+        </span>
+        {% trans "Online" %}
+    </p>
+
+    <style>
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: translateY(-5px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .fade_in_scale {
+            animation: fadeInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+</div>

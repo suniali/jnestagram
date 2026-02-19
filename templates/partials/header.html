@@ -51,6 +51,9 @@
                         <li>{% include 'partials/buttons/create_post.html' %}</li>
                         <li>{% include 'partials/buttons/my_profile.html' %}</li>
                         <li>{% include 'partials/buttons/inbox.html' %}</li>
+                        {% if feature_chatapp %}
+                            <li>{% include 'partials/buttons/chats.html' %}</li>
+                        {% endif %}
                         <hr class="border-white/5 my-1">
                         <li>{% include 'partials/buttons/logout.html' %}</li>
                     </ul>
