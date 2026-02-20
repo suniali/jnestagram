@@ -66,6 +66,7 @@ class ChatsConsumer(WebsocketConsumer):
         message_id=event['message_id']
         message=GroupMessage.objects.get(id=message_id)
         context = {
+            'is_new':True,
             'message': message,
             'user': self.user,
         }

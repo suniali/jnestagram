@@ -11,12 +11,12 @@
 
     <main id="chat-messages-parent"  class="flex-1 overflow-y-auto px-4 py-8 md:px-0 custom-scrollbar bg-slate-50/50" >
         <div id="chat-messages" class="max-w-3xl mx-auto space-y-8">
-            <div class="flex justify-center">
-                <div class="bg-white px-4 py-1.5 rd-full shadow-sm b-1 b-slate-100 flex items-center gap-2">
-                    <span class="text-[10px] font-900 text-indigo-500 uppercase">System</span>
-                    <span class="text-[10px] text-slate-400 font-600">John Doe joined the room</span>
-                </div>
-            </div>
+<!--            <div class="flex justify-center">-->
+<!--                <div class="bg-white px-4 py-1.5 rd-full shadow-sm b-1 b-slate-100 flex items-center gap-2">-->
+<!--                    <span class="text-[10px] font-900 text-indigo-500 uppercase">System</span>-->
+<!--                    <span class="text-[10px] text-slate-400 font-600">John Doe joined the room</span>-->
+<!--                </div>-->
+<!--            </div>-->
             {% for message in chat_messages reversed %}
                 {% include 'rtchats/chat.html' %}
             {% endfor %}
@@ -39,7 +39,7 @@
                 </button>
                 {{ form.text }}
                 <button type="submit" class="bg-indigo-600 text-white h-11 px-6 rd-xl font-900 text-xs uppercase tracking-widest shadow-lg shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-0.5 active:scale-95 transition-all">
-                    Send
+                    {% trans "Send" %}
                 </button>
             </form>
         </div>

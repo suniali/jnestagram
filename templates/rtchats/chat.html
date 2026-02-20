@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="chat-message" x-data="{ decrypted: false }" x-init="setTimeout(() => decrypted = true, 1500)">
+<div class="chat-message" x-data="{ decrypted: false }" x-init="if ({{ is_new|yesno:'true,false' }}) { setTimeout(() => decrypted = true, 1500) } else { decrypted = true }">
     {% if message.author == user %}
     <div class="flex gap-4 flex-row-reverse group">
         <div class="w-10 h-10 rd-2xl bg-indigo-600 flex-center text-white font-900 shadow-lg shadow-indigo-200 mt-1 shrink-0">
@@ -23,9 +23,9 @@
                 <span class="text-[9px] text-slate-300 font-700">{{message.created_at|timesince}} {% trans "ago" %}</span>
             </div>
             <template x-if="!decrypted">
-                <div class="flex items-center justify-between">
-                    <span class="italic text-xs text-white font-bold">{% trans "Eecrypting..." %}</span>
-                    <span class="text-[10px] opacity-50">{{ message.text|truncatechars:10 }}</span>
+                <div class="flex flex-col gap-2">
+                    <span class="text-medium text-white font-bold opacity-50">{{ message.text|truncatechars:15 }}</span>
+<!--                    <span class="italic text-xs text-gray-300 font-bold">{% trans "Encrypting..." %}</span>-->
                 </div>
             </template>
 
@@ -59,9 +59,9 @@
                 <span class="text-[9px] text-slate-300 font-700">{{message.created_at|timesince}} {% trans "ago" %}</span>
             </div>
             <template x-if="!decrypted">
-                <div class="flex items-center justify-between">
-                    <span class="italic text-xs text-white font-bold">{% trans "Decrypting..." %}</span>
-                    <span class="text-[10px] opacity-50">{{ message.text|truncatechars:10 }}</span>
+                <div class="flex flex-col gap-1">
+                    <span class="text-medium font-bold text-white opacity-50">{{ message.text|truncatechars:15 }}</span>
+<!--                    <span class="italic text-xs text-gray-300 ">{% trans "Decrypting..." %}</span>-->
                 </div>
             </template>
 
