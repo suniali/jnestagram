@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-19 20:48+0330\n"
+"POT-Creation-Date: 2026-02-20 13:00+0330\n"
 "PO-Revision-Date: 2026-02-12 20:30+0330\n"
 "Last-Translator: Gemini AI\n"
 "Language-Team: Persian\n"
@@ -596,7 +596,9 @@ msgstr "هنوز نظری ثبت نشده"
 msgid ""
 "Be the first to share your thoughts! Start the conversation by leaving a "
 "comment below."
-msgstr "اولین کسی باشید که نظر خود را به اشتراک می‌گذارد! با گذاشتن یک نظر گفتگو را شروع کنید."
+msgstr ""
+"اولین کسی باشید که نظر خود را به اشتراک می‌گذارد! با گذاشتن یک نظر گفتگو را "
+"شروع کنید."
 
 #: templates/partials/posts/no_highlights.html:3
 msgid "No highlights yet."
@@ -1168,13 +1170,17 @@ msgstr "دریافت نکردید؟ پوشه اسپم را چک کنید."
 msgid "ME"
 msgstr "من"
 
-#: templates/rtchats/chat.html:27
-msgid "Eecrypting..."
+#: templates/rtchats/chat.html:28
+msgid "Encrypting..."
 msgstr "در حال رمزگذاری..."
 
-#: templates/rtchats/chat.html:63
+#: templates/rtchats/chat.html:64
 msgid "Decrypting..."
 msgstr "در حال رمزگشایی..."
+
+#: templates/rtchats/chat_room.html:42
+msgid "Send"
+msgstr "ارسال"
 
 #: templates/rtchats/online_count.html:16
 msgid "Online"
