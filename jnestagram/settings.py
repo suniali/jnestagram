@@ -126,6 +126,7 @@ TEMPLATES = [
 
                 'posts.context_processors.pending_comments_count',
                 'inboxes.context_processors.inbox_messages_count',
+                'features.context_processors.export_features',
             ],
         },
     },
