@@ -109,7 +109,7 @@ export default defineConfig({
     'badge-primary': 'bg-primary/10 text-primary px-2 py-0.5 rd-full text-[11px] font-bold',
     // ptofile
     'profile-card': '!bg-white rd-[2.5rem] p-8 shadow-sm border border-slate-100 mb-6',
-    'edit-btn': 'p-3 !bg-white/90 backdrop-blur-sm border border-slate-100 rd-2xl text-slate-400 hover:(text-primary shadow-lg bg-white) transition-all duration-300',
+    'edit-btn': 'p-3 !bg-white/90 backdrop-blur-sm border border-slate-100 rd-2xl text-slate-400 hover:(text-primary shadow-lg bg-white) transition-all duration-300 cursor-pointer',
     'profile-stat': 'flex flex-col items-center px-6 py-2 border-r border-slate-100 last:border-0',
     // profile
     'admin-card': 'bg-white rd-[2rem] p-5 border border-slate-100 shadow-sm flex items-center justify-between group hover:(shadow-xl shadow-slate-200/50 -translate-y-1) transition-all duration-300',

@@ -25,6 +25,7 @@ from .models import Profile,Country
 from posts.models import Post, Comment, Like, Replay
 from .forms import RegistrationForm,ProfileForm
 from jnestagram.tokens import generate_token
+from features.views import feature_enabled
 
 User = get_user_model()
 
@@ -236,6 +237,11 @@ class PublicProfileView(DetailView):
         context=super().get_context_data(**kwargs)
         user=self.object.user
 
+        try:
+            feature_chatapp=feature_enabled(2,'jarvis')
+        except:
+            feature_chatapp=False
+
         if 'top-posts' in self.request.GET:
             context['posts']=user.top_posts
         elif 'top-comments' in self.request.GET:
@@ -243,6 +249,7 @@ class PublicProfileView(DetailView):
         else:
             context['posts']=user.all_posts
 
+        context['feature_chatapp']=feature_chatapp
         return context
 
     def render_to_response(self, context, **response_kwargs):
