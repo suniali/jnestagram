@@ -27,7 +27,7 @@
         <div class="max-w-3xl mx-auto">
             <form  class="bg-white p-2.5 rd-[1.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] b-1 b-slate-100 flex items-center gap-2 focus-within:ring-4 focus-within:ring-indigo-50 transition-all duration-500"
                    hx-ext="ws"
-                   ws-connect="/ws/chats/jnestagram"
+                   ws-connect="/ws/chats/{{ chat_group.group_name}}"
                    ws-send
                    hx-on::ws-after-send="this.reset();"
                    hx-on::ws-after-message="const container = document.getElementById('chat-messages-parent'); container.scrollTo({top: container.scrollHeight, behaivor: 'smooth'});">
