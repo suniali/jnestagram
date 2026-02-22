@@ -4,7 +4,7 @@ from django.urls import reverse
 from .models import Tag,Post
 
 class StaticSitemap(Sitemap):
-    changefreq = "monthly"
+    changefreq = "weekly"
     priority = 1.0
     def items(self):
         return ['home','about']
@@ -13,7 +13,7 @@ class StaticSitemap(Sitemap):
         return reverse(item)
 
 class CategorySitemap(Sitemap):
-    changefreq = "monthly"
+    changefreq = "weekly"
     priority = 0.5
     def items(self):
         return Tag.objects.all()
