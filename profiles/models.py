@@ -57,7 +57,7 @@ class Profile(models.Model):
         if self.avatar and hasattr(self.avatar, 'url'):
             return self.avatar.url
 
-        return static('images/avatar_default.svg')
+        return static('images/avatar.png')
 
 # TODO: Add Device Model Too
 # class Device(models.Model):

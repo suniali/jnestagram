@@ -8,7 +8,7 @@
         <div class="flex items-center gap-4 mb-8">
             <div class="relative">
                 <img class="w-14 h-14 rd-2xl object-cover shadow-sm border-2 border-white ring-1 ring-slate-100"
-                     src="{% if recipient.profile.avatar %}{{ recipient.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}"
+                     src="{% if recipient.profile.avatar %}{{ recipient.profile.avatar.url }}{% else %}{% static 'images/avatar.png' %}{% endif %}"
                      alt="{{ recipient.username }}">
                 <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rd-full"></div>
             </div>
