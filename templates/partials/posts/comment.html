@@ -57,7 +57,7 @@
                 <form class="comment-input-container"
                       hx-post="{% url 'replay' comment.id %}"
                       hx-target="#replay-container-{{ comment.id }}"
-                      hx-swap="afterbegin"
+                      hx-swap="innerHTML"
                       hx-on::after-request="this.reset()">
                     {% csrf_token %}
                     <button type="submit"

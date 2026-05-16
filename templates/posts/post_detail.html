@@ -17,7 +17,7 @@
                   autocomplete="off"
                   hx-post="{% url 'add_comment' post.pk %}"
                   hx-target="#comment-container"
-                  hx-swap="afterbegin"
+                  hx-swap="innerHTML"
                   hx-on::after-request="this.reset()">
                 {% csrf_token %}
 
