@@ -3,14 +3,14 @@
 <html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
 <head>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6VK68TVG20"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+<!--    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6VK68TVG20"></script>-->
+<!--    <script>-->
+<!--        window.dataLayer = window.dataLayer || [];-->
+<!--        function gtag(){dataLayer.push(arguments);}-->
+<!--        gtag('js', new Date());-->
 
-        gtag('config', 'G-6VK68TVG20');
-    </script>
+<!--        gtag('config', 'G-6VK68TVG20');-->
+<!--    </script>-->
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,14 +30,14 @@
 
     <link rel="shortcut icon"
           type="image/png"
-          href="https://img.icons8.com/small/64/000000/fire-heart.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
-    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
-    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+          href="{% static 'images/fireheart.svg' %}" />
+<!--    <link rel="preconnect" href="https://fonts.googleapis.com">-->
+<!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">-->
+    <script defer src="{% static 'js/cdn.min.js' %}"></script> <!-- alpine js -->
+    <script src="{% static 'js/htmx.min.js' %}"></script>
+    <script src="{% static 'js/ws.js' %}"></script>
+    <script src="{% static 'js/hyperscript.org@0.9.12' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/uno.css' %}">
     <style>
         :root {

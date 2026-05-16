@@ -136,20 +136,22 @@ TEMPLATES = [
 
 ASGI_APPLICATION = "jnestagram.asgi.application"
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels.layers.InMemoryChannelLayer"
-#     }
-# }
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [f"rediss://default:{env('REDIS_TOKEN')}@clean-lacewing-15180.upstash.io:6379"],
+POSTGRES_LOCALLY = True
+if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == False:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [f"rediss://default:{env('REDIS_TOKEN')}@clean-lacewing-15180.upstash.io:6379"],
+            },
         },
-    },
-}
+    }
+else:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
+        }
+    }
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -165,8 +167,6 @@ DATABASES = {
     }
 }
 
-
-POSTGRES_LOCALLY = True
 if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == False:
     DATABASES['default']=dj_database_url.parse(env('DB_URL'))
 

@@ -25,7 +25,7 @@
                     <div class="flex flex-col items-center text-center">
                         <div class="relative">
                             <img class="w-24 h-24 rd-full shadow-md object-cover b-2 b-violet-100"
-                                 src="https://img.icons8.com/small/192/7c3aed/user-male-circle.png"
+                                 src="{% static 'images/avatar.png' %}"
                                  alt="Developer Avatar">
                         </div>
 
@@ -73,7 +73,7 @@
 
                 <div class="mt-4">
                     <a href="{% url 'home' %}" class="btn-secondary inline-flex gap-2">
-                        {% trans "Back to Feed" %}
+                        {% trans "Back to Home" %}
                         <div class="i-mdi-arrow-right -mt-1 text-xl">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </div>

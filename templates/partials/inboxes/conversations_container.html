@@ -6,7 +6,7 @@
                 {% if conversation and conversation.id == conv.id %} bg-violet-600 text-white shadow-xl shadow-violet-600/30 hover:bg-violet-700 {% else %} bg-white text-slate-800 hover:bg-slate-50 {% endif %}">
 
     <div class="relative flex-shrink-0">
-        <img src="{% if conv.other_user.profile.avatar %}{{ conv.other_user.profile.avatar.url }}{% else %}{% static 'images/avatar_default.svg' %}{% endif %}"
+        <img src="{% if conv.other_user.profile.avatar %}{{ conv.other_user.profile.avatar.url }}{% else %}{% static 'images/avatar.png' %}{% endif %}"
              class="w-14 h-14 rounded-2xl object-cover shadow-sm border border-transparent group-hover:border-white/20 transition-all"
              alt="sender-profile-{{conv.other_user.profile.id}}-avatar">
 
